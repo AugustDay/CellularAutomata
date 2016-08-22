@@ -23,8 +23,7 @@ namespace CellularAutomata.OneDimensionalCA
             myRules = new Rules1D();
             myImager = new Imager1D(myRules);
             cellularAutomata = new List<Generation1D>();
-            farthestLeft = 0;
-            
+            farthestLeft = 0;            
         }
 
         public void Go()
