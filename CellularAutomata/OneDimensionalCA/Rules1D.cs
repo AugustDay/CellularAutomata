@@ -15,6 +15,8 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int[] myRule;
 
+        public int[] myNeighboorhoodOrientation;
+
         public int myNeighborhoodSize = 3;
 
         public int myPossibleStates = 2;
@@ -35,6 +37,7 @@ namespace CellularAutomata.OneDimensionalCA
         public Rules1D()
         {
             myRule = new int[] { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
+            myNeighboorhoodOrientation = new int[] { -1, 0, 1 };
             myNeighborhoodSize = 3;
             myPossibleStates = 2;
         }

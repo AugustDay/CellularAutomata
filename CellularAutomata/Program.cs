@@ -12,7 +12,7 @@ namespace CellularAutomata
         static void Main(string[] args)
         {
             Automata1D theAutomata = new Automata1D();
-            for(int a = 0; a <= 1; a++)
+            for (int a = 0; a <= 1; a++)
             {
                 for (int b = 0; b <= 1; b++)
                 {
@@ -39,6 +39,7 @@ namespace CellularAutomata
                     }
                 }
             }
+            //theAutomata.Go();
             Console.WriteLine("Program complete.");
             Console.ReadKey();
         }

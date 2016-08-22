@@ -16,20 +16,56 @@ namespace CellularAutomata.OneDimensionalCA
 
         private int farthestLeft;
 
-        public int[] neighborhood = new int[3];
+        List<Cell1D> myOrigin;
+
+        public int mySizeOfBoard;
+
+        public int[] myNBH;
 
         public Automata1D()
         {
             myRules = new Rules1D();
             myImager = new Imager1D(myRules);
             cellularAutomata = new List<Generation1D>();
-            farthestLeft = 0;            
+            myOrigin = new List<Cell1D>();
+            mySizeOfBoard = 400;
+            setOriginSingleCell();
+            //setOriginRandomCells();
+            farthestLeft = 0;
+            
+            myNBH = new int[myRules.myNeighborhoodSize];
+        }
+
+        public void setOriginSingleCell() //with 75 dead cells on either side
+        {
+            myOrigin.Clear();
+            int i;
+            for(i = -(mySizeOfBoard / 2); i < 0; i++ )
+            {
+                myOrigin.Add(new Cell1D(i, 0));
+            }
+            myOrigin.Add(new Cell1D(0, 1));
+            i++;
+            for(; i <= (mySizeOfBoard / 2); i++)
+            {
+                myOrigin.Add(new Cell1D(i, 0));
+            }
+        }
+
+        public void setOriginRandomCells()
+        {
+            myOrigin.Clear();
+            Random r = new Random();
+            for(int i = 0; i < mySizeOfBoard; i++)
+            {
+                myOrigin.Add(new Cell1D(i, r.Next(myRules.myPossibleStates)));
+            }
         }
 
         public void Go()
         {
             Initialize();
-            proceed(100);
+            proceed();
             myImager.GenerateAndSaveImage(cellularAutomata, Math.Abs(farthestLeft));
         }
 
@@ -39,15 +75,7 @@ namespace CellularAutomata.OneDimensionalCA
         public void Initialize()
         {
             cellularAutomata.Clear();
-            List<Cell1D> origin = new List<Cell1D>();
-            Cell1D c = new Cell1D(0);
-            c.State = 1;
-            origin.Add(new Cell1D(-2));
-            origin.Add(new Cell1D(-1));
-            origin.Add(c);
-            origin.Add(new Cell1D(1));
-            origin.Add(new Cell1D(2));
-            cellularAutomata.Add(new Generation1D(origin));
+            cellularAutomata.Add(new Generation1D(myOrigin));
         }
 
         /// <summary>
@@ -77,20 +105,32 @@ namespace CellularAutomata.OneDimensionalCA
         public List<Cell1D> NewGeneration(Generation1D theGen)
         {
             LinkedList<Cell1D> newCells = new LinkedList<Cell1D>();
-            for (int i = 1; i < theGen.Cells.Count - 1; i++)
+            for (int i = 0; i < theGen.Cells.Count; i++)
             {
                 Cell1D c = new Cell1D(theGen.Cells[i].Coordinates);
-                neighborhood[0] = theGen.Cells[i - 1].State;
-                neighborhood[1] = theGen.Cells[i].State;
-                neighborhood[2] = theGen.Cells[i + 1].State;
-                
-                c.State = myRules.rule(neighborhood); //TODO make GetNeighborhood thing! (in Rule?)
+                getNeighboorhood(i, theGen);
+                c.State = myRules.rule(myNBH); //TODO make GetNeighborhood thing! (in Rule?)
                 newCells.AddLast(c);
             }
 
-            leftPadding(newCells);
-            rightPadding(newCells);
+            //leftPadding(newCells);
+            //rightPadding(newCells);
             return newCells.ToList();
+        }
+
+        public void getNeighboorhood(int i, Generation1D theGen)
+        {
+            for (int n = 0; n < myRules.myNeighborhoodSize; n++) 
+            {
+                int location = myRules.myNeighboorhoodOrientation[n] + i;
+                if(location > 0 && location < theGen.Cells.Count) //is not out of bounds
+                {
+                    myNBH[n] = theGen.Cells[location].State;
+                } else
+                {
+                    myNBH[n] = 0; //dead out of bounds
+                }
+            }
         }
 
         private void leftPadding(LinkedList<Cell1D> list)

@@ -16,5 +16,11 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Coordinates = coordinates;
         }
+
+        public Cell1D(int theCoordinates, int theState)
+        {
+            Coordinates = theCoordinates;
+            State = theState;
+        }
     }
 }

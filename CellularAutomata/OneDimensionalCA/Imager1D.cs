@@ -49,6 +49,7 @@ namespace CellularAutomata.OneDimensionalCA
 
             Bitmap output = new Bitmap(maxDistance * 20, 1 + ca.Count * 20);
             Graphics g = Graphics.FromImage(output);
+            g.FillRectangle(new SolidBrush(Color.LightGray), new Rectangle(new Point(0, 0), output.Size));
             //image1.SetPixel(x, y, Color.Transparent);
             Point point = new Point();
             int padding;
@@ -100,6 +101,25 @@ namespace CellularAutomata.OneDimensionalCA
             }
 
             System.IO.File.WriteAllLines(@"C:\Users\Austin\Documents\visual studio 2015\Projects\CellularAutomata\CA.txt", lines);
+        }
+
+        public void printCANew(List<Generation1D> list)
+        {
+            List<string> lines = new List<string>();
+            string s = "";
+            foreach(Generation1D g in list)
+            {
+                foreach(Cell1D c in g.Cells)
+                {
+                    s += c.State;
+                }
+                lines.Add(s);
+                s = "";
+            }
+            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            string location = AppDomain.CurrentDomain.BaseDirectory + myRules.toString() + " -- " + (int)t.TotalSeconds + ".txt";
+            System.IO.File.WriteAllLines(@location, lines);
+
         }
     }
 }
