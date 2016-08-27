@@ -12,9 +12,9 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int State { get; set; }
 
-        public Cell1D(int coordinates)
+        public Cell1D(int theCoordinates)
         {
-            Coordinates = coordinates;
+            Coordinates = theCoordinates;
         }
 
         public Cell1D(int theCoordinates, int theState)

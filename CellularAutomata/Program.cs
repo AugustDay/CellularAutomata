@@ -29,7 +29,7 @@ namespace CellularAutomata
                                         for (int h = 0; h <= 1; h++)
                                         {
                                             int[] rule = new int[] { a, b, c, d, e, f, g, h };
-                                            theAutomata.myRules.myRule = rule;
+                                            theAutomata.Rules.RuleArray = rule;
                                             theAutomata.Go();
                                         }
                                     }

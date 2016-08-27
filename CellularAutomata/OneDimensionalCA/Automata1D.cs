@@ -10,55 +10,55 @@ namespace CellularAutomata.OneDimensionalCA
     {
         public List<Generation1D> cellularAutomata;
 
-        public Imager1D myImager;
+        public Imager1D Imager;
 
-        public Rules1D myRules;
+        public Rules1D Rules;
 
-        private int farthestLeft;
+        private int FarthestLeft;
 
-        List<Cell1D> myOrigin;
+        List<Cell1D> Origin;
 
-        public int mySizeOfBoard;
+        public int SizeOfBoard;
 
-        public int[] myNBH;
+        public int[] NBH;
 
         public Automata1D()
         {
-            myRules = new Rules1D();
-            myImager = new Imager1D(myRules);
+            Rules = new Rules1D();
+            Imager = new Imager1D(Rules);
             cellularAutomata = new List<Generation1D>();
-            myOrigin = new List<Cell1D>();
-            mySizeOfBoard = 400;
-            setOriginSingleCell();
-            //setOriginRandomCells();
-            farthestLeft = 0;
+            Origin = new List<Cell1D>();
+            SizeOfBoard = 400;
+            //setOriginSingleCell();
+            setOriginRandomCells();
+            FarthestLeft = 0;
             
-            myNBH = new int[myRules.myNeighborhoodSize];
+            NBH = new int[Rules.NeighborhoodSize];
         }
 
         public void setOriginSingleCell() //with 75 dead cells on either side
         {
-            myOrigin.Clear();
+            Origin.Clear();
             int i;
-            for(i = -(mySizeOfBoard / 2); i < 0; i++ )
+            for(i = -(SizeOfBoard / 2); i < 0; i++ )
             {
-                myOrigin.Add(new Cell1D(i, 0));
+                Origin.Add(new Cell1D(i, 0));
             }
-            myOrigin.Add(new Cell1D(0, 1));
+            Origin.Add(new Cell1D(0, 1));
             i++;
-            for(; i <= (mySizeOfBoard / 2); i++)
+            for(; i <= (SizeOfBoard / 2); i++)
             {
-                myOrigin.Add(new Cell1D(i, 0));
+                Origin.Add(new Cell1D(i, 0));
             }
         }
 
         public void setOriginRandomCells()
         {
-            myOrigin.Clear();
+            Origin.Clear();
             Random r = new Random();
-            for(int i = 0; i < mySizeOfBoard; i++)
+            for(int i = 0; i < SizeOfBoard; i++)
             {
-                myOrigin.Add(new Cell1D(i, r.Next(myRules.myPossibleStates)));
+                Origin.Add(new Cell1D(i, r.Next(Rules.PossibleStates)));
             }
         }
 
@@ -66,7 +66,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Initialize();
             proceed();
-            myImager.GenerateAndSaveImage(cellularAutomata, Math.Abs(farthestLeft));
+            Imager.GenerateAndSaveImage(cellularAutomata, Math.Abs(FarthestLeft));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace CellularAutomata.OneDimensionalCA
         public void Initialize()
         {
             cellularAutomata.Clear();
-            cellularAutomata.Add(new Generation1D(myOrigin));
+            cellularAutomata.Add(new Generation1D(Origin));
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 next = new Generation1D(NewGeneration(next));
                 cellularAutomata.Add(next);
-                farthestLeft = Math.Min(farthestLeft, next.LeftEdge);
+                FarthestLeft = Math.Min(FarthestLeft, next.LeftEdge);
 
             }
         }
@@ -109,7 +109,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 Cell1D c = new Cell1D(theGen.Cells[i].Coordinates);
                 getNeighboorhood(i, theGen);
-                c.State = myRules.rule(myNBH); //TODO make GetNeighborhood thing! (in Rule?)
+                c.State = Rules.rule(NBH); //TODO make GetNeighborhood thing! (in Rule?)
                 newCells.AddLast(c);
             }
 
@@ -118,25 +118,25 @@ namespace CellularAutomata.OneDimensionalCA
             return newCells.ToList();
         }
 
-        public void getNeighboorhood(int i, Generation1D theGen)
+        public void getNeighboorhood(int theIndex, Generation1D theGen)
         {
-            for (int n = 0; n < myRules.myNeighborhoodSize; n++) 
+            for (int n = 0; n < Rules.NeighborhoodSize; n++) 
             {
-                int location = myRules.myNeighboorhoodOrientation[n] + i;
+                int location = Rules.NeighborhoodOrientation[n] + theIndex;
                 if(location > 0 && location < theGen.Cells.Count) //is not out of bounds
                 {
-                    myNBH[n] = theGen.Cells[location].State;
+                    NBH[n] = theGen.Cells[location].State;
                 } else
                 {
-                    myNBH[n] = 0; //dead out of bounds
+                    NBH[n] = 0; //dead out of bounds
                 }
             }
         }
 
-        private void leftPadding(LinkedList<Cell1D> list)
+        private void leftPadding(LinkedList<Cell1D> theList)
         {
             int padding = 3;
-            foreach (Cell1D c in list)
+            foreach (Cell1D c in theList)
             {
                 if (c.State > 0)
                 {
@@ -150,16 +150,16 @@ namespace CellularAutomata.OneDimensionalCA
 
             for (; padding > 0; padding--)
             {
-                Cell1D empty = new Cell1D(list.First().Coordinates - 1);
+                Cell1D empty = new Cell1D(theList.First().Coordinates - 1);
                 empty.State = 0;
-                list.AddFirst(empty);
+                theList.AddFirst(empty);
             }
         }
 
-        private void rightPadding(LinkedList<Cell1D> list)
+        private void rightPadding(LinkedList<Cell1D> theList)
         {
             int padding = 3;
-            foreach (Cell1D c in list.Reverse())
+            foreach (Cell1D c in theList.Reverse())
             {
                 if (c.State > 0)
                 {
@@ -173,9 +173,9 @@ namespace CellularAutomata.OneDimensionalCA
 
             for (; padding > 0; padding--)
             {
-                Cell1D empty = new Cell1D(list.Last().Coordinates + 1);
+                Cell1D empty = new Cell1D(theList.Last().Coordinates + 1);
                 empty.State = 0;
-                list.AddLast(empty);
+                theList.AddLast(empty);
             }
         }
     }

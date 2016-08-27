@@ -13,66 +13,66 @@ namespace CellularAutomata.OneDimensionalCA
         //{0, 1, 1, 1, 1, 0, 0, 0};
         //TODO implement Observer/Observable to update, example: change in number of states = more brushes
 
-        public int[] myRule;
+        public int[] RuleArray;
 
-        public int[] myNeighboorhoodOrientation;
+        public int[] NeighborhoodOrientation;
 
-        public int myNeighborhoodSize = 3;
+        public int NeighborhoodSize = 3;
 
-        public int myPossibleStates = 2;
+        public int PossibleStates = 2;
 
         public Rules1D(int[] theRules, int theNeighborhoodSize, int thePossibleStates)
         {
-            myRule = new int[theRules.Length];
+            RuleArray = new int[theRules.Length];
             int i = 0;
             foreach(int n in theRules.Reverse())
             {
-                myRule[i] = n;
+                RuleArray[i] = n;
                 i++;
             }
-            myNeighborhoodSize = theNeighborhoodSize;
-            myPossibleStates = thePossibleStates;
+            NeighborhoodSize = theNeighborhoodSize;
+            PossibleStates = thePossibleStates;
         }
 
         public Rules1D()
         {
-            myRule = new int[] { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
-            myNeighboorhoodOrientation = new int[] { -1, 0, 1 };
-            myNeighborhoodSize = 3;
-            myPossibleStates = 2;
+            RuleArray = new int[] { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
+            NeighborhoodOrientation = new int[] { -1, 0, 1 };
+            NeighborhoodSize = 3;
+            PossibleStates = 2;
         }
 
         public void setNewAutomataRule(int[] theRule, int theNeighborhoodSize, int thePossibleStates)
         {
             //TODO error / invalid input checking
-            myRule = theRule;
-            myNeighborhoodSize = theNeighborhoodSize;
-            myPossibleStates = thePossibleStates;
+            RuleArray = theRule;
+            NeighborhoodSize = theNeighborhoodSize;
+            PossibleStates = thePossibleStates;
         }
 
         //TODO should a neighborhood be its own object?
 
-        public int rule(int[] neighborhood)
+        public int rule(int[] theNeighborhood)
         {
             int number = 0;
             int power = 0;
-            foreach(int b in neighborhood.Reverse())
+            foreach(int b in theNeighborhood.Reverse())
             {
                 if (b > 0)
                 {
-                    number += b * Convert.ToInt32(Math.Pow(myPossibleStates, power));
+                    number += b * Convert.ToInt32(Math.Pow(PossibleStates, power));
                 }
                 power++;
             }
             
-            return myRule[number]; //TODO this is a problem with the .Reverse() stuff
+            return RuleArray[number]; //TODO this is a problem with the .Reverse() stuff
         }
 
         public string toString()
         {
             int number = 0;
             int power = 0;
-            foreach(int b in myRule)
+            foreach(int b in RuleArray)
             {
                 if(b > 0)
                 {

@@ -12,9 +12,9 @@ namespace CellularAutomata.OneDimensionalCA
 
         public List<Cell1D> Cells { get; }
 
-        public Generation1D(List<Cell1D> cells)
+        public Generation1D(List<Cell1D> theCells)
         {
-            Cells = cells;
+            Cells = theCells;
             LeftEdge = Cells.First().Coordinates;
         }
 

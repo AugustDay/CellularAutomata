@@ -7,79 +7,79 @@ namespace CellularAutomata.OneDimensionalCA
 {
     class Imager1D
     {
-        private Color[] myDefaultColors = { Color.Transparent, Color.Blue, Color.Green, Color.Red, Color.Yellow}; //TODO add more!
+        private Color[] DefaultColors = { Color.Transparent, Color.Blue, Color.Green, Color.Red, Color.Yellow}; //TODO add more!
 
-        public Rules1D myRules;
+        public Rules1D Rule;
 
-        public SolidBrush[] myBrushes;
+        public SolidBrush[] Brushes;
 
-        public Size mySize { get; }
+        public Size RectangleSize { get; }
 
-        public Pen myPen { get; }
+        public Pen RectanglePen { get; }
         
 
         public Imager1D(Rules1D theRules)
         {
-            myRules = theRules;
-            myPen = new Pen(Color.Black);
-            mySize = new Size(20, 20);
+            Rule = theRules;
+            RectanglePen = new Pen(Color.Black);
+            RectangleSize = new Size(20, 20);
             
             InitializeBrushes();
         }
 
         public void InitializeBrushes()
         {
-            myBrushes = new SolidBrush[myRules.myPossibleStates];
-            for(int i = 0; i < myBrushes.Length; i++)
+            Brushes = new SolidBrush[Rule.PossibleStates];
+            for(int i = 0; i < Brushes.Length; i++)
             {
-                myBrushes[i] = new SolidBrush(myDefaultColors[i]);
+                Brushes[i] = new SolidBrush(DefaultColors[i]);
             }
         }
 
-        public void GenerateAndSaveImage(List<Generation1D> ca, int left)
+        public void GenerateAndSaveImage(List<Generation1D> theCA, int theLeftEdge)
         {
             //find dimensions
             int maxDistance = 0;
-            foreach (Generation1D gen in ca)
+            foreach (Generation1D gen in theCA)
             {
                 maxDistance = Math.Max(maxDistance, gen.Cells.Count);
             }
             //Console.WriteLine("Largest number of cells = " + maxDistance);
             //Console.WriteLine("Number of generations = " + ca.Count);
 
-            Bitmap output = new Bitmap(maxDistance * 20, 1 + ca.Count * 20);
+            Bitmap output = new Bitmap(maxDistance * 20, 1 + theCA.Count * 20);
             Graphics g = Graphics.FromImage(output);
             g.FillRectangle(new SolidBrush(Color.LightGray), new Rectangle(new Point(0, 0), output.Size));
             //image1.SetPixel(x, y, Color.Transparent);
             Point point = new Point();
             int padding;
 
-            for (int generation = 0; generation < ca.Count; generation++)
+            for (int generation = 0; generation < theCA.Count; generation++)
             {
-                for (int c = 0; c < ca[generation].Cells.Count; c++)
+                for (int c = 0; c < theCA[generation].Cells.Count; c++)
                 {
-                    if (ca[generation].Cells[c].State > 0) //TODO have array of brushes, a color for each state
+                    if (theCA[generation].Cells[c].State > 0) //TODO have array of brushes, a color for each state
                     {
-                        padding = left - Math.Abs(ca[generation].LeftEdge);
+                        padding = theLeftEdge - Math.Abs(theCA[generation].LeftEdge);
                         point.X = (c + padding) * 20; //this is where leftEdge comes in
                         point.Y = generation * 20;
-                        g.FillRectangle(myBrushes[ca[generation].Cells[c].State], point.X, point.Y, mySize.Width, mySize.Height);
-                        g.DrawRectangle(myPen, new Rectangle(point, mySize));
+                        g.FillRectangle(Brushes[theCA[generation].Cells[c].State], point.X, point.Y, RectangleSize.Width, RectangleSize.Height);
+                        g.DrawRectangle(RectanglePen, new Rectangle(point, RectangleSize));
                     }
                 }
             }
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            string location = AppDomain.CurrentDomain.BaseDirectory + myRules.toString() + " -- " + (int)t.TotalSeconds + ".bmp";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)t.TotalSeconds + ".bmp";
             output.Save(@location);
             //output.Save(@"G:\Personal\newImage.png", ImageFormat.Png); //doesn't compress?
         }
 
-        public void printCA(List<Generation1D> list, int left)
+        public void printCA(List<Generation1D> theList, int theLeftEdge)
         {
             List<string> lines = new List<string>();
-            foreach (Generation1D g in list)
+            foreach (Generation1D g in theList)
             {
-                int padding = left - Math.Abs(g.LeftEdge);
+                int padding = theLeftEdge - Math.Abs(g.LeftEdge);
                 string s = "";
                 for (; padding > 0; padding--)
                 {
@@ -103,11 +103,11 @@ namespace CellularAutomata.OneDimensionalCA
             System.IO.File.WriteAllLines(@"C:\Users\Austin\Documents\visual studio 2015\Projects\CellularAutomata\CA.txt", lines);
         }
 
-        public void printCANew(List<Generation1D> list)
+        public void printCANew(List<Generation1D> theList)
         {
             List<string> lines = new List<string>();
             string s = "";
-            foreach(Generation1D g in list)
+            foreach(Generation1D g in theList)
             {
                 foreach(Cell1D c in g.Cells)
                 {
@@ -117,7 +117,7 @@ namespace CellularAutomata.OneDimensionalCA
                 s = "";
             }
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            string location = AppDomain.CurrentDomain.BaseDirectory + myRules.toString() + " -- " + (int)t.TotalSeconds + ".txt";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)t.TotalSeconds + ".txt";
             System.IO.File.WriteAllLines(@location, lines);
 
         }
