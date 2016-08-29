@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CellularAutomata.OneDimensionalCA
 {
+    /// <summary>
+    /// Object representing the current ruleset of the one-dimensional Automata.
+    /// </summary>
     class Rules1D
     {
         //ruleset90 = { 0, 1, 0, 1, 1, 0, 1, 0 };
@@ -39,7 +42,7 @@ namespace CellularAutomata.OneDimensionalCA
             RuleArray = new int[] { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
             NeighborhoodOrientation = new int[] { -1, 0, 1 };
             NeighborhoodSize = 3;
-            PossibleStates = 2;
+            PossibleStates = 2; 
         }
 
         public void setNewAutomataRule(int[] theRule, int theNeighborhoodSize, int thePossibleStates)
@@ -72,6 +75,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             int number = 0;
             int power = 0;
+            //TODO switch to ulong/BigNum for rule number calculation! Possible permutations too large to hold in int!
             foreach(int b in RuleArray)
             {
                 if(b > 0)

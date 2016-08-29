@@ -7,11 +7,31 @@ using System.Threading.Tasks;
 
 namespace CellularAutomata
 {
+    public enum ImagerGridSettings1D
+    {
+        NoGrid,
+        Grid,
+        GridOnLive,
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
+            //Random r = new Random();
+            //for(int i = 0; i < 27; i++)
+            //{
+            //    Console.Write(r.Next(3) + ", ");
+            //}
+
             Automata1D theAutomata = new Automata1D();
+            theAutomata.Go();
+            Console.WriteLine("Program complete.");
+            Console.ReadKey();
+        }
+
+        static void EveryRule(Automata1D theAutomata)
+        {
             for (int a = 0; a <= 1; a++)
             {
                 for (int b = 0; b <= 1; b++)
@@ -39,9 +59,6 @@ namespace CellularAutomata
                     }
                 }
             }
-            //theAutomata.Go();
-            Console.WriteLine("Program complete.");
-            Console.ReadKey();
         }
     }
 }

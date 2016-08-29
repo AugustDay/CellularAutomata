@@ -29,8 +29,8 @@ namespace CellularAutomata.OneDimensionalCA
             cellularAutomata = new List<Generation1D>();
             Origin = new List<Cell1D>();
             SizeOfBoard = 400;
-            //setOriginSingleCell();
-            setOriginRandomCells();
+            setOriginSingleCell();
+            //setOriginRandomCells();
             FarthestLeft = 0;
             
             NBH = new int[Rules.NeighborhoodSize];
@@ -66,7 +66,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Initialize();
             proceed();
-            Imager.GenerateAndSaveImage(cellularAutomata, Math.Abs(FarthestLeft));
+            Imager.SaveImage(cellularAutomata, Math.Abs(FarthestLeft));
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace CellularAutomata.OneDimensionalCA
             LinkedList<Cell1D> newCells = new LinkedList<Cell1D>();
             for (int i = 0; i < theGen.Cells.Count; i++)
             {
-                Cell1D c = new Cell1D(theGen.Cells[i].Coordinates);
+                Cell1D c = new Cell1D(theGen.Cells[i].Coordinate);
                 getNeighboorhood(i, theGen);
                 c.State = Rules.rule(NBH); //TODO make GetNeighborhood thing! (in Rule?)
                 newCells.AddLast(c);
@@ -150,7 +150,7 @@ namespace CellularAutomata.OneDimensionalCA
 
             for (; padding > 0; padding--)
             {
-                Cell1D empty = new Cell1D(theList.First().Coordinates - 1);
+                Cell1D empty = new Cell1D(theList.First().Coordinate - 1);
                 empty.State = 0;
                 theList.AddFirst(empty);
             }
@@ -173,7 +173,7 @@ namespace CellularAutomata.OneDimensionalCA
 
             for (; padding > 0; padding--)
             {
-                Cell1D empty = new Cell1D(theList.Last().Coordinates + 1);
+                Cell1D empty = new Cell1D(theList.Last().Coordinate + 1);
                 empty.State = 0;
                 theList.AddLast(empty);
             }

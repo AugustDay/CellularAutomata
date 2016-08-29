@@ -6,20 +6,34 @@ using System.Threading.Tasks;
 
 namespace CellularAutomata.OneDimensionalCA
 {
+    /// <summary>Object representing a single one-dimensional Cell.</summary>
     class Cell1D
     {
-        public int Coordinates { get; }
+        /// <summary>Location on horizontal axis in 1D Automata Generation.</summary>
+        public int Coordinate { get; }
 
+        /// <summary>State of this Cell.</summary>
         public int State { get; set; }
 
-        public Cell1D(int theCoordinates)
+        /// <summary>
+        /// Constructs a new Cell with the given Coordinate value,
+        /// and default State of "0 = dead".
+        /// </summary>
+        /// <param name="theCoordinate"></param>
+        public Cell1D(int theCoordinate)
         {
-            Coordinates = theCoordinates;
+            Coordinate = theCoordinate;
+            State = 0;
         }
 
-        public Cell1D(int theCoordinates, int theState)
+        /// <summary>
+        /// Constructs a new Cell with a given Coordinate and State value.
+        /// </summary>
+        /// <param name="theCoordinate"></param>
+        /// <param name="theState"></param>
+        public Cell1D(int theCoordinate, int theState)
         {
-            Coordinates = theCoordinates;
+            Coordinate = theCoordinate;
             State = theState;
         }
     }
