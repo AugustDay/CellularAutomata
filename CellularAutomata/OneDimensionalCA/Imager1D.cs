@@ -7,9 +7,9 @@ namespace CellularAutomata.OneDimensionalCA
 {
     class Imager1D
     {
-        private static Size SIZE_DEFAULT = new Size(10, 10);
+        private static readonly Size SIZE_DEFAULT = new Size(10, 10);
 
-        private Color[] COLORS_DEFAULT = { Color.Transparent, Color.Blue, Color.Green,
+        private static readonly Color[] COLORS_DEFAULT = { Color.Transparent, Color.Blue, Color.Green,
                                    Color.Red, Color.Yellow, Color.Purple, Color.Aqua}; //TODO add more!
 
         private Rules1D Rule;
@@ -20,7 +20,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// <summary> Size of each Cell drawn on the bitmap. </summary>
         public Size CellSize { get; set; }
 
-        public Pen LinePen { get; set; }
+        public Pen LinePen { get; }
 
         /// <summary>
         /// Determines how to draw the grid on bitmaps. 
@@ -62,11 +62,12 @@ namespace CellularAutomata.OneDimensionalCA
         public void SaveImage(List<Generation1D> theCA, int theLeftEdge)
         {
             //find dimensions
-            int maxDistance = 0;
-            foreach (Generation1D gen in theCA)
-            {
-                maxDistance = Math.Max(maxDistance, gen.Cells.Count);
-            }
+            int maxDistance = theCA[0].Cells.Count;
+
+            //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
+            //{
+            //    maxDistance = Math.Max(maxDistance, gen.Cells.Count);
+            //}
 
             //create image
             Bitmap output = new Bitmap(maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);
@@ -100,7 +101,9 @@ namespace CellularAutomata.OneDimensionalCA
                 DrawGrid(g, output.Size);
             }
 
-            Save(output);
+            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            Save(output, t);
+            SaveInfo(t);
         }
 
         /// <summary>
@@ -124,45 +127,23 @@ namespace CellularAutomata.OneDimensionalCA
         /// Writes image to a file in the local directory.
         /// </summary>
         /// <param name="theOutput"></param>
-        private void Save(Bitmap theOutput)
+        private void Save(Bitmap theOutput, TimeSpan theT)
         {
-            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)t.TotalSeconds + ".bmp";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)theT.TotalSeconds + ".bmp";
             theOutput.Save(@location);
             //output.Save(@location, ImageFormat.Png); //TODO any way to do compression? Bitmaps are large!
             //TODO create "debug" function to write rule specifics to text file
         }
 
-        public void printCA(List<Generation1D> theList, int theLeftEdge)
+        private void SaveInfo(TimeSpan theT)
         {
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)theT.TotalSeconds + " -- Info.txt";
             List<string> lines = new List<string>();
-            foreach (Generation1D g in theList)
-            {
-                int padding = theLeftEdge - Math.Abs(g.LeftEdge);
-                string s = "";
-                for (; padding > 0; padding--)
-                {
-                    s += " ";
-                }
-
-                foreach (Cell1D c in g.Cells)
-                {
-                    if (c.State > 0) //TODO Needs symbol for each state
-                    {
-                        s += "\u2588";
-                    }
-                    else
-                    {
-                        s += " ";
-                    }
-                }
-                lines.Add(s);
-            }
-
-            System.IO.File.WriteAllLines(@"C:\Users\Austin\Documents\visual studio 2015\Projects\CellularAutomata\CA.txt", lines);
+            lines.Add(Rule.GetInfo());
+            System.IO.File.WriteAllLines(@location, lines);
         }
 
-        public void printCANew(List<Generation1D> theList)
+        public void printCA(List<Generation1D> theList)
         {
             List<string> lines = new List<string>();
             string s = "";

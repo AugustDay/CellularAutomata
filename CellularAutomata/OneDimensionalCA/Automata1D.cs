@@ -55,10 +55,9 @@ namespace CellularAutomata.OneDimensionalCA
         public void setOriginRandomCells()
         {
             Origin.Clear();
-            Random r = new Random();
             for(int i = 0; i < SizeOfBoard; i++)
             {
-                Origin.Add(new Cell1D(i, r.Next(Rules.PossibleStates)));
+                Origin.Add(new Cell1D(i, Rand.m.Next(Rules.PossibleStates)));
             }
         }
 

@@ -25,6 +25,7 @@ namespace CellularAutomata
             //}
 
             Automata1D theAutomata = new Automata1D();
+            //theAutomata.Rules.setRandomRule(3);
             theAutomata.Go();
             Console.WriteLine("Program complete.");
             Console.ReadKey();
