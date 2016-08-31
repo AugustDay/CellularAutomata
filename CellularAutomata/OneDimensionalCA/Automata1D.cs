@@ -57,7 +57,7 @@ namespace CellularAutomata.OneDimensionalCA
             Origin.Clear();
             for(int i = 0; i < SizeOfBoard; i++)
             {
-                Origin.Add(new Cell1D(i, Rand.m.Next(Rules.PossibleStates)));
+                Origin.Add(new Cell1D(i, Tools.Rand.Next(Rules.PossibleStates)));
             }
         }
 
@@ -75,6 +75,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             cellularAutomata.Clear();
             cellularAutomata.Add(new Generation1D(Origin));
+            FarthestLeft = 0;
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         private static readonly int DEFAULT_NEIGHBORHOOD_SIZE = 3;
 
-        private static readonly int DEFAULT_POSSIBLE_STATES = 2;
+        private static readonly int DEFAULT_POSSIBLE_STATES = 3;
 
         public int[] RuleArray;
 
@@ -50,10 +50,10 @@ namespace CellularAutomata.OneDimensionalCA
         {
             NeighborhoodOrientation = DEFAULT_NEIGHBORHOOD_ORIENTATION;
             NeighborhoodSize = DEFAULT_NEIGHBORHOOD_SIZE;
+            PossibleStates = DEFAULT_POSSIBLE_STATES;
 
-            //PossibleStates = DEFAULT_POSSIBLE_STATES;
             //RuleArray = DEFAULT_RULE_ARRAY;
-            setRandomRule(3);
+            setRandomRule();
         }
 
         public void setNewAutomataRule(int[] theRule, int theNeighborhoodSize, int thePossibleStates)
@@ -67,13 +67,18 @@ namespace CellularAutomata.OneDimensionalCA
         public void setRandomRule(int thePossibleStates)
         {
             PossibleStates = thePossibleStates;
+            setRandomRule();
+        }
+
+        public void setRandomRule()
+        {            
             //TODO will need to change depending on rule type (totalistic rules different permutations)
             long numberOfCombinations = (long)Math.Pow(PossibleStates, NeighborhoodSize);
             RuleArray = new int[numberOfCombinations];
-            Rand.m.Next(PossibleStates);
+            Tools.Rand.Next(PossibleStates);
             for (int i = 0; i < numberOfCombinations; i++)
             {
-                RuleArray[i] = Rand.m.Next(PossibleStates);
+                RuleArray[i] = Tools.Rand.Next(PossibleStates);
             }
         }
 
@@ -104,24 +109,23 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 s += n + ", ";
             }
-            s += "}\nRule: ";
-            for(int x = 0; x < NeighborhoodSize; x++)
+            s += "}\nRule: {"; //LITTLE ENDIAN.
+            string c = "";
+            for(int i = RuleArray.Length - 1; i >= 0 ; i--)
             {
-                s += PossibleStates - 1;
+                c = Tools.DecimalToStringBase(i, PossibleStates);
+                while(c.Length < NeighborhoodSize)
+                {
+                    c = "0" + c;
+                }
+                s += "\n" + c + " -> " + RuleArray[i];
+                c = "";
             }
-            s += "-> { "; //LITTLE ENDIAN.
-            foreach(int i in RuleArray.Reverse()) //TODO REVERSE!
-            {
-                s += i + ", ";
-            }
-            s += "} <- ";
-            for (int x = 0; x < NeighborhoodSize; x++)
-            {
-                s += 0;
-            }
-            s += "\nNumber: " + GetRuleNumber();
+            s += " }\nNumber: " + GetRuleNumber();
             return s;
         }
+
+        
 
         public string GetRuleNumber()
         {
@@ -132,7 +136,8 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 if (b > 0)
                 {
-                    number += b * Convert.ToInt32(Math.Pow(2, power));
+                    number += b * Convert.ToInt32(Math.Pow(2, power)); //TODO 4-state rules can cause overflow from power being too large
+                    //TODO large numbers can be too big for filename path; maybe switch to hex base to condense?
                 }
                 power++;
             }

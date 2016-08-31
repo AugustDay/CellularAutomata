@@ -28,6 +28,10 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         public ImagerGridSettings1D GridType { get; set; }
 
+        private int NumberFilesSaved = 0;
+
+        public bool PrintInfoText = true;
+
         /// <summary>
         /// Constructs an instance of the Imager1D, with the given Rule object. 
         /// </summary>
@@ -63,6 +67,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             //find dimensions
             int maxDistance = theCA[0].Cells.Count;
+            NumberFilesSaved++;
 
             //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
             //{
@@ -101,9 +106,12 @@ namespace CellularAutomata.OneDimensionalCA
                 DrawGrid(g, output.Size);
             }
 
-            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1); //TODO use hex base for time?
             Save(output, t);
-            SaveInfo(t);
+            if (PrintInfoText)
+            {
+                SaveInfo(t);
+            }
         }
 
         /// <summary>
@@ -127,9 +135,9 @@ namespace CellularAutomata.OneDimensionalCA
         /// Writes image to a file in the local directory.
         /// </summary>
         /// <param name="theOutput"></param>
-        private void Save(Bitmap theOutput, TimeSpan theT)
+        private void Save(Bitmap theOutput, TimeSpan theT) //TODO sometimes still overwrites existing file if generating them fast enough!
         {
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)theT.TotalSeconds + ".bmp";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)theT.TotalSeconds + "_" + NumberFilesSaved + ".bmp";
             theOutput.Save(@location);
             //output.Save(@location, ImageFormat.Png); //TODO any way to do compression? Bitmaps are large!
             //TODO create "debug" function to write rule specifics to text file

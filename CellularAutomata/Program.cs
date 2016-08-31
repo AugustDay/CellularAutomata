@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace CellularAutomata
 {
@@ -18,16 +19,18 @@ namespace CellularAutomata
     {
         static void Main(string[] args)
         {
-            //Random r = new Random();
-            //for(int i = 0; i < 27; i++)
-            //{
-            //    Console.Write(r.Next(3) + ", ");
-            //}
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             Automata1D theAutomata = new Automata1D();
-            //theAutomata.Rules.setRandomRule(3);
             theAutomata.Go();
+            theAutomata.setOriginRandomCells();
+            theAutomata.Imager.PrintInfoText = false;
+            theAutomata.Go();
+
+            sw.Stop();
             Console.WriteLine("Program complete.");
+            Console.WriteLine("Milliseconds elapsed: " + sw.ElapsedMilliseconds);
             Console.ReadKey();
         }
 
