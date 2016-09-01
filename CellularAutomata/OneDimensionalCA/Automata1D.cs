@@ -44,7 +44,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 Origin.Add(new Cell1D(i, 0));
             }
-            Origin.Add(new Cell1D(0, 1));
+            Origin.Add(new Cell1D(0, 1/*Rules.PossibleStates - 1*/));
             i++;
             for(; i <= (SizeOfBoard / 2); i++)
             {

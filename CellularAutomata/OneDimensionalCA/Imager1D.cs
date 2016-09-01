@@ -9,7 +9,7 @@ namespace CellularAutomata.OneDimensionalCA
     {
         private static readonly Size SIZE_DEFAULT = new Size(10, 10);
 
-        private static readonly Color[] COLORS_DEFAULT = { Color.Transparent, Color.Blue, Color.Green,
+        private static readonly Color[] COLORS_DEFAULT = { Color.LightGray, Color.Blue, Color.Green,
                                    Color.Red, Color.Yellow, Color.Purple, Color.Aqua}; //TODO add more!
 
         private Rules1D Rule;
@@ -77,7 +77,7 @@ namespace CellularAutomata.OneDimensionalCA
             //create image
             Bitmap output = new Bitmap(maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);
             Graphics g = Graphics.FromImage(output);
-            g.FillRectangle(new SolidBrush(Color.LightGray), new Rectangle(new Point(0, 0), output.Size));
+            g.FillRectangle(new SolidBrush(Brushes[0].Color), new Rectangle(new Point(0, 0), output.Size));
             //image1.SetPixel(x, y, Color.Transparent);
             Point point = new Point();
             int padding;

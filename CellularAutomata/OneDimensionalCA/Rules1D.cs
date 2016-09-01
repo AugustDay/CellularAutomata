@@ -17,7 +17,9 @@ namespace CellularAutomata.OneDimensionalCA
         //{0, 1, 1, 1, 1, 0, 0, 0};
         //TODO implement Observer/Observable to update, example: change in number of states = more brushes
 
-        private static readonly int[] DEFAULT_RULE_ARRAY = { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
+        private static readonly int[] __DEFAULT_RULE_ARRAY = { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
+
+        private static readonly int[] DEFAULT_RULE_ARRAY = { 0, 2, 2, 1, 0, 0, 2, 1, 2, 2, 2, 1, 2, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0, 1, 2, 1, 0 }; //defaults to Rule 30
 
         private static readonly int[] DEFAULT_NEIGHBORHOOD_ORIENTATION = { -1, 0, 1 }; //left, center, right
 
@@ -33,6 +35,8 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int PossibleStates;
 
+        public string RuleNumber { get; private set; }
+
         public Rules1D(int[] theRules, int theNeighborhoodSize, int thePossibleStates)
         {
             RuleArray = new int[theRules.Length];
@@ -42,8 +46,10 @@ namespace CellularAutomata.OneDimensionalCA
                 RuleArray[i] = n;
                 i++;
             }
+            //TODO needs to pass orientation instead of size
             NeighborhoodSize = theNeighborhoodSize;
             PossibleStates = thePossibleStates;
+            CalculateRuleNumber();
         }
 
         public Rules1D()
@@ -54,14 +60,17 @@ namespace CellularAutomata.OneDimensionalCA
 
             //RuleArray = DEFAULT_RULE_ARRAY;
             setRandomRule();
+            //CalculateRuleNumber();
         }
 
-        public void setNewAutomataRule(int[] theRule, int theNeighborhoodSize, int thePossibleStates)
+        public void setNewAutomataRule(int[] theRule, int[] theNeighborhoodOrientation, int thePossibleStates)
         {
             //TODO error & invalid input checking
             RuleArray = theRule;
-            NeighborhoodSize = theNeighborhoodSize;
+            NeighborhoodOrientation = theNeighborhoodOrientation;
+            NeighborhoodSize = NeighborhoodOrientation.Length;
             PossibleStates = thePossibleStates;
+            CalculateRuleNumber();
         }
 
         public void setRandomRule(int thePossibleStates)
@@ -70,7 +79,7 @@ namespace CellularAutomata.OneDimensionalCA
             setRandomRule();
         }
 
-        public void setRandomRule()
+        public void setRandomRule() //TODO make this call setNewAutomataRule?
         {            
             //TODO will need to change depending on rule type (totalistic rules different permutations)
             long numberOfCombinations = (long)Math.Pow(PossibleStates, NeighborhoodSize);
@@ -80,6 +89,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 RuleArray[i] = Tools.Rand.Next(PossibleStates);
             }
+            CalculateRuleNumber();
         }
 
         //TODO should a neighborhood be its own object?
@@ -121,32 +131,33 @@ namespace CellularAutomata.OneDimensionalCA
                 s += "\n" + c + " -> " + RuleArray[i];
                 c = "";
             }
-            s += " }\nNumber: " + GetRuleNumber();
+            s += " }\nNumber: " + RuleNumber;
             return s;
         }
 
         
 
-        public string GetRuleNumber()
+        private void CalculateRuleNumber()
         {
             BigInteger number = new BigInteger(0);
+            double d = 5;
             long power = 0;
             //TODO switch to ulong/BigNum for rule number calculation! Possible permutations too large to hold in int!
             foreach (int b in RuleArray)
             {
                 if (b > 0)
                 {
-                    number += b * Convert.ToInt32(Math.Pow(2, power)); //TODO 4-state rules can cause overflow from power being too large
+                    number += new BigInteger(b * Math.Pow(PossibleStates, power)); //TODO 4-state rules can cause overflow from power being too large
                     //TODO large numbers can be too big for filename path; maybe switch to hex base to condense?
                 }
                 power++;
             }
-            return number.ToString();
+            RuleNumber = number.ToString();
         }
 
         public string toString()
         {
-            return "1D-Rule " + GetRuleNumber();
+            return "1D-Rule " + RuleNumber;
         }
     }
 }
