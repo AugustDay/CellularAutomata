@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CellularAutomata.OneDimensionalCA;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,6 +52,46 @@ namespace CellularAutomata
             }
 
             return result;
+        }
+
+        public static Automata1D MakeAutomataFromCode(string theSpecification)
+        {
+            //k = states, n = neighborhood, r = rule number, b = board size,  
+            string sampleSpec = "k=3 n={-1,0,1} r=1234567 b=400";
+            string[] testString = sampleSpec.Split(' ');
+            int? k;
+            int[] index = new int[4];
+
+            foreach (string s in testString)
+            {
+                //check s for each possible substring we're looking for
+                //if statements do the thing if one is found
+                //go to next string
+                //better to not split into many strings? do it to the whole thing!
+                switch (s)
+                {
+                    case "k=": //doesn't work! 
+                        Console.Write(s);
+                        Console.WriteLine(" == hell yeah!");
+                        break;
+                    default:
+                        Console.Write(s);
+                        Console.WriteLine(" == nah!");
+  
+                        break;
+                }
+            }
+
+            //index[0] = sampleSpec.IndexOf("k=");
+            //if(index[0] == -1)
+            //{
+            //    k = null;
+            //} else
+            //{
+            //    Console.WriteLine(index[0]);
+            //}
+
+            return null;
         }
     }
 }

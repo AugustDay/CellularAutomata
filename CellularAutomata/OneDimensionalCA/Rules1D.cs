@@ -29,7 +29,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int[] RuleArray;
 
-        public int[] NeighborhoodOrientation;
+        public int[] NeighborhoodCoordinates;
 
         public int NeighborhoodSize;
 
@@ -37,24 +37,25 @@ namespace CellularAutomata.OneDimensionalCA
 
         public string RuleNumber { get; private set; }
 
-        public Rules1D(int[] theRules, int theNeighborhoodSize, int thePossibleStates)
+        public Rules1D(int[] theRuleArray, int[] theNeighborhoodOrientation, int thePossibleStates)
         {
-            RuleArray = new int[theRules.Length];
+            RuleArray = new int[theRuleArray.Length];
             int i = 0;
-            foreach(int n in theRules.Reverse())
+            foreach(int n in theRuleArray.Reverse())
             {
                 RuleArray[i] = n;
                 i++;
             }
             //TODO needs to pass orientation instead of size
-            NeighborhoodSize = theNeighborhoodSize;
+            NeighborhoodCoordinates = theNeighborhoodOrientation;
+            NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = thePossibleStates;
             CalculateRuleNumber();
         }
 
         public Rules1D()
         {
-            NeighborhoodOrientation = DEFAULT_NEIGHBORHOOD_ORIENTATION;
+            NeighborhoodCoordinates = DEFAULT_NEIGHBORHOOD_ORIENTATION;
             NeighborhoodSize = DEFAULT_NEIGHBORHOOD_SIZE;
             PossibleStates = DEFAULT_POSSIBLE_STATES;
 
@@ -67,8 +68,8 @@ namespace CellularAutomata.OneDimensionalCA
         {
             //TODO error & invalid input checking
             RuleArray = theRule;
-            NeighborhoodOrientation = theNeighborhoodOrientation;
-            NeighborhoodSize = NeighborhoodOrientation.Length;
+            NeighborhoodCoordinates = theNeighborhoodOrientation;
+            NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = thePossibleStates;
             CalculateRuleNumber();
         }
@@ -115,7 +116,7 @@ namespace CellularAutomata.OneDimensionalCA
             string s = "1-Dimensional, Elementary\n";
             s += "Possible States: " + PossibleStates + "\n";
             s += "Neighborhood Size: " + NeighborhoodSize + ", Orientation: { ";
-            foreach(int n in NeighborhoodOrientation)
+            foreach(int n in NeighborhoodCoordinates)
             {
                 s += n + ", ";
             }

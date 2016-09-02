@@ -8,19 +8,22 @@ namespace CellularAutomata.OneDimensionalCA
 {
     class Automata1D
     {
-        public List<Generation1D> cellularAutomata;
+        private static readonly int DEFAULT_SIZE_OF_BOARD = 400;
 
-        public Imager1D Imager;
-
-        public Rules1D Rules;
+        private List<Cell1D> Origin;
 
         private int FarthestLeft;
 
-        List<Cell1D> Origin;
+        /// <summary>The state of the cells within a given Cell's neighborhood coordinates.</summary>
+        private int[] LocalSituation;
 
-        public int SizeOfBoard;
+        public List<Generation1D> cellularAutomata { get; }
 
-        public int[] NBH;
+        public Imager1D Imager { get; }
+
+        public Rules1D Rules { get; }
+
+        public int SizeOfBoard { get; set; }
 
         public Automata1D()
         {
@@ -28,12 +31,12 @@ namespace CellularAutomata.OneDimensionalCA
             Imager = new Imager1D(Rules);
             cellularAutomata = new List<Generation1D>();
             Origin = new List<Cell1D>();
-            SizeOfBoard = 400;
+            SizeOfBoard = DEFAULT_SIZE_OF_BOARD;
             setOriginSingleCell();
             //setOriginRandomCells();
             FarthestLeft = 0;
             
-            NBH = new int[Rules.NeighborhoodSize];
+            LocalSituation = new int[Rules.NeighborhoodSize];
         }
 
         public void setOriginSingleCell() //with 75 dead cells on either side
@@ -109,7 +112,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 Cell1D c = new Cell1D(theGen.Cells[i].Coordinate);
                 getNeighboorhood(i, theGen);
-                c.State = Rules.rule(NBH); //TODO make GetNeighborhood thing! (in Rule?)
+                c.State = Rules.rule(LocalSituation); //TODO make GetNeighborhood thing! (in Rule?)
                 newCells.AddLast(c);
             }
 
@@ -122,13 +125,13 @@ namespace CellularAutomata.OneDimensionalCA
         {
             for (int n = 0; n < Rules.NeighborhoodSize; n++) 
             {
-                int location = Rules.NeighborhoodOrientation[n] + theIndex;
+                int location = Rules.NeighborhoodCoordinates[n] + theIndex;
                 if(location > 0 && location < theGen.Cells.Count) //is not out of bounds
                 {
-                    NBH[n] = theGen.Cells[location].State;
+                    LocalSituation[n] = theGen.Cells[location].State;
                 } else
                 {
-                    NBH[n] = 0; //dead out of bounds
+                    LocalSituation[n] = 0; //dead out of bounds
                 }
             }
         }

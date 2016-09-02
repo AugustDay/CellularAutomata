@@ -21,12 +21,13 @@ namespace CellularAutomata
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
+            Tools.MakeAutomataFromCode("blah");
 
-            Automata1D theAutomata = new Automata1D();
-            theAutomata.Go();
-            theAutomata.setOriginRandomCells();
-            theAutomata.Imager.PrintInfoText = false;
-            theAutomata.Go();
+            //Automata1D theAutomata = new Automata1D();
+            //theAutomata.Go();
+            //theAutomata.setOriginRandomCells();
+            //theAutomata.Imager.PrintInfoText = false;
+            //theAutomata.Go();
 
             sw.Stop();
             Console.WriteLine("Program complete.");
