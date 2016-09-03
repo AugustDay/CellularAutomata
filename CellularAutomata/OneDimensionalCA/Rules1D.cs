@@ -21,11 +21,9 @@ namespace CellularAutomata.OneDimensionalCA
 
         private static readonly int[] DEFAULT_RULE_ARRAY = { 0, 2, 2, 1, 0, 0, 2, 1, 2, 2, 2, 1, 2, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0, 1, 2, 1, 0 }; //defaults to Rule 30
 
-        private static readonly int[] DEFAULT_NEIGHBORHOOD_ORIENTATION = { -1, 0, 1 }; //left, center, right
+        public static readonly int[] DEFAULT_NEIGHBORHOOD_ORIENTATION = { -1, 0, 1 }; //left, center, right
 
-        private static readonly int DEFAULT_NEIGHBORHOOD_SIZE = 3;
-
-        private static readonly int DEFAULT_POSSIBLE_STATES = 3;
+        public static readonly int DEFAULT_POSSIBLE_STATES = 3;
 
         public int[] RuleArray;
 
@@ -33,11 +31,11 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int NeighborhoodSize;
 
-        public int PossibleStates;
+        public int PossibleStates; 
 
         public string RuleNumber { get; private set; }
 
-        public Rules1D(int[] theRuleArray, int[] theNeighborhoodOrientation, int thePossibleStates)
+        public Rules1D(int[] theRuleArray, int[] theNeighborhoodCoordinates, int thePossibleStates)
         {
             RuleArray = new int[theRuleArray.Length];
             int i = 0;
@@ -47,7 +45,7 @@ namespace CellularAutomata.OneDimensionalCA
                 i++;
             }
             //TODO needs to pass orientation instead of size
-            NeighborhoodCoordinates = theNeighborhoodOrientation;
+            NeighborhoodCoordinates = theNeighborhoodCoordinates;
             NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = thePossibleStates;
             CalculateRuleNumber();
@@ -56,7 +54,7 @@ namespace CellularAutomata.OneDimensionalCA
         public Rules1D()
         {
             NeighborhoodCoordinates = DEFAULT_NEIGHBORHOOD_ORIENTATION;
-            NeighborhoodSize = DEFAULT_NEIGHBORHOOD_SIZE;
+            NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = DEFAULT_POSSIBLE_STATES;
 
             //RuleArray = DEFAULT_RULE_ARRAY;
@@ -124,7 +122,7 @@ namespace CellularAutomata.OneDimensionalCA
             string c = "";
             for(int i = RuleArray.Length - 1; i >= 0 ; i--)
             {
-                c = Tools.DecimalToStringBase(i, PossibleStates);
+                c = Tools.DecimalToStringBase(i, (uint)PossibleStates);
                 while(c.Length < NeighborhoodSize)
                 {
                     c = "0" + c;

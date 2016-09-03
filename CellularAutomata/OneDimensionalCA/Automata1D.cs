@@ -8,7 +8,7 @@ namespace CellularAutomata.OneDimensionalCA
 {
     class Automata1D
     {
-        private static readonly int DEFAULT_SIZE_OF_BOARD = 400;
+        public static readonly int DEFAULT_SIZE_OF_BOARD = 400;
 
         private List<Cell1D> Origin;
 

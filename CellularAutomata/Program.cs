@@ -21,7 +21,16 @@ namespace CellularAutomata
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            Tools.MakeAutomataFromCode("blah");
+
+            long number = 406282927461L;
+            string num36 = Tools.DecimalToStringBase(number, 36);
+            double nextNumber = Tools.ArbitraryToDecimalSystem(num36, 36);
+            Console.WriteLine(number + " => " + num36 + "_36 => " + nextNumber);
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    Tools.MakeAutomataFromCode("k=3 n={-1,0,1} r=1234567 b=400");
+            //}
 
             //Automata1D theAutomata = new Automata1D();
             //theAutomata.Go();
