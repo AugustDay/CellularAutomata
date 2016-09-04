@@ -25,18 +25,35 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int SizeOfBoard { get; set; }
 
-        public Automata1D()
+        public Automata1D() 
         {
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
             cellularAutomata = new List<Generation1D>();
-            Origin = new List<Cell1D>();
-            SizeOfBoard = DEFAULT_SIZE_OF_BOARD;
-            setOriginSingleCell();
-            //setOriginRandomCells();
-            FarthestLeft = 0;
-            
+            ConstructorHelper(DEFAULT_SIZE_OF_BOARD);
+        }
+
+        public Automata1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard)
+        {
+            if(theRules == null || 
+               theImager == null ||
+               theSizeOfBoard < 1)
+            {
+                throw new ArgumentException();
+            }
+            Rules = theRules;
+            Imager = theImager;
+            cellularAutomata = new List<Generation1D>();
+            ConstructorHelper(theSizeOfBoard);
+        }
+
+        private void ConstructorHelper(int theSizeOfBoard)
+        {            
             LocalSituation = new int[Rules.NeighborhoodSize];
+            Origin = new List<Cell1D>();
+            SizeOfBoard = theSizeOfBoard;
+            setOriginSingleCell(); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
+            FarthestLeft = 0;
         }
 
         public void setOriginSingleCell() //with 75 dead cells on either side

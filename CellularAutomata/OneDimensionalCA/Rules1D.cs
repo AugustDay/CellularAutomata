@@ -17,9 +17,9 @@ namespace CellularAutomata.OneDimensionalCA
         //{0, 1, 1, 1, 1, 0, 0, 0};
         //TODO implement Observer/Observable to update, example: change in number of states = more brushes
 
-        private static readonly int[] __DEFAULT_RULE_ARRAY = { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
+        public static readonly int[] DEFAULT_RULE_ARRAY = { 0, 1, 1, 1, 1, 0, 0, 0 }; //defaults to Rule 30
 
-        private static readonly int[] DEFAULT_RULE_ARRAY = { 0, 2, 2, 1, 0, 0, 2, 1, 2, 2, 2, 1, 2, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0, 1, 2, 1, 0 }; //defaults to Rule 30
+        private static readonly int[] DEFAULT_RULE_ARRAY_3_STATES = { 0, 2, 2, 1, 0, 0, 2, 1, 2, 2, 2, 1, 2, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0, 1, 2, 1, 0 }; //defaults to Rule 30
 
         public static readonly int[] DEFAULT_NEIGHBORHOOD_ORIENTATION = { -1, 0, 1 }; //left, center, right
 
@@ -35,7 +35,24 @@ namespace CellularAutomata.OneDimensionalCA
 
         public string RuleNumber { get; private set; }
 
-        public Rules1D(int[] theRuleArray, int[] theNeighborhoodCoordinates, int thePossibleStates)
+        public Rules1D(BigInteger theRuleNumber, int[] theNeighborhoodCoordinates, int thePossibleStates)
+        {
+            if(theNeighborhoodCoordinates.Length == 0 || //no neighborhood
+               thePossibleStates < 2 || //must have at least two states
+               theRuleNumber > LargestPossibleRuleNumber(thePossibleStates, theNeighborhoodCoordinates.Length) || //too big
+               theRuleNumber.Sign < 0) //negative rule
+            {
+                throw new ArgumentException();
+            }
+            NeighborhoodCoordinates = theNeighborhoodCoordinates;
+            NeighborhoodSize = NeighborhoodCoordinates.Length;
+            PossibleStates = thePossibleStates;
+
+            CalculateRuleArrayFromBigInteger(theRuleNumber);
+            RuleNumber = theRuleNumber.ToString();
+        }
+
+        public Rules1D(int[] theRuleArray, int[] theNeighborhoodOrientation, int thePossibleStates)
         {
             RuleArray = new int[theRuleArray.Length];
             int i = 0;
@@ -45,7 +62,9 @@ namespace CellularAutomata.OneDimensionalCA
                 i++;
             }
             //TODO needs to pass orientation instead of size
-            NeighborhoodCoordinates = theNeighborhoodCoordinates;
+            //TODO deprecate this method, or fix it up!
+            //TODO get rid of this constructor; no more passing an int array into the Rules class, must make rule from number!
+            NeighborhoodCoordinates = theNeighborhoodOrientation;
             NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = thePossibleStates;
             CalculateRuleNumber();
@@ -122,7 +141,7 @@ namespace CellularAutomata.OneDimensionalCA
             string c = "";
             for(int i = RuleArray.Length - 1; i >= 0 ; i--)
             {
-                c = Tools.DecimalToStringBase(i, (uint)PossibleStates);
+                c = Tools.DecimalToStringBase(i, PossibleStates);
                 while(c.Length < NeighborhoodSize)
                 {
                     c = "0" + c;
@@ -134,12 +153,27 @@ namespace CellularAutomata.OneDimensionalCA
             return s;
         }
 
-        
+        private BigInteger LargestPossibleRuleNumber(int thePossibleStates, int theNeighborhoodSize)
+        { //k^(k^n)
+            return BigInteger.Pow(thePossibleStates, (int)Math.Pow(thePossibleStates, theNeighborhoodSize));
+        }
+
+        private void CalculateRuleArrayFromBigInteger(BigInteger theNumber)
+        {
+
+            string ruleString = Tools.LargeDecimalToStringBase(theNumber, PossibleStates);
+            RuleArray = new int[(int)Math.Pow(PossibleStates, NeighborhoodSize)];
+            int n = 0;
+            for (int i = ruleString.Length - 1; i >= 0; i--) //TODO bigEndian!
+            {
+                RuleArray[i] = ruleString[n] - '0';
+                n++;
+            }
+        }
 
         private void CalculateRuleNumber()
         {
             BigInteger number = new BigInteger(0);
-            double d = 5;
             long power = 0;
             //TODO switch to ulong/BigNum for rule number calculation! Possible permutations too large to hold in int!
             foreach (int b in RuleArray)
@@ -147,6 +181,7 @@ namespace CellularAutomata.OneDimensionalCA
                 if (b > 0)
                 {
                     number += new BigInteger(b * Math.Pow(PossibleStates, power)); //TODO 4-state rules can cause overflow from power being too large
+                    //TODO should perhaps use converter to do this? Need a method to go from arbitrary to arbitrary (rather than to 10)
                     //TODO large numbers can be too big for filename path; maybe switch to hex base to condense?
                 }
                 power++;

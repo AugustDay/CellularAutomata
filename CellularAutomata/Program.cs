@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace CellularAutomata
 {
@@ -22,21 +23,15 @@ namespace CellularAutomata
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            long number = 406282927461L;
-            string num36 = Tools.DecimalToStringBase(number, 36);
-            double nextNumber = Tools.ArbitraryToDecimalSystem(num36, 36);
-            Console.WriteLine(number + " => " + num36 + "_36 => " + nextNumber);
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Tools.MakeAutomataFromCode("k=3 n={-1,0,1} r=1234567 b=400");
-            //}
-
-            //Automata1D theAutomata = new Automata1D();
-            //theAutomata.Go();
-            //theAutomata.setOriginRandomCells();
-            //theAutomata.Imager.PrintInfoText = false;
-            //theAutomata.Go();
+            Automata1D theAutomata = Tools.MakeAutomataFromCode("k=3 n={-1,0,1} r=1537550572281_10 b=400");
+            
+            if(theAutomata != null)
+            {
+                theAutomata.Go();
+                theAutomata.setOriginRandomCells();
+                theAutomata.Imager.PrintInfoText = false;
+                theAutomata.Go();
+            }
 
             sw.Stop();
             Console.WriteLine("Program complete.");
