@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleInterface.cs" />
     <Compile Include="OneDimensionalCA\Automata1D.cs" />
     <Compile Include="OneDimensionalCA\Cell1D.cs" />
     <Compile Include="OneDimensionalCA\Generation1D.cs" />

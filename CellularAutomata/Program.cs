@@ -20,54 +20,33 @@ namespace CellularAutomata
     {
         static void Main(string[] args)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            ConsoleInterface ci = new ConsoleInterface();
+            ci.Run();
 
-            Automata1D theAutomata = Tools.MakeAutomataFromCode("k=3 n={-1,0,1} r=1537550572281_10 b=400");
-            
-            if(theAutomata != null)
-            {
-                theAutomata.Go();
-                theAutomata.setOriginRandomCells();
-                theAutomata.Imager.PrintInfoText = false;
-                theAutomata.Go();
-            }
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
 
-            sw.Stop();
-            Console.WriteLine("Program complete.");
-            Console.WriteLine("Milliseconds elapsed: " + sw.ElapsedMilliseconds);
+            //Automata1D theAutomata = Tools.MakeAutomataFromCode("k=3 n={-1,0,1} r=1537550572281_10 b=400");
+
+            //if (theAutomata != null)
+            //{
+            //    theAutomata.Go();
+            //    theAutomata.setOriginRandomCells();
+            //    theAutomata.Imager.PrintInfoText = false;
+            //    theAutomata.Go();
+            //}
+
+            //sw.Stop();
+            Console.WriteLine("Program complete. Press any key to close window.");
+            //Console.WriteLine("Milliseconds elapsed: " + sw.ElapsedMilliseconds);
             Console.ReadKey();
         }
 
         static void EveryRule(Automata1D theAutomata)
         {
-            for (int a = 0; a <= 1; a++)
-            {
-                for (int b = 0; b <= 1; b++)
-                {
-                    for (int c = 0; c <= 1; c++)
-                    {
-                        for (int d = 0; d <= 1; d++)
-                        {
-                            for (int e = 0; e <= 1; e++)
-                            {
-                                for (int f = 0; f <= 1; f++)
-                                {
-                                    for (int g = 0; g <= 1; g++)
-                                    {
-                                        for (int h = 0; h <= 1; h++)
-                                        {
-                                            int[] rule = new int[] { a, b, c, d, e, f, g, h };
-                                            theAutomata.Rules.RuleArray = rule;
-                                            theAutomata.Go();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+           //create a simple Arbitrary Number class with an array the size of the rule you want. 
+           //keep adding 1 to it, with proper code handling carries into higher digit places.
+           //when the last digit overflows, you've done every permutation of that array.
         }
     }
 }

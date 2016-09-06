@@ -10,6 +10,8 @@ namespace CellularAutomata.OneDimensionalCA
     {
         public static readonly int DEFAULT_SIZE_OF_BOARD = 400;
 
+        public int DEFAULT_NUMBER_OF_STEPS = 200;
+
         private List<Cell1D> Origin;
 
         private int FarthestLeft;
@@ -17,7 +19,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// <summary>The state of the cells within a given Cell's neighborhood coordinates.</summary>
         private int[] LocalSituation;
 
-        public List<Generation1D> cellularAutomata { get; }
+        public List<Generation1D> CellularAutomata { get; }
 
         public Imager1D Imager { get; }
 
@@ -25,11 +27,13 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int SizeOfBoard { get; set; }
 
+        public int Generation { get { return CellularAutomata.Count; } }
+
         public Automata1D() 
         {
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
-            cellularAutomata = new List<Generation1D>();
+            CellularAutomata = new List<Generation1D>();
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD);
         }
 
@@ -43,7 +47,7 @@ namespace CellularAutomata.OneDimensionalCA
             }
             Rules = theRules;
             Imager = theImager;
-            cellularAutomata = new List<Generation1D>();
+            CellularAutomata = new List<Generation1D>();
             ConstructorHelper(theSizeOfBoard);
         }
 
@@ -83,9 +87,13 @@ namespace CellularAutomata.OneDimensionalCA
 
         public void Go()
         {
+            Go(DEFAULT_NUMBER_OF_STEPS);            
+        }
+
+        public void Go(int theNumberOfSteps)
+        {
             Initialize();
-            proceed();
-            Imager.SaveImage(cellularAutomata, Math.Abs(FarthestLeft));
+            Proceed(theNumberOfSteps);
         }
 
         /// <summary>
@@ -93,32 +101,31 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         public void Initialize()
         {
-            cellularAutomata.Clear();
-            cellularAutomata.Add(new Generation1D(Origin));
+            CellularAutomata.Clear();
+            CellularAutomata.Add(new Generation1D(Origin));
             FarthestLeft = 0;
         }
 
         /// <summary>
         /// Iterate forward 200 steps.
         /// </summary>
-        public void proceed()
+        public void Proceed()
         {
-            proceed(200);
+            Proceed(DEFAULT_NUMBER_OF_STEPS);
         }
 
         /// <summary>
         /// Iterate forward a given number of steps. 
         /// </summary>
         /// <param name="theNumberOfSteps"></param>
-        public void proceed(int theNumberOfSteps)
+        public void Proceed(int theNumberOfSteps)
         {
-            Generation1D next = cellularAutomata[cellularAutomata.Count - 1];
+            Generation1D next = CellularAutomata[CellularAutomata.Count - 1];
             for (int i = 0; i < theNumberOfSteps; i++)
             {
                 next = new Generation1D(NewGeneration(next));
-                cellularAutomata.Add(next);
+                CellularAutomata.Add(next);
                 FarthestLeft = Math.Min(FarthestLeft, next.LeftEdge);
-
             }
         }
 
@@ -151,6 +158,11 @@ namespace CellularAutomata.OneDimensionalCA
                     LocalSituation[n] = 0; //dead out of bounds
                 }
             }
+        }
+
+        public void OuputAutomata()
+        {
+            Imager.SaveImage(CellularAutomata, Math.Abs(FarthestLeft));
         }
 
         private void leftPadding(LinkedList<Cell1D> theList)

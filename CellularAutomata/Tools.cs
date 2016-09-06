@@ -13,8 +13,6 @@ namespace CellularAutomata
 {
     static class Tools
     {
-        
-
         public static readonly Random Rand = new Random();
 
         /// <summary>
@@ -261,11 +259,33 @@ namespace CellularAutomata
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("Error constructing Automata!");
+                Console.WriteLine("Error: something went wrong with constructing the new Automata.");
                 theAutomata = null;
             }
 
             return theAutomata;
+        }
+
+        public static string DisplayArray(int[] theArray)
+        {
+            string result = "{";
+            for(int i = 0; i < theArray.Length - 1; i++)
+            {
+                result += theArray[i] + ",";
+            }
+            result += theArray[theArray.Length - 1] + "}";
+            return result;
+        }
+
+        public static string DisplayArrayWithSpaces(int[] theArray)
+        {
+            string result = "{ ";
+            for (int i = 0; i < theArray.Length - 1; i++)
+            {
+                result += theArray[i] + ", ";
+            }
+            result += theArray[theArray.Length - 1] + " }";
+            return result;
         }
     }
 }

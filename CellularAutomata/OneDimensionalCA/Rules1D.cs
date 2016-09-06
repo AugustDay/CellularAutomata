@@ -35,6 +35,8 @@ namespace CellularAutomata.OneDimensionalCA
 
         public string RuleNumber { get; private set; }
 
+        public int RuleBase { get; private set; }
+
         public Rules1D(BigInteger theRuleNumber, int[] theNeighborhoodCoordinates, int thePossibleStates)
         {
             if(theNeighborhoodCoordinates.Length == 0 || //no neighborhood
@@ -49,7 +51,8 @@ namespace CellularAutomata.OneDimensionalCA
             PossibleStates = thePossibleStates;
 
             CalculateRuleArrayFromBigInteger(theRuleNumber);
-            RuleNumber = theRuleNumber.ToString();
+            RuleNumber = theRuleNumber.ToString(); //base ten right now!
+            RuleBase = 10;
         }
 
         public Rules1D(int[] theRuleArray, int[] theNeighborhoodOrientation, int thePossibleStates)
@@ -149,7 +152,7 @@ namespace CellularAutomata.OneDimensionalCA
                 s += "\n" + c + " -> " + RuleArray[i];
                 c = "";
             }
-            s += " }\nNumber: " + RuleNumber;
+            s += " }\nNumber: " + RuleNumber + "_" + RuleBase;
             return s;
         }
 
@@ -187,6 +190,7 @@ namespace CellularAutomata.OneDimensionalCA
                 power++;
             }
             RuleNumber = number.ToString();
+            RuleBase = 10;
         }
 
         public string toString()
