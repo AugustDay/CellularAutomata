@@ -85,6 +85,7 @@ namespace CellularAutomata
         public void Run()
         {
             bool keepGoing = true;
+            PrintWelcomeCA();
             string prompt = WELCOME_PROMPT + USER_INPUT_SYMBOL;
             string input = "";
             string[] arguments;
@@ -260,6 +261,45 @@ namespace CellularAutomata
                 Regex.Split(theInput, "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
             array[0] = array[0].ToLower(); //insures that the command is lowercase.
             return array;
+        }
+
+        private void PrintWelcomeCA()
+        {
+            List<int[]> theList = new List<int[]>();
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 2, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 1, 1, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 0, 2, 1, 1, 0, 0, 1, 1, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 0, 2, 1, 0, 2, 2, 2, 0, 1, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 0, 2, 1, 2, 1, 2, 0, 2, 2, 1, 1, 2, 0, 0, 2, 2, 0, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 0, 2, 1, 1, 0, 1, 0, 2, 2, 1, 0, 1, 0, 2, 2, 2, 2, 2, 0, 0, 0 });
+            theList.Add(new int[] { 0, 0, 2, 1, 0, 2, 2, 1, 1, 2, 1, 2, 2, 1, 1, 2, 0, 0, 0, 2, 2, 0, 0 });
+            theList.Add(new int[] { 0, 2, 1, 2, 1, 2, 1, 0, 1, 0, 1, 2, 1, 0, 1, 0, 2, 0, 2, 2, 2, 2, 0 });
+            theList.Add(new int[] { 2, 1, 1, 0, 1, 0, 2, 2, 1, 2, 0, 0, 2, 2, 1, 1, 2, 2, 2, 0, 0, 2, 2 });
+            foreach (int[] row in theList)
+            {
+                foreach(int c in row)
+                {
+                    switch(c)
+                    {
+                        case 0:
+                            Console.BackgroundColor = ConsoleColor.Black;
+                            break;
+                        case 1:
+                            Console.BackgroundColor = ConsoleColor.Blue;
+                            break;
+                        case 2:
+                            Console.BackgroundColor = ConsoleColor.Green;
+                            break;
+                    }
+                    Console.Write("  ");
+                }
+                Console.WriteLine();
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine();
         }
     }
 }
