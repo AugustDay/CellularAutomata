@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 
 namespace CellularAutomata.OneDimensionalCA
 {
-    class Imager1D
+    public class Imager1D
     {
         private static readonly Size SIZE_DEFAULT = new Size(10, 10);
 

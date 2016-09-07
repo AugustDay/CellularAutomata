@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CellularAutomata.OneDimensionalCA
 {
-    class Automata1D
+    public class Automata1D
     {
         public static readonly int DEFAULT_SIZE_OF_BOARD = 400;
 
@@ -57,23 +57,33 @@ namespace CellularAutomata.OneDimensionalCA
             Origin = new List<Cell1D>();
             SizeOfBoard = theSizeOfBoard;
             setOriginSingleCell(); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
-            FarthestLeft = 0;
+            Initialize();
         }
 
-        public void setOriginSingleCell() //with 75 dead cells on either side
+        public void setOriginSingleCell()
         {
+            setOriginSingleCell(1);
+        }
+
+        public void setOriginSingleCell(int theState) //with 75 dead cells on either side
+        {
+            if(theState >= Rules.PossibleStates || theState < 0)
+            {
+                throw new ArgumentOutOfRangeException("theState", theState, "Need a given state that exists in this rule.");
+            }
             Origin.Clear();
             int i;
             for(i = -(SizeOfBoard / 2); i < 0; i++ )
             {
                 Origin.Add(new Cell1D(i, 0));
             }
-            Origin.Add(new Cell1D(0, 1/*Rules.PossibleStates - 1*/));
+            Origin.Add(new Cell1D(0, theState));
             i++;
             for(; i <= (SizeOfBoard / 2); i++)
             {
                 Origin.Add(new Cell1D(i, 0));
             }
+            Initialize(); //TODO should these setOrigin functions re-initialize?
         }
 
         public void setOriginRandomCells()
@@ -83,6 +93,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 Origin.Add(new Cell1D(i, Tools.Rand.Next(Rules.PossibleStates)));
             }
+            Initialize();
         }
 
         public void Go()
@@ -103,7 +114,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             CellularAutomata.Clear();
             CellularAutomata.Add(new Generation1D(Origin));
-            FarthestLeft = 0;
+            FarthestLeft = CellularAutomata.Last().LeftEdge;
         }
 
         /// <summary>
@@ -160,7 +171,7 @@ namespace CellularAutomata.OneDimensionalCA
             }
         }
 
-        public void OuputAutomata()
+        public void OutputAutomata()
         {
             Imager.SaveImage(CellularAutomata, Math.Abs(FarthestLeft));
         }

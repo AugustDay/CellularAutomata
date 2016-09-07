@@ -10,7 +10,7 @@ namespace CellularAutomata.OneDimensionalCA
     /// Represents a single Generation of the Automata, 
     /// containing a list of Cells and their leftmost coordinate.
     /// </summary>
-    class Generation1D
+    public class Generation1D
     {
         /// <summary> Coordinate of left-most Cell. </summary>
         public int LeftEdge { get; }

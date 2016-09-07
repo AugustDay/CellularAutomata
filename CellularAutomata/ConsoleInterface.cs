@@ -9,18 +9,19 @@ using System.Threading.Tasks;
 
 namespace CellularAutomata
 {
-    class ConsoleInterface
+    public class ConsoleInterface
     {
         private const string COMMAND_NOT_RECOGNIZED =
             "Command not recognized. Type 'help' for list of commands.";
 
         private const string USER_INPUT_SYMBOL = "> ";
 
-        private const string WELCOME_PROMPT = "Welcome to the Cellular Automata (CA) simulator!\n";
+        private const string WELCOME_PROMPT = "Welcome to the Cellular Automata (CA) simulator!\n" +
+            "By: Austin Ingraham\n\nPress 'help' or simply 'h' for commands.\n"; //TODO name here!
 
-        private const string HELP_MESSAGE = 
+        private const string HELP_MESSAGE =
             "h|help: lists all commands.\n" +
-             
+
             "a|about {topic}: describes different topics about automata\n" +
             "\tTopics: automata, states, neighborhood, etc. etc.\n" +
             "\tExample: > about automata\n\n" +
@@ -32,37 +33,41 @@ namespace CellularAutomata
             "n={##, ##, ##, etc.} the neighborhood coordinates, normally {-1,0,1}.\n\t" +
             "r=###_## the rule number code, in the specified base.\n\t" +
             "b=### the number of cells on each row of the board.\n\t" +
-            "Example: > new \"k=3 n={-1,0,1} r=1234567_10 b=400\"\n\t\n" +  
-                      
+            "Example: > new \"k=3 n={-1,0,1} r=1234567_10 b=400\"\n\t\n" +
+
             "s|status: prints the status of the current automata.\n" +
             "g|go {###}: initializes, runs ### generations of the CA, and saves result.\n" +
             "c|continue {###}: runs another ### generations of the CA, saving result.\n\t" +
             "For Go and Continue, program will output result if autosaving is ON.\n\n" + //TODO implement autosave setting.
+
+            "m|many {###}: inits CA origin w/ both random and single-cell origins, runs Go.\n" +
             "o|output: saves CA as a BMP image and text file with info on its structure.\n" +
-            "q|quit: ends the program."; 
+            "q|quit: ends the program.";
 
         private Dictionary<string, int> Commands = new Dictionary<string, int>()
         {
-            {"help", 0},
+            {"help", 0 },
             {"about", 1 },
             {"quit", 2 },
             {"new", 3 },
             {"undo", 4 }, //TODO implement this and add to Help text.
-            {"status", 5},
-            {"go", 6},
-            {"continue", 7},
-            {"output", 8},
+            {"status", 5 },
+            {"go", 6 },
+            {"continue", 7 },
+            {"output", 8 },
+            {"many", 9 },
 
             //short versions:
-            {"h", 0},
+            {"h", 0 },
             {"a", 1 },
             {"q", 2 },
             {"n", 3 },
             {"u", 4 },
-            {"s", 5},
-            {"g", 6},
-            {"c", 7},
-            {"o", 8},
+            {"s", 5 },
+            {"g", 6 },
+            {"c", 7 },
+            {"o", 8 },
+            {"m", 9 }
         };
 
         private const int MAXIMUM_HISTORY_SIZE = 5;
@@ -89,13 +94,13 @@ namespace CellularAutomata
                 Console.Write(prompt);
                 prompt = USER_INPUT_SYMBOL;
                 input = Console.ReadLine();
-                if(input.Length > 0) //checks if the user just hit enter or input something.
+                if (input.Length > 0) //checks if the user just hit enter or input something.
                 {
                     sw.Restart();
                     arguments = ParseInput(input).Where(s => !string.IsNullOrEmpty(s)).ToArray();
                     if (Commands.ContainsKey(arguments[0])) //input has valid argument.
                     {
-                        switch(Commands[arguments[0]])
+                        switch (Commands[arguments[0]])
                         {
                             case 0: //help
                                 Console.WriteLine(HELP_MESSAGE);
@@ -104,7 +109,7 @@ namespace CellularAutomata
                                 Console.WriteLine("'About' command not yet implemented.");
                                 break;
                             case 2: //quit
-                                keepGoing = false;                               
+                                keepGoing = false;
                                 break;
                             case 3: //new
                                 NewCommand(arguments);
@@ -119,59 +124,63 @@ namespace CellularAutomata
                                 ContinueCommand(arguments);
                                 break;
                             case 8:
-                                CurrentAutomata.OuputAutomata();
+                                CurrentAutomata.OutputAutomata();
+                                break;
+                            case 9:
+                                ManyCommand(arguments);
                                 break;
                         }
                         sw.Stop();
                         Console.WriteLine($"Command took: {sw.ElapsedMilliseconds} ms.");
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine(COMMAND_NOT_RECOGNIZED);
-                    }                    
-                }            
+                    }
+                }
             }
+        }
+
+        public void ManyCommand(string[] theArguments)
+        {
+            int numberOfSteps = GetNumberOfSteps(theArguments);
+            for(int i = 1; i < CurrentAutomata.Rules.PossibleStates; i++)
+            {
+                CurrentAutomata.setOriginSingleCell(i);
+                CurrentAutomata.Proceed(numberOfSteps);
+                CurrentAutomata.Imager.PrintInfoText = false;
+                CurrentAutomata.OutputAutomata();
+            }
+            CurrentAutomata.setOriginRandomCells();
+            CurrentAutomata.Proceed(numberOfSteps);
+            CurrentAutomata.Imager.PrintInfoText = true;
+            CurrentAutomata.OutputAutomata();
         }
 
         public void ContinueCommand(string[] theArguments)
         {
             if (theArguments.Length > 1)
             {
-                int numberOfSteps;
-                if (int.TryParse(theArguments[1], out numberOfSteps))
-                {
-                    CurrentAutomata.Proceed(numberOfSteps);
-                }
-                else
-                {
-                    Console.WriteLine("Failed to read the given number of steps. Using default instead.");
-                    CurrentAutomata.Proceed();
-                }
+                CurrentAutomata.Proceed(GetNumberOfSteps(theArguments));
             }
             else //default
             {
                 CurrentAutomata.Proceed();
             }
-            CurrentAutomata.OuputAutomata();
+            CurrentAutomata.OutputAutomata();
         }
 
         public void GoCommand(string[] theArguments)
         {
-            if(theArguments.Length > 1)
+            if (theArguments.Length > 1)
             {
-                int numberOfSteps;
-                if(int.TryParse(theArguments[1], out numberOfSteps))
-                {
-                    CurrentAutomata.Go(numberOfSteps);
-                } else
-                {
-                    Console.WriteLine("Failed to read the given number of steps. Using default instead.");
-                    CurrentAutomata.Go();
-                }
-            } else //default
+                CurrentAutomata.Go(GetNumberOfSteps(theArguments));
+            }
+            else //default
             {
                 CurrentAutomata.Go();
             }
-            CurrentAutomata.OuputAutomata();
+            CurrentAutomata.OutputAutomata();
         }
 
         public void StatusCommand()
@@ -188,16 +197,18 @@ namespace CellularAutomata
 
         public void NewCommand(string[] theArguments)
         {
-            if(theArguments.Length > 1)
+            if (theArguments.Length > 1)
             {
-                if(theArguments[1].Length > 2) //quotation marks
+                if (theArguments[1].Length > 2) //quotation marks
                 {
                     CurrentAutomata = Tools.MakeAutomataFromCode(theArguments[1].Substring(1, theArguments[1].Length - 2));
-                } else
+                }
+                else
                 {
                     CurrentAutomata = null;
                 }
-            } else //no args, make default
+            }
+            else //no args, make default
             {
                 CurrentAutomata = Tools.MakeAutomataFromCode("");
             }
@@ -206,11 +217,28 @@ namespace CellularAutomata
             {
                 AddToHistory();
                 Console.WriteLine("Found automata #" + CurrentAutomata.Rules.RuleNumber);
-            } else
+            }
+            else
             {
                 Console.WriteLine("Error: failed to parse parameters.");
                 CurrentAutomata = History.Last();
             }
+        }
+
+        private int GetNumberOfSteps(string[] theArguments)
+        {
+            int numberOfSteps;
+            if (theArguments.Length == 1)
+            {
+                numberOfSteps = CurrentAutomata.DEFAULT_NUMBER_OF_STEPS;
+            }
+            else if (!int.TryParse(theArguments[1], out numberOfSteps))
+            {
+                Console.WriteLine("Failed to read the given number of steps. Using default instead.");
+                numberOfSteps = CurrentAutomata.DEFAULT_NUMBER_OF_STEPS;
+            }
+
+            return numberOfSteps;
         }
 
         private void AddToHistory()
@@ -228,7 +256,7 @@ namespace CellularAutomata
 
         public string[] ParseInput(string theInput)
         {
-            string[] array = 
+            string[] array =
                 Regex.Split(theInput, "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
             array[0] = array[0].ToLower(); //insures that the command is lowercase.
             return array;

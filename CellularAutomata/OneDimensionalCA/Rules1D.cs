@@ -10,7 +10,7 @@ namespace CellularAutomata.OneDimensionalCA
     /// <summary>
     /// Object representing the current ruleset of the one-dimensional Automata.
     /// </summary>
-    class Rules1D
+    public class Rules1D
     {
         //ruleset90 = { 0, 1, 0, 1, 1, 0, 1, 0 };
         //ruleset30 = { 0, 0, 0, 1, 1, 1, 1, 0 };
@@ -37,51 +37,45 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int RuleBase { get; private set; }
 
+        public Rules1D(int[] theNeighborhoodCoordinates, int thePossibleStates)
+        {
+            ConstructorHelper(theNeighborhoodCoordinates, thePossibleStates);
+            setRandomRule();
+        }
+
         public Rules1D(BigInteger theRuleNumber, int[] theNeighborhoodCoordinates, int thePossibleStates)
         {
-            if(theNeighborhoodCoordinates.Length == 0 || //no neighborhood
-               thePossibleStates < 2 || //must have at least two states
-               theRuleNumber > LargestPossibleRuleNumber(thePossibleStates, theNeighborhoodCoordinates.Length) || //too big
+            ConstructorHelper(theNeighborhoodCoordinates, thePossibleStates);
+            if (theRuleNumber > LargestPossibleRuleNumber(PossibleStates, NeighborhoodSize) || //too big
                theRuleNumber.Sign < 0) //negative rule
+            {
+                throw new ArgumentException();
+            }
+
+            CalculateRuleArrayFromBigInteger(theRuleNumber);
+            RuleNumber = theRuleNumber.ToString(); //TODO base ten right now! Change to more condensed base 36.
+            RuleBase = 10;
+        }
+
+        public Rules1D()
+        {
+            ConstructorHelper(DEFAULT_NEIGHBORHOOD_ORIENTATION, DEFAULT_POSSIBLE_STATES);
+
+            //RuleArray = DEFAULT_RULE_ARRAY;
+            setRandomRule();
+            //CalculateRuleNumber();
+        }
+
+        private void ConstructorHelper(int[] theNeighborhoodCoordinates, int thePossibleStates)
+        {
+            if (theNeighborhoodCoordinates.Length == 0 || //no neighborhood
+               thePossibleStates < 2) //must have at least two states 
             {
                 throw new ArgumentException();
             }
             NeighborhoodCoordinates = theNeighborhoodCoordinates;
             NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = thePossibleStates;
-
-            CalculateRuleArrayFromBigInteger(theRuleNumber);
-            RuleNumber = theRuleNumber.ToString(); //base ten right now!
-            RuleBase = 10;
-        }
-
-        public Rules1D(int[] theRuleArray, int[] theNeighborhoodOrientation, int thePossibleStates)
-        {
-            RuleArray = new int[theRuleArray.Length];
-            int i = 0;
-            foreach(int n in theRuleArray.Reverse())
-            {
-                RuleArray[i] = n;
-                i++;
-            }
-            //TODO needs to pass orientation instead of size
-            //TODO deprecate this method, or fix it up!
-            //TODO get rid of this constructor; no more passing an int array into the Rules class, must make rule from number!
-            NeighborhoodCoordinates = theNeighborhoodOrientation;
-            NeighborhoodSize = NeighborhoodCoordinates.Length;
-            PossibleStates = thePossibleStates;
-            CalculateRuleNumber();
-        }
-
-        public Rules1D()
-        {
-            NeighborhoodCoordinates = DEFAULT_NEIGHBORHOOD_ORIENTATION;
-            NeighborhoodSize = NeighborhoodCoordinates.Length;
-            PossibleStates = DEFAULT_POSSIBLE_STATES;
-
-            //RuleArray = DEFAULT_RULE_ARRAY;
-            setRandomRule();
-            //CalculateRuleNumber();
         }
 
         public void setNewAutomataRule(int[] theRule, int[] theNeighborhoodOrientation, int thePossibleStates)

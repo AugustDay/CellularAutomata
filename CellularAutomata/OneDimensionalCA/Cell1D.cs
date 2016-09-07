@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CellularAutomata.OneDimensionalCA
 {
     /// <summary>Object representing a single one-dimensional Cell.</summary>
-    class Cell1D
+    public class Cell1D
     {
         /// <summary>Location on horizontal axis in 1D Automata Generation.</summary>
         public int Coordinate { get; }

@@ -20,6 +20,7 @@ namespace CellularAutomata
     {
         static void Main(string[] args)
         {
+            Console.Title = "Cellular Automata Simulator";
             ConsoleInterface ci = new ConsoleInterface();
             ci.Run();
 

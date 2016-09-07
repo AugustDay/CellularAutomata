@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace CellularAutomata
 {
-    static class Tools
+    public static class Tools
     {
         public static readonly Random Rand = new Random();
 
@@ -210,7 +210,11 @@ namespace CellularAutomata
         public static Automata1D MakeAutomataFromCode(string theSpecification)
         {
             //string sampleSpec = "k=3 n={-1,0,1} r=1234567_10 b=400";
-            string[] testString = theSpecification.Split(' ');
+            if(theSpecification.Length == 0)
+            {
+                return new Automata1D();
+            }
+            string[] testString = theSpecification.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int k = Rules1D.DEFAULT_POSSIBLE_STATES;
             int b = Automata1D.DEFAULT_SIZE_OF_BOARD;
             int[] ruleArray = Rules1D.DEFAULT_RULE_ARRAY;
@@ -248,12 +252,22 @@ namespace CellularAutomata
                 }
             }
             //just pass in rule number in base 10 form, no conversion in here
-            //
+            //int[] nArray = null;
+            //if(nArray == null)
+            //{
+            //}
 
             Automata1D theAutomata;
             try
             {
-                Rules1D daRules = new Rules1D(big, neighborhoodCoordinates, k);
+                Rules1D daRules;
+                if (big.Sign < 0)
+                {
+                    daRules = new Rules1D(neighborhoodCoordinates, k);
+                } else
+                {
+                    daRules = new Rules1D(big, neighborhoodCoordinates, k);
+                }
                 Imager1D daImager = new Imager1D(daRules);
                 theAutomata = new Automata1D(daRules, daImager, b);
             }
