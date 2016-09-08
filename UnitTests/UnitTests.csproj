@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestRules1D.cs" />
     <Compile Include="TestTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

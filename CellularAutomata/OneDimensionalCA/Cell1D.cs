@@ -36,5 +36,15 @@ namespace CellularAutomata.OneDimensionalCA
             Coordinate = theCoordinate;
             State = theState;
         }
+
+        public override bool Equals(object theOther)
+        {
+            if (theOther == null || GetType() != theOther.GetType())
+            {
+                return false;
+            }
+            Cell1D otherCell = (Cell1D)theOther;
+            return Coordinate == otherCell.Coordinate && State == otherCell.State;
+        }
     }
 }

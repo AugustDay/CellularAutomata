@@ -221,5 +221,19 @@ namespace CellularAutomata.OneDimensionalCA
                 theList.AddLast(empty);
             }
         }
+
+        public override bool Equals(Object theOther)
+        {
+            // Check for null values and compare run-time types.
+            if (theOther == null || GetType() != theOther.GetType())
+                return false;
+
+            Automata1D otherAutomata = (Automata1D)theOther;
+            return /*Rules.Equals(theOther.Rules) &&*/ Imager.Equals(otherAutomata.Imager) &&
+                //Imager will need to check its Rule for equality anyways, no need to directly check Rule
+                FarthestLeft == otherAutomata.FarthestLeft && SizeOfBoard == otherAutomata.SizeOfBoard &&
+                Origin.SequenceEqual(otherAutomata.Origin) && LocalSituation.SequenceEqual(otherAutomata.LocalSituation) &&
+                CellularAutomata.SequenceEqual(otherAutomata.CellularAutomata); //should it compare the generations?
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace CellularAutomata
 {
     public static class Tools
     {
-        public static readonly Random Rand = new Random();
+        public static Random Rand = new Random(); //no longer readonly, for testing purposes.
 
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
@@ -210,7 +210,7 @@ namespace CellularAutomata
         public static Automata1D MakeAutomataFromCode(string theSpecification)
         {
             //string sampleSpec = "k=3 n={-1,0,1} r=1234567_10 b=400";
-            if(theSpecification.Length == 0)
+            if(theSpecification == null || theSpecification.Length == 0)
             {
                 return new Automata1D();
             }

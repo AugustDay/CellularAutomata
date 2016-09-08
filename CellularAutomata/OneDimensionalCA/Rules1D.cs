@@ -78,16 +78,6 @@ namespace CellularAutomata.OneDimensionalCA
             PossibleStates = thePossibleStates;
         }
 
-        public void setNewAutomataRule(int[] theRule, int[] theNeighborhoodOrientation, int thePossibleStates)
-        {
-            //TODO error & invalid input checking
-            RuleArray = theRule;
-            NeighborhoodCoordinates = theNeighborhoodOrientation;
-            NeighborhoodSize = NeighborhoodCoordinates.Length;
-            PossibleStates = thePossibleStates;
-            CalculateRuleNumber();
-        }
-
         public void setRandomRule(int thePossibleStates)
         {
             PossibleStates = thePossibleStates;
@@ -106,8 +96,6 @@ namespace CellularAutomata.OneDimensionalCA
             }
             CalculateRuleNumber();
         }
-
-        //TODO should a neighborhood be its own object?
 
         public int rule(int[] theNeighborhood)
         {
@@ -187,9 +175,23 @@ namespace CellularAutomata.OneDimensionalCA
             RuleBase = 10;
         }
 
-        public string toString()
+        public override string ToString()
         {
             return "1D-Rule " + RuleNumber;
+        }
+
+        public override bool Equals(Object theOther)
+        {
+            // Check for null values and compare run-time types.
+            if (GetType() != theOther.GetType() || theOther == null)
+            {
+                return false;
+            }
+
+            Rules1D otherRule = (Rules1D)theOther;
+            return RuleNumber.Equals(otherRule.RuleNumber) && RuleBase == otherRule.RuleBase &&
+                PossibleStates == otherRule.PossibleStates && RuleArray.SequenceEqual(otherRule.RuleArray) &&
+                NeighborhoodCoordinates.SequenceEqual(otherRule.NeighborhoodCoordinates);
         }
     }
 }

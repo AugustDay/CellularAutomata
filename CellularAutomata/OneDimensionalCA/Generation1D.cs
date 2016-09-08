@@ -30,7 +30,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         /// <summary> Outputs a String representation of this Generation. </summary>
         /// <returns></returns>
-        public string toString()
+        public override string ToString()
         {
             string s = "";
             foreach (Cell1D c in Cells)
@@ -38,6 +38,16 @@ namespace CellularAutomata.OneDimensionalCA
                 s += c.State; //TODO does this work? Verify this.
             }
             return s;
+        }
+
+        public override bool Equals(object theOther)
+        {
+            if (theOther == null || GetType() != theOther.GetType())
+            {
+                return false;
+            }
+            Generation1D otherGen = (Generation1D)theOther;
+            return LeftEdge == otherGen.LeftEdge && Cells.SequenceEqual(otherGen.Cells);
         }
     }
 }

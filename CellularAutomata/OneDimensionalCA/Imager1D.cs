@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace CellularAutomata.OneDimensionalCA
 {
@@ -137,7 +138,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// <param name="theOutput"></param>
         private void Save(Bitmap theOutput, TimeSpan theT) //TODO sometimes still overwrites existing file if generating them fast enough!
         {
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)theT.TotalSeconds + "_" + NumberFilesSaved + ".bmp";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theT.TotalSeconds + "_" + NumberFilesSaved + ".bmp";
             theOutput.Save(@location);
             //output.Save(@location, ImageFormat.Png); //TODO any way to do compression? Bitmaps are large!
             //TODO create "debug" function to write rule specifics to text file
@@ -145,7 +146,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         private void SaveInfo(TimeSpan theT)
         {
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)theT.TotalSeconds + " -- Info.txt";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theT.TotalSeconds + " -- Info.txt";
             List<string> lines = new List<string>();
             lines.Add(Rule.GetInfo());
             System.IO.File.WriteAllLines(@location, lines);
@@ -165,9 +166,39 @@ namespace CellularAutomata.OneDimensionalCA
                 s = "";
             }
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.toString() + " -- " + (int)t.TotalSeconds + ".txt";
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)t.TotalSeconds + ".txt";
             System.IO.File.WriteAllLines(@location, lines);
 
+        }
+
+        public override bool Equals(Object theOther)
+        {
+            // Check for null values and compare run-time types.
+            if (theOther == null || GetType() != theOther.GetType())
+            {
+                return false;
+            }
+            Imager1D otherImager = (Imager1D)theOther;
+            if (Brushes.Length != otherImager.Brushes.Length)
+            {
+                return false;
+            }
+            else
+            {
+                for (int i = 0; i < Brushes.Length; i++)
+                {
+                    bool equalBrush = Brushes[i].Color == otherImager.Brushes[i].Color;
+                    if (!equalBrush)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return Rule.Equals(otherImager.Rule) && CellSize.Equals(otherImager.CellSize) &&
+                LinePen.Width == otherImager.LinePen.Width && LinePen.Color == otherImager.LinePen.Color && 
+                GridType == otherImager.GridType && NumberFilesSaved == otherImager.NumberFilesSaved && 
+                PrintInfoText == otherImager.PrintInfoText;
         }
     }
 }
