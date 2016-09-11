@@ -12,20 +12,14 @@ namespace CellularAutomata.OneDimensionalCA
     /// </summary>
     public class Generation1D
     {
-        /// <summary> Coordinate of left-most Cell. </summary>
-        public int LeftEdge { get; }
-
         /// <summary> The Cells in this Generation. </summary>
-        public List<Cell1D> Cells { get; }
+        public int[] Cells { get; }
 
         /// <summary> Constructs a new Generation of the Automata. </summary>
         /// <param name="theCells"></param>
-        public Generation1D(List<Cell1D> theCells)
+        public Generation1D(int[] theCells)
         {
             Cells = theCells;
-
-            //TODO might be more efficient to set LeftEdge = first LIVE cell.
-            LeftEdge = Cells.First().Coordinate; 
         }
 
         /// <summary> Outputs a String representation of this Generation. </summary>
@@ -33,9 +27,9 @@ namespace CellularAutomata.OneDimensionalCA
         public override string ToString()
         {
             string s = "";
-            foreach (Cell1D c in Cells)
+            foreach (int i in Cells)
             {
-                s += c.State; //TODO does this work? Verify this.
+                s += i; //TODO does this work? Verify this.
             }
             return s;
         }
@@ -46,8 +40,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 return false;
             }
-            Generation1D otherGen = (Generation1D)theOther;
-            return LeftEdge == otherGen.LeftEdge && Cells.SequenceEqual(otherGen.Cells);
+            return Cells.SequenceEqual(((Generation1D)theOther).Cells);
         }
     }
 }

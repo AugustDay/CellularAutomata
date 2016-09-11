@@ -236,21 +236,21 @@ namespace UnitTests
             Assert.AreEqual(expectedNumber, rulesToTest.LargestPossibleRuleNumber(statesInput, coordinatesInput.Length));
         }
 
-        [TestMethod]
-        public void Rules1D_Construct8StateRuleWithoutGivenNumber_FailIfExceptionThrown()
-        {
-            int statesInput = 8;
-            int[] coordinatesInput = new int[] { -1, 0, 1 };
+        //[TestMethod]
+        //public void Rules1D_Construct8StateRuleWithoutGivenNumber_FailIfExceptionThrown()
+        //{
+        //    int statesInput = 8;
+        //    int[] coordinatesInput = new int[] { -1, 0, 1 };
 
-            try
-            {
-                Rules1D ruleToTest = new Rules1D(coordinatesInput, statesInput);
-            }
-            catch (Exception e)
-            {                
-                Assert.Fail("Exception thrown, stack trace: " + e.StackTrace);
-            }
-        }
+        //    try
+        //    {
+        //        Rules1D ruleToTest = new Rules1D(coordinatesInput, statesInput);
+        //    }
+        //    catch (Exception e)
+        //    {                
+        //        Assert.Fail("Exception thrown, stack trace: " + e.StackTrace);
+        //    }
+        //}
 
         [TestMethod]
         public void Rules1D_Construct7StateRuleWithoutGivenNumber_FailIfExceptionThrown()

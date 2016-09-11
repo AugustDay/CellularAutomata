@@ -19,23 +19,7 @@ namespace CellularAutomata
     class Program
     {
         static void Main(string[] args)
-        {
-            string testInput = "k=3 n={-1,0,1} r=1537550572281_10 b=30";
-            Simulator1D cellualrAutomata30 = Tools.MakeAutomataFromCode(testInput);
-            cellualrAutomata30.Go(15);
-
-            foreach (string s in cellualrAutomata30.Imager.displayCA((cellualrAutomata30.CellularAutomata)))
-            {
-                Console.Write("theList.Add(new int[] { ");
-                foreach(char c in s.ToCharArray())
-                {
-                    Console.Write(c + ", ");
-                }
-                Console.WriteLine("});");
-            }
-            Console.WriteLine("\n\n\n");
-            
-
+        {            
             Console.Title = "Cellular Automata Simulator";
             ConsoleInterface userInterface = new ConsoleInterface();
             userInterface.Run();

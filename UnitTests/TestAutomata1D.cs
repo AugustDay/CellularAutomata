@@ -38,9 +38,9 @@ namespace UnitTests
             cellularAutomata30.Go(15);
 
             int counter = 0;
-            foreach(Cell1D c in cellularAutomata30.CellularAutomata[14].Cells)
+            foreach(int c in cellularAutomata30.CellularAutomata[14].Cells)
             {
-                Assert.AreEqual(correctSimulationList[14][counter], c.State, "The expected value of cell  " + counter + " on row 15 was not equal.");
+                Assert.AreEqual(correctSimulationList[14][counter], c, "The expected value of cell  " + counter + " on row 15 was not equal.");
                 counter++;
             }
         }
@@ -70,9 +70,9 @@ namespace UnitTests
             cellularAutomata30.Go(15);
 
             int counter = 0;
-            foreach (Cell1D c in cellularAutomata30.CellularAutomata[14].Cells)
+            foreach (int c in cellularAutomata30.CellularAutomata[14].Cells)
             {
-                Assert.AreEqual(correctSimulationList[14][counter], c.State, "The expected value of cell  " + counter + " on row 15 was not equal.");
+                Assert.AreEqual(correctSimulationList[14][counter], c, "The expected value of cell  " + counter + " on row 15 was not equal.");
                 counter++;
             }
         }

@@ -64,10 +64,10 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         /// <param name="theCA"></param>
         /// <param name="theLeftEdge"></param>
-        public void SaveImage(List<Generation1D> theCA, int theLeftEdge)
+        public void SaveImage(List<Generation1D> theCA)
         {
             //find dimensions
-            int maxDistance = theCA[0].Cells.Count;
+            int maxDistance = theCA[0].Cells.Length;
             NumberFilesSaved++;
 
             //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
@@ -81,18 +81,16 @@ namespace CellularAutomata.OneDimensionalCA
             g.FillRectangle(new SolidBrush(Brushes[0].Color), new Rectangle(new Point(0, 0), output.Size));
             //image1.SetPixel(x, y, Color.Transparent);
             Point point = new Point();
-            int padding;
 
             for (int generation = 0; generation < theCA.Count; generation++)
             {
-                for (int c = 0; c < theCA[generation].Cells.Count; c++)
+                for (int c = 0; c < theCA[generation].Cells.Length; c++)
                 {
-                    if (theCA[generation].Cells[c].State > 0) //TODO have array of brushes, a color for each state
+                    if (theCA[generation].Cells[c] > 0) //TODO have array of brushes, a color for each state
                     {
-                        padding = theLeftEdge - Math.Abs(theCA[generation].LeftEdge);
-                        point.X = (c + padding) * CellSize.Width; //this is where leftEdge comes in
+                        point.X = c * CellSize.Width; //this is where leftEdge comes in
                         point.Y = generation * CellSize.Height;
-                        g.FillRectangle(Brushes[theCA[generation].Cells[c].State], point.X, point.Y, CellSize.Width, CellSize.Height);
+                        g.FillRectangle(Brushes[theCA[generation].Cells[c]], point.X, point.Y, CellSize.Width, CellSize.Height);
                         if(GridType == ImagerGridSettings1D.GridOnLive)
                         {
                             g.DrawRectangle(LinePen, new Rectangle(point, CellSize));
@@ -158,9 +156,9 @@ namespace CellularAutomata.OneDimensionalCA
             string s = "";
             foreach(Generation1D g in theList)
             {
-                foreach(Cell1D c in g.Cells)
+                foreach(int c in g.Cells)
                 {
-                    s += c.State;
+                    s += c;
                 }
                 lines.Add(s);
                 s = "";
@@ -176,9 +174,9 @@ namespace CellularAutomata.OneDimensionalCA
             string s = "";
             foreach (Generation1D g in theList)
             {
-                foreach (Cell1D c in g.Cells)
+                foreach (int c in g.Cells)
                 {
-                    s += c.State;
+                    s += c;
                 }
                 lines.Add(s);
                 s = "";

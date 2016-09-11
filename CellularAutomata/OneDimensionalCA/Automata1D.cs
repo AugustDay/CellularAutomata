@@ -12,9 +12,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int DEFAULT_NUMBER_OF_STEPS = 200;
 
-        private List<Cell1D> Origin;
-
-        private int FarthestLeft;
+        private int[] Origin;
 
         /// <summary>The state of the cells within a given Cell's neighborhood coordinates.</summary>
         private int[] LocalSituation;
@@ -54,8 +52,8 @@ namespace CellularAutomata.OneDimensionalCA
         private void ConstructorHelper(int theSizeOfBoard)
         {            
             LocalSituation = new int[Rules.NeighborhoodSize];
-            Origin = new List<Cell1D>();
             SizeOfBoard = theSizeOfBoard;
+            Origin = new int[SizeOfBoard];
             setOriginSingleCell(); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
             Initialize();
         }
@@ -71,27 +69,27 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 throw new ArgumentOutOfRangeException("theState", theState, "Need a given state that exists in this rule.");
             }
-            Origin.Clear();
+            Origin = new int[SizeOfBoard];
             int i;
-            for(i = -(SizeOfBoard / 2); i < 0; i++ )
+            for(i = 0; i < SizeOfBoard / 2; i++ )
             {
-                Origin.Add(new Cell1D(i, 0));
+                Origin[i] = 0;
             }
-            Origin.Add(new Cell1D(0, theState));
+            Origin[i] = theState;
             i++;
-            for(; i <= (SizeOfBoard / 2); i++)
+            for(; i < SizeOfBoard; i++)
             {
-                Origin.Add(new Cell1D(i, 0));
+                Origin[i] = 0;
             }
             Initialize(); //TODO should these setOrigin functions re-initialize?
         }
 
         public void setOriginRandomCells()
         {
-            Origin.Clear();
+            Origin = new int[SizeOfBoard];
             for(int i = 0; i < SizeOfBoard; i++)
             {
-                Origin.Add(new Cell1D(i, Tools.Rand.Next(Rules.PossibleStates)));
+                Origin[i] = Tools.Rand.Next(Rules.PossibleStates);
             }
             Initialize();
         }
@@ -114,7 +112,6 @@ namespace CellularAutomata.OneDimensionalCA
         {
             CellularAutomata.Clear();
             CellularAutomata.Add(new Generation1D(Origin));
-            FarthestLeft = CellularAutomata.Last().LeftEdge;
         }
 
         /// <summary>
@@ -136,24 +133,19 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 next = new Generation1D(NewGeneration(next));
                 CellularAutomata.Add(next);
-                FarthestLeft = Math.Min(FarthestLeft, next.LeftEdge);
             }
         }
 
-        public List<Cell1D> NewGeneration(Generation1D theGen)
+        public int[] NewGeneration(Generation1D theGen)
         {
-            LinkedList<Cell1D> newCells = new LinkedList<Cell1D>();
-            for (int i = 0; i < theGen.Cells.Count; i++)
+            int[] newCells = new int[SizeOfBoard];
+            for (int i = 0; i < theGen.Cells.Length; i++)
             {
-                Cell1D c = new Cell1D(theGen.Cells[i].Coordinate);
                 getNeighboorhood(i, theGen);
-                c.State = Rules.rule(LocalSituation); //TODO make GetNeighborhood thing! (in Rule?)
-                newCells.AddLast(c);
+                newCells[i] = Rules.rule(LocalSituation);
             }
 
-            //leftPadding(newCells);
-            //rightPadding(newCells);
-            return newCells.ToList();
+            return newCells;
         }
 
         public void getNeighboorhood(int theIndex, Generation1D theGen)
@@ -161,9 +153,9 @@ namespace CellularAutomata.OneDimensionalCA
             for (int n = 0; n < Rules.NeighborhoodSize; n++) 
             {
                 int location = Rules.NeighborhoodCoordinates[n] + theIndex;
-                if(location > 0 && location < theGen.Cells.Count) //is not out of bounds
+                if(location > 0 && location < theGen.Cells.Length) //is not out of bounds
                 {
-                    LocalSituation[n] = theGen.Cells[location].State;
+                    LocalSituation[n] = theGen.Cells[location];
                 } else
                 {
                     LocalSituation[n] = 0; //dead out of bounds
@@ -173,53 +165,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public void OutputAutomata()
         {
-            Imager.SaveImage(CellularAutomata, Math.Abs(FarthestLeft));
-        }
-
-        private void leftPadding(LinkedList<Cell1D> theList)
-        {
-            int padding = 3;
-            foreach (Cell1D c in theList)
-            {
-                if (c.State > 0)
-                {
-                    break;
-                }
-                else //c is dead
-                {
-                    padding--;
-                }
-            }
-
-            for (; padding > 0; padding--)
-            {
-                Cell1D empty = new Cell1D(theList.First().Coordinate - 1);
-                empty.State = 0;
-                theList.AddFirst(empty);
-            }
-        }
-
-        private void rightPadding(LinkedList<Cell1D> theList)
-        {
-            int padding = 3;
-            foreach (Cell1D c in theList.Reverse())
-            {
-                if (c.State > 0)
-                {
-                    break;
-                }
-                else //c is dead
-                {
-                    padding--;
-                }
-            }
-
-            for (; padding > 0; padding--)
-            {
-                Cell1D empty = new Cell1D(theList.Last().Coordinate + 1);
-                empty.State = 0;
-                theList.AddLast(empty);
-            }
+            Imager.SaveImage(CellularAutomata);
         }
 
         public override bool Equals(Object theOther)
@@ -231,7 +177,7 @@ namespace CellularAutomata.OneDimensionalCA
             Simulator1D otherAutomata = (Simulator1D)theOther;
             return /*Rules.Equals(theOther.Rules) &&*/ Imager.Equals(otherAutomata.Imager) &&
                 //Imager will need to check its Rule for equality anyways, no need to directly check Rule
-                FarthestLeft == otherAutomata.FarthestLeft && SizeOfBoard == otherAutomata.SizeOfBoard &&
+                SizeOfBoard == otherAutomata.SizeOfBoard &&
                 Origin.SequenceEqual(otherAutomata.Origin) && LocalSituation.SequenceEqual(otherAutomata.LocalSituation) &&
                 CellularAutomata.SequenceEqual(otherAutomata.CellularAutomata); //should it compare the generations?
         }
