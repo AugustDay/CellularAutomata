@@ -138,7 +138,7 @@ namespace CellularAutomata.OneDimensionalCA
             return s;
         }
 
-        private BigInteger LargestPossibleRuleNumber(int thePossibleStates, int theNeighborhoodSize)
+        public BigInteger LargestPossibleRuleNumber(int thePossibleStates, int theNeighborhoodSize)
         { //k^(k^n)
             return BigInteger.Pow(thePossibleStates, (int)Math.Pow(thePossibleStates, theNeighborhoodSize));
         }

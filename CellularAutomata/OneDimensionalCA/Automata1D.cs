@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CellularAutomata.OneDimensionalCA
 {
-    public class Automata1D
+    public class Simulator1D
     {
         public static readonly int DEFAULT_SIZE_OF_BOARD = 400;
 
@@ -29,7 +29,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int Generation { get { return CellularAutomata.Count; } }
 
-        public Automata1D() 
+        public Simulator1D() 
         {
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
@@ -37,7 +37,7 @@ namespace CellularAutomata.OneDimensionalCA
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD);
         }
 
-        public Automata1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard)
+        public Simulator1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard)
         {
             if(theRules == null || 
                theImager == null ||
@@ -228,7 +228,7 @@ namespace CellularAutomata.OneDimensionalCA
             if (theOther == null || GetType() != theOther.GetType())
                 return false;
 
-            Automata1D otherAutomata = (Automata1D)theOther;
+            Simulator1D otherAutomata = (Simulator1D)theOther;
             return /*Rules.Equals(theOther.Rules) &&*/ Imager.Equals(otherAutomata.Imager) &&
                 //Imager will need to check its Rule for equality anyways, no need to directly check Rule
                 FarthestLeft == otherAutomata.FarthestLeft && SizeOfBoard == otherAutomata.SizeOfBoard &&

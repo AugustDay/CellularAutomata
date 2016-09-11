@@ -207,16 +207,16 @@ namespace CellularAutomata
             return result;
         }
 
-        public static Automata1D MakeAutomataFromCode(string theSpecification)
+        public static Simulator1D MakeAutomataFromCode(string theSpecification)
         {
             //string sampleSpec = "k=3 n={-1,0,1} r=1234567_10 b=400";
             if(theSpecification == null || theSpecification.Length == 0)
             {
-                return new Automata1D();
+                return new Simulator1D();
             }
             string[] testString = theSpecification.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             int k = Rules1D.DEFAULT_POSSIBLE_STATES;
-            int b = Automata1D.DEFAULT_SIZE_OF_BOARD;
+            int b = Simulator1D.DEFAULT_SIZE_OF_BOARD;
             int[] ruleArray = Rules1D.DEFAULT_RULE_ARRAY;
             BigInteger big = new BigInteger(-1);
             int[] neighborhoodCoordinates = Rules1D.DEFAULT_NEIGHBORHOOD_ORIENTATION;
@@ -257,7 +257,7 @@ namespace CellularAutomata
             //{
             //}
 
-            Automata1D theAutomata;
+            Simulator1D theAutomata;
             try
             {
                 Rules1D daRules;
@@ -269,7 +269,7 @@ namespace CellularAutomata
                     daRules = new Rules1D(big, neighborhoodCoordinates, k);
                 }
                 Imager1D daImager = new Imager1D(daRules);
-                theAutomata = new Automata1D(daRules, daImager, b);
+                theAutomata = new Simulator1D(daRules, daImager, b);
             }
             catch (ArgumentException)
             {

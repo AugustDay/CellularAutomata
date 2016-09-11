@@ -72,13 +72,13 @@ namespace CellularAutomata
 
         private const int MAXIMUM_HISTORY_SIZE = 5;
 
-        private LinkedList<Automata1D> History = new LinkedList<Automata1D>();
+        private LinkedList<Simulator1D> History = new LinkedList<Simulator1D>();
 
-        private Automata1D CurrentAutomata;
+        private Simulator1D CurrentAutomata;
 
         public ConsoleInterface()
         {
-            CurrentAutomata = new Automata1D();
+            CurrentAutomata = new Simulator1D();
             History.AddLast(CurrentAutomata);
         }
 

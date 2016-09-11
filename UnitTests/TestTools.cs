@@ -69,9 +69,9 @@ namespace UnitTests
             //this won't be true once I implement "dynamic defaults" without some reworking
             DateTime now = DateTime.Now; //uses test-specific seed values to make SetRandomRule() consistent.
             Tools.Rand = new Random((int)now.Ticks);
-            Automata1D resultExpected = new Automata1D();
+            Simulator1D resultExpected = new Simulator1D();
             Tools.Rand = new Random((int)now.Ticks);
-            Automata1D resultActual = Tools.MakeAutomataFromCode(""); 
+            Simulator1D resultActual = Tools.MakeAutomataFromCode(""); 
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
         }
 
@@ -87,9 +87,9 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Automata1D resultExpected = new Automata1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
 
-            Automata1D resultActual = Tools.MakeAutomataFromCode(testInput);
+            Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
         }
 
@@ -99,15 +99,15 @@ namespace UnitTests
             string testInput = "k=3 n={-1,0,1} r=1537550572281_10";
             BigInteger numberExpected;
             BigInteger.TryParse("1537550572281", out numberExpected);
-            int sizeExpected = Automata1D.DEFAULT_SIZE_OF_BOARD;
+            int sizeExpected = Simulator1D.DEFAULT_SIZE_OF_BOARD;
             int statesExpected = 3;
             int[] coordinatesExpected = new int[] { -1, 0, 1 };
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Automata1D resultExpected = new Automata1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
 
-            Automata1D resultActual = Tools.MakeAutomataFromCode(testInput);
+            Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
         }
 
@@ -123,9 +123,9 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Automata1D resultExpected = new Automata1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
 
-            Automata1D resultActual = Tools.MakeAutomataFromCode(testInput);
+            Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
         }
 
@@ -141,9 +141,9 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Automata1D resultExpected = new Automata1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
 
-            Automata1D resultActual = Tools.MakeAutomataFromCode(testInput);
+            Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
         }
     }

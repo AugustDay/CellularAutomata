@@ -168,7 +168,22 @@ namespace CellularAutomata.OneDimensionalCA
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
             string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)t.TotalSeconds + ".txt";
             System.IO.File.WriteAllLines(@location, lines);
+        }
 
+        public List<string> displayCA(List<Generation1D> theList)
+        {
+            List<string> lines = new List<string>();
+            string s = "";
+            foreach (Generation1D g in theList)
+            {
+                foreach (Cell1D c in g.Cells)
+                {
+                    s += c.State;
+                }
+                lines.Add(s);
+                s = "";
+            }
+            return lines;
         }
 
         public override bool Equals(Object theOther)
