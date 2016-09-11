@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace CellularAutomata
 {
@@ -192,7 +190,7 @@ namespace CellularAutomata
                 $"Neighborhood size: {CurrentAutomata.Rules.NeighborhoodSize}\n" +
                 $"Neighborhood coordinates: {Tools.DisplayArray(CurrentAutomata.Rules.NeighborhoodCoordinates)}\n" +
                 $"Rule Number: {CurrentAutomata.Rules.RuleNumber}_{CurrentAutomata.Rules.RuleBase}\n" +
-                $"Current Generation: {CurrentAutomata.Generation}\n========================";
+                $"Current Generation: {CurrentAutomata.StepNumber}\n========================";
             Console.WriteLine(status);
         }
 

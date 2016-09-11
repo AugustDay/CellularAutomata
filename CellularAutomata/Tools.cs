@@ -1,12 +1,5 @@
 ﻿using CellularAutomata.OneDimensionalCA;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NDesk;
-using NDesk.Options;
-using ManyConsole;
 using System.Numerics;
 
 namespace CellularAutomata

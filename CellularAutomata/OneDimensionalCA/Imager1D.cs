@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
 
 namespace CellularAutomata.OneDimensionalCA
 {
@@ -64,10 +62,10 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         /// <param name="theCA"></param>
         /// <param name="theLeftEdge"></param>
-        public void SaveImage(List<Generation1D> theCA)
+        public void SaveImage(List<int[]> theCA)
         {
             //find dimensions
-            int maxDistance = theCA[0].Cells.Length;
+            int maxDistance = theCA[0].Length;
             NumberFilesSaved++;
 
             //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
@@ -84,13 +82,13 @@ namespace CellularAutomata.OneDimensionalCA
 
             for (int generation = 0; generation < theCA.Count; generation++)
             {
-                for (int c = 0; c < theCA[generation].Cells.Length; c++)
+                for (int c = 0; c < theCA[generation].Length; c++)
                 {
-                    if (theCA[generation].Cells[c] > 0) //TODO have array of brushes, a color for each state
+                    if (theCA[generation][c] > 0) //TODO have array of brushes, a color for each state
                     {
                         point.X = c * CellSize.Width; //this is where leftEdge comes in
                         point.Y = generation * CellSize.Height;
-                        g.FillRectangle(Brushes[theCA[generation].Cells[c]], point.X, point.Y, CellSize.Width, CellSize.Height);
+                        g.FillRectangle(Brushes[theCA[generation][c]], point.X, point.Y, CellSize.Width, CellSize.Height);
                         if(GridType == ImagerGridSettings1D.GridOnLive)
                         {
                             g.DrawRectangle(LinePen, new Rectangle(point, CellSize));
@@ -150,13 +148,13 @@ namespace CellularAutomata.OneDimensionalCA
             System.IO.File.WriteAllLines(@location, lines);
         }
 
-        public void printCA(List<Generation1D> theList)
+        public void printCA(List<int[]> theList)
         {
             List<string> lines = new List<string>();
             string s = "";
-            foreach(Generation1D g in theList)
+            foreach(int[] g in theList)
             {
-                foreach(int c in g.Cells)
+                foreach(int c in g)
                 {
                     s += c;
                 }
@@ -168,13 +166,13 @@ namespace CellularAutomata.OneDimensionalCA
             System.IO.File.WriteAllLines(@location, lines);
         }
 
-        public List<string> displayCA(List<Generation1D> theList)
+        public List<string> displayCA(List<int[]> theList)
         {
             List<string> lines = new List<string>();
             string s = "";
-            foreach (Generation1D g in theList)
+            foreach (int[] g in theList)
             {
-                foreach (int c in g.Cells)
+                foreach (int c in g)
                 {
                     s += c;
                 }

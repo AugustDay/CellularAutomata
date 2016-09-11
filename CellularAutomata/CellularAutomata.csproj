@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="ConsoleInterface.cs" />
     <Compile Include="OneDimensionalCA\Automata1D.cs" />
-    <Compile Include="OneDimensionalCA\Generation1D.cs" />
     <Compile Include="OneDimensionalCA\Imager1D.cs" />
     <Compile Include="OneDimensionalCA\Rules1D.cs" />
     <Compile Include="Program.cs" />

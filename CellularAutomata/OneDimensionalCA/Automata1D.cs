@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CellularAutomata.OneDimensionalCA
 {
@@ -17,7 +15,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// <summary>The state of the cells within a given Cell's neighborhood coordinates.</summary>
         private int[] LocalSituation;
 
-        public List<Generation1D> CellularAutomata { get; }
+        public List<int[]> Generations { get; }
 
         public Imager1D Imager { get; }
 
@@ -25,13 +23,13 @@ namespace CellularAutomata.OneDimensionalCA
 
         public int SizeOfBoard { get; set; }
 
-        public int Generation { get { return CellularAutomata.Count; } }
+        public int StepNumber { get { return Generations.Count; } }
 
         public Simulator1D() 
         {
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
-            CellularAutomata = new List<Generation1D>();
+            Generations = new List<int[]>();
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD);
         }
 
@@ -45,7 +43,7 @@ namespace CellularAutomata.OneDimensionalCA
             }
             Rules = theRules;
             Imager = theImager;
-            CellularAutomata = new List<Generation1D>();
+            Generations = new List<int[]>();
             ConstructorHelper(theSizeOfBoard);
         }
 
@@ -110,8 +108,8 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         public void Initialize()
         {
-            CellularAutomata.Clear();
-            CellularAutomata.Add(new Generation1D(Origin));
+            Generations.Clear();
+            Generations.Add(Origin);
         }
 
         /// <summary>
@@ -128,18 +126,18 @@ namespace CellularAutomata.OneDimensionalCA
         /// <param name="theNumberOfSteps"></param>
         public void Proceed(int theNumberOfSteps)
         {
-            Generation1D next = CellularAutomata[CellularAutomata.Count - 1];
+            int[] next = Generations[Generations.Count - 1];
             for (int i = 0; i < theNumberOfSteps; i++)
             {
-                next = new Generation1D(NewGeneration(next));
-                CellularAutomata.Add(next);
+                next = NewGeneration(next);
+                Generations.Add(next);
             }
         }
 
-        public int[] NewGeneration(Generation1D theGen)
+        public int[] NewGeneration(int[] theGen)
         {
             int[] newCells = new int[SizeOfBoard];
-            for (int i = 0; i < theGen.Cells.Length; i++)
+            for (int i = 0; i < theGen.Length; i++)
             {
                 getNeighboorhood(i, theGen);
                 newCells[i] = Rules.rule(LocalSituation);
@@ -148,14 +146,14 @@ namespace CellularAutomata.OneDimensionalCA
             return newCells;
         }
 
-        public void getNeighboorhood(int theIndex, Generation1D theGen)
+        public void getNeighboorhood(int theIndex, int[] theGen)
         {
             for (int n = 0; n < Rules.NeighborhoodSize; n++) 
             {
                 int location = Rules.NeighborhoodCoordinates[n] + theIndex;
-                if(location > 0 && location < theGen.Cells.Length) //is not out of bounds
+                if(location > 0 && location < theGen.Length) //is not out of bounds
                 {
-                    LocalSituation[n] = theGen.Cells[location];
+                    LocalSituation[n] = theGen[location];
                 } else
                 {
                     LocalSituation[n] = 0; //dead out of bounds
@@ -165,7 +163,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public void OutputAutomata()
         {
-            Imager.SaveImage(CellularAutomata);
+            Imager.SaveImage(Generations);
         }
 
         public override bool Equals(Object theOther)
@@ -175,11 +173,17 @@ namespace CellularAutomata.OneDimensionalCA
                 return false;
 
             Simulator1D otherAutomata = (Simulator1D)theOther;
-            return /*Rules.Equals(theOther.Rules) &&*/ Imager.Equals(otherAutomata.Imager) &&
-                //Imager will need to check its Rule for equality anyways, no need to directly check Rule
-                SizeOfBoard == otherAutomata.SizeOfBoard &&
-                Origin.SequenceEqual(otherAutomata.Origin) && LocalSituation.SequenceEqual(otherAutomata.LocalSituation) &&
-                CellularAutomata.SequenceEqual(otherAutomata.CellularAutomata); //should it compare the generations?
+            bool gensAreEqual = true;
+            for(int i = 0; i < Generations.Count; i++)
+            {
+                if(!Generations[i].SequenceEqual(otherAutomata.Generations[i]))
+                {
+                    gensAreEqual = false;
+                    break;
+                }
+            }
+            return Imager.Equals(otherAutomata.Imager) && SizeOfBoard == otherAutomata.SizeOfBoard && gensAreEqual &&
+                Origin.SequenceEqual(otherAutomata.Origin) && LocalSituation.SequenceEqual(otherAutomata.LocalSituation);
         }
     }
 }
