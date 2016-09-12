@@ -8,6 +8,8 @@ namespace CellularAutomata
     {
         public static Random Rand = new Random(); //no longer readonly, for testing purposes.
 
+        public static ConsoleColor ErrorColor = ConsoleColor.Red;
+
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
         /// specified radix (in the range [2, 36]).
@@ -231,16 +233,22 @@ namespace CellularAutomata
                         Array.Sort(neighborhoodCoordinates);
                         break;
                     case 'r':
-                        string[] numberCode = s.Substring(2).Split('_'); //[0] is array, [1] is base
-                        int radix;
-                        int.TryParse(numberCode[1], out radix);
-                        big = LargeArbitraryToDecimalSystem(numberCode[0], radix);                                             
+                        try
+                        {
+                            string[] numberCode = s.Substring(2).Split('_'); //[0] is array, [1] is base
+                            int radix;
+                            int.TryParse(numberCode[1], out radix);
+                            big = LargeArbitraryToDecimalSystem(numberCode[0], radix);
+                        } catch (IndexOutOfRangeException)
+                        {
+                            DisplayMessage("Failed to parse rule number: \"" + s + "\"\n", ErrorColor);
+                        }
                         break;
                     case 'b':
                         int.TryParse(s.Substring(2), out b);
                         break;
                     default:
-                        Console.WriteLine("Failed to parse: \"" + s);
+                        DisplayMessage("Failed to parse parameter: \"" + s + "\"\n", ErrorColor);
                         break;
                 }
             }
@@ -266,11 +274,19 @@ namespace CellularAutomata
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("Error: something went wrong with constructing the new Automata.");
+                DisplayMessage("Error: something went wrong with constructing the new Automata.\n", ErrorColor);
                 theAutomata = null;
             }
 
             return theAutomata;
+        }
+
+        public static void DisplayMessage(string theMessage, ConsoleColor theColor)
+        {
+            ConsoleColor oldColor = Console.ForegroundColor;
+            Console.ForegroundColor = theColor;
+            Console.Write(theMessage);
+            Console.ForegroundColor = oldColor;
         }
 
         public static string DisplayArray(int[] theArray)

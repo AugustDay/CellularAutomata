@@ -219,7 +219,7 @@ namespace CellularAutomata
             }
             else
             {
-                Console.WriteLine("Error: failed to parse parameters.");
+                Tools.DisplayMessage("Error: failed to parse parameters.\n", Tools.ErrorColor);
                 CurrentAutomata = History.Last();
             }
         }
