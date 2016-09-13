@@ -62,11 +62,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyInfo1.cs</LastGenOutput>
     </Content>
-    <Compile Include="Properties\AssemblyInfo1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyInfo.tt</DependentUpon>
-    </Compile>
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>

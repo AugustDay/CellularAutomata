@@ -12,7 +12,7 @@
     try { incBuild = Convert.ToBoolean(this.Host.ResolveParameterValue("","","build")); } catch( Exception ) { }
     try {
         string currentDirectory = Path.GetDirectoryName(Host.TemplateFile);
-        string assemblyInfo = File.ReadAllText(Path.Combine(currentDirectory, "AssemblyInfo1.cs"));
+        string assemblyInfo = File.ReadAllText(Path.Combine(currentDirectory, "AssemblyInfo.cs"));
         Regex pattern = new Regex("AssemblyVersion\\(\"\\d+\\.\\d+\\.(?<revision>\\d+)\\.(?<build>\\d+)\"\\)");
         MatchCollection matches = pattern.Matches(assemblyInfo);
         revision = Convert.ToInt32(matches[0].Groups["revision"].Value) + (incRevision?1:0);
