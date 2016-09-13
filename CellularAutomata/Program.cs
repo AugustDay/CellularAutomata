@@ -17,7 +17,7 @@ namespace CellularAutomata
             Console.Title = "Cellular Automata Simulator";
             ConsoleInterface userInterface = new ConsoleInterface();
             userInterface.Run();
-
+            //test   
             Console.WriteLine("Program complete. Press any key to close window.");
             Console.ReadKey();
         }
