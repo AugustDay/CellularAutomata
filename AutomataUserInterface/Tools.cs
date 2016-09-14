@@ -1,6 +1,8 @@
 ﻿using CellularAutomata.OneDimensionalCA;
 using System;
 using System.Numerics;
+using AutomataUserInterface;
+using System.Windows.Media;
 
 namespace CellularAutomata
 {
@@ -8,7 +10,15 @@ namespace CellularAutomata
     {
         public static Random Rand = new Random(); //no longer readonly, for testing purposes.
 
-        public static ConsoleColor ErrorColor = ConsoleColor.Red;
+        public static Brush PositiveColor = Brushes.Blue;
+
+        public static Brush NeutralColor = Brushes.Black;
+
+        public static Brush ErrorColor = Brushes.Red;
+
+        public static Brush GreenColor = Brushes.Green;
+
+        public static MainWindow OutputWindow;
 
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
@@ -281,15 +291,27 @@ namespace CellularAutomata
             return theAutomata;
         }
 
-        public static void DisplayMessage(string theMessage, ConsoleColor theColor)
+        public static void DisplayMessageLine(string theMessage)
         {
-            ConsoleColor oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = theColor;
-            Console.Write(theMessage);
-            Console.ForegroundColor = oldColor;
+            OutputWindow.addSomeColoredText(theMessage + "\n", NeutralColor);
         }
 
-        public static string DisplayArray(int[] theArray)
+        public static void DisplayMessageLine(string theMessage, Brush theColor)
+        {
+            OutputWindow.addSomeColoredText(theMessage + "\n", theColor);
+        }
+
+        public static void DisplayMessage(string theMessage)
+        {
+            OutputWindow.addSomeColoredText(theMessage, NeutralColor);
+        }
+
+        public static void DisplayMessage(string theMessage, Brush theColor)
+        {
+            OutputWindow.addSomeColoredText(theMessage, theColor);
+        }
+
+        public static string ArrayToString(int[] theArray)
         {
             string result = "{";
             for(int i = 0; i < theArray.Length - 1; i++)
@@ -300,7 +322,7 @@ namespace CellularAutomata
             return result;
         }
 
-        public static string DisplayArrayWithSpaces(int[] theArray)
+        public static string ArrayToStringWithSpaces(int[] theArray)
         {
             string result = "{ ";
             for (int i = 0; i < theArray.Length - 1; i++)

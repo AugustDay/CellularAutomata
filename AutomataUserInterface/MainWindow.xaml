@@ -6,7 +6,33 @@
         xmlns:local="clr-namespace:AutomataUserInterface"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <DockPanel Margin="0">
+        <TextBox x:Name="UserInput"
+		 DockPanel.Dock="Bottom"
+		 MinLines="2"
+		 TextWrapping="Wrap"
+		 KeyUp="UserInput_KeyUp"
+		 Background="White"
+		 Foreground="Black">
+            <TextBox.ToolTip>
+                <TextBlock>
+			<Italic Foreground="Red">Instructions: </Italic> Type here to change the preview text.
+                </TextBlock>
+            </TextBox.ToolTip>
+            The quick brown fox jumps over the lazy dog.
+        </TextBox>
+        <FlowDocumentScrollViewer 
+            Margin="-8, 0, 0, 0">
+            <FlowDocument Background="White" Foreground="Black">
+                <Paragraph x:Name="TextHistory" 
+			   FontSize="16" />
+            </FlowDocument>
+            <!--<FlowDocumentScrollViewer.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="Background" Value="Blue"/>
+                </Style>
+            </FlowDocumentScrollViewer.Resources>-->
+        </FlowDocumentScrollViewer>
+    </DockPanel>
+
 </Window>

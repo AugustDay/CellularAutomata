@@ -6,6 +6,14 @@ namespace CellularAutomata.OneDimensionalCA
 {
     public class Imager1D
     {
+
+        public enum ImagerGridSettings1D
+        {
+            NoGrid,
+            Grid,
+            GridOnLive,
+        }
+
         private static readonly Size SIZE_DEFAULT = new Size(10, 10);
 
         private static readonly Color[] COLORS_DEFAULT = { Color.LightGray, Color.Blue, Color.Green,

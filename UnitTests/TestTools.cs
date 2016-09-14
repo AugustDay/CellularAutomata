@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CellularAutomata;
 using System.Numerics;
+using CellularAutomata;
 using CellularAutomata.OneDimensionalCA;
 
 namespace UnitTests
