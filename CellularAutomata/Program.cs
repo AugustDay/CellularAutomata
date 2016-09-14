@@ -12,15 +12,15 @@ namespace CellularAutomata
 
     class Program
     {
-        static void Main(string[] args)
-        {            
-            Console.Title = "Cellular Automata Simulator";
-            ConsoleInterface userInterface = new ConsoleInterface();
-            userInterface.Run();
+        //static void Main(string[] args)
+        //{            
+        //    Console.Title = "Cellular Automata Simulator";
+        //    ConsoleInterface userInterface = new ConsoleInterface();
+        //    userInterface.Run();
 
-            Console.WriteLine("Program complete. Press any key to close window.");
-            Console.ReadKey();
-        }
+        //    Console.WriteLine("Program complete. Press any key to close window.");
+        //    Console.ReadKey();
+        //}
 
         static void EveryRule(Simulator1D theAutomata)
         {

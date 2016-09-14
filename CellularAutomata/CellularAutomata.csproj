@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A8227A57-DBC0-446C-BD15-C6C356A87B6C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CellularAutomata</RootNamespace>
     <AssemblyName>CellularAutomata</AssemblyName>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ManyConsole, Version=0.4.2.20, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ManyConsole.0.4.2.20\lib\ManyConsole.dll</HintPath>
@@ -54,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleInterface.cs" />
-    <Compile Include="OneDimensionalCA\Automata1D.cs" />
+    <Compile Include="OneDimensionalCA\Simulator1D.cs" />
     <Compile Include="OneDimensionalCA\Imager1D.cs" />
     <Compile Include="OneDimensionalCA\Rules1D.cs" />
     <Compile Include="Program.cs" />
