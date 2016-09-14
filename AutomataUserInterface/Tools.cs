@@ -292,13 +292,13 @@ namespace CellularAutomata
         }
 
         public static void DisplayMessageLine(string theMessage)
-        {
+        { 
             OutputWindow.addSomeColoredText(theMessage + "\n", NeutralColor);
         }
 
         public static void DisplayMessageLine(string theMessage, Brush theColor)
         {
-            OutputWindow.addSomeColoredText(theMessage + "\n", theColor);
+            OutputWindow.addSomeColoredText(theMessage + "\n", theColor); 
         }
 
         public static void DisplayMessage(string theMessage)
