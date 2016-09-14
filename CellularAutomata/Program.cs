@@ -19,7 +19,7 @@ namespace CellularAutomata
         //    userInterface.Run();
 
         //    Console.WriteLine("Program complete. Press any key to close window.");
-        //    Console.ReadKey();
+        //    Console.ReadKey();  
         //}
 
         static void EveryRule(Simulator1D theAutomata)
