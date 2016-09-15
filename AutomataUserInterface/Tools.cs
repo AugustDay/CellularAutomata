@@ -251,14 +251,14 @@ namespace CellularAutomata
                             big = LargeArbitraryToDecimalSystem(numberCode[0], radix);
                         } catch (IndexOutOfRangeException)
                         {
-                            DisplayMessage("Failed to parse rule number: \"" + s + "\"\n", ErrorColor);
+                            DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", ErrorColor);
                         }
                         break;
                     case 'b':
                         int.TryParse(s.Substring(2), out b);
                         break;
                     default:
-                        DisplayMessage("Failed to parse parameter: \"" + s + "\"\n", ErrorColor);
+                        DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", ErrorColor);
                         break;
                 }
             }
@@ -284,7 +284,7 @@ namespace CellularAutomata
             }
             catch (ArgumentException)
             {
-                DisplayMessage("Error: something went wrong with constructing the new Automata.\n", ErrorColor);
+                DisplayMessageLine("Error: something went wrong with constructing the new Automata.", ErrorColor);
                 theAutomata = null;
             }
 
@@ -293,12 +293,12 @@ namespace CellularAutomata
 
         public static void DisplayMessageLine(string theMessage)
         { 
-            OutputWindow.addSomeColoredText(theMessage + "\n", NeutralColor);
+            OutputWindow.addSomeColoredText("\n" + theMessage, NeutralColor);
         }
 
         public static void DisplayMessageLine(string theMessage, Brush theColor)
         {
-            OutputWindow.addSomeColoredText(theMessage + "\n", theColor); 
+            OutputWindow.addSomeColoredText("\n" + theMessage, theColor); 
         }
 
         public static void DisplayMessage(string theMessage)

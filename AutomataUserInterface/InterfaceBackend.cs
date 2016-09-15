@@ -10,12 +10,12 @@ namespace CellularAutomata
     public class InterfaceBackend
     {
         private const string COMMAND_NOT_RECOGNIZED =
-            "Command not recognized. Type 'help' for list of commands.\n";
+            "Command not recognized. Type 'help' for list of commands.";
 
         private const string USER_INPUT_SYMBOL = "> ";
 
         private const string WELCOME_PROMPT = "Welcome to the Cellular Automata (CA) simulator!\n" +
-            "By: Austin Ingraham\n\nPress 'help' or simply 'h' for commands.\n"; //TODO name here!
+            "By: Austin Ingraham\n\nPress 'help' or simply 'h' for commands."; //TODO name here!
 
         private const string HELP_MESSAGE =
             "h|help: lists all commands.\n" +
@@ -81,6 +81,7 @@ namespace CellularAutomata
             CurrentAutomata = new Simulator1D();
             History.AddLast(CurrentAutomata);
             Watch = new Stopwatch();
+            Tools.DisplayMessage(WELCOME_PROMPT);
         }
 
         public void Run(string theInput)
@@ -90,15 +91,15 @@ namespace CellularAutomata
             {
                 Watch.Restart();
                 arguments = ParseInput(theInput).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-                if (Commands.ContainsKey(arguments[0])) //input has valid argument.
+                if (arguments.Length > 0 && Commands.ContainsKey(arguments[0])) //input has valid argument.
                 {
                     switch (Commands[arguments[0]])
                     {
                         case 0: //help
-                            Tools.DisplayMessage(HELP_MESSAGE);
+                            Tools.DisplayMessageLine(HELP_MESSAGE);
                             break;
                         case 1: //about
-                            Tools.DisplayMessage("'About' command not yet implemented.\n");
+                            Tools.DisplayMessageLine("'About' command not yet implemented.");
                             break;
                         //case 2: //quit 
                         //    keepGoing = false; TODO Should close the window!
@@ -123,11 +124,11 @@ namespace CellularAutomata
                             break;
                     }
                     Watch.Stop();
-                    Tools.DisplayMessage($"Command took: {Watch.ElapsedMilliseconds} ms.\n");
+                    Tools.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
                 }
                 else
                 {
-                    Tools.DisplayMessage(COMMAND_NOT_RECOGNIZED);
+                    Tools.DisplayMessageLine(COMMAND_NOT_RECOGNIZED);
                 }                
             }
         }
@@ -211,7 +212,7 @@ namespace CellularAutomata
             }
             else
             {
-                Tools.DisplayMessage("Error: failed to parse parameters.\n", Tools.ErrorColor);
+                Tools.DisplayMessageLine("Error: failed to parse parameters.", Tools.ErrorColor);
                 CurrentAutomata = History.Last();
             }
         }
