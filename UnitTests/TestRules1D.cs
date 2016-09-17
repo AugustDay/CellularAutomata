@@ -174,7 +174,7 @@ namespace UnitTests
             Rules1D rulesToTest = new Rules1D(numberInput, coordinatesInput, statesInput);
 
             Assert.IsTrue(rulesToTest.RuleArray.SequenceEqual(sequenceExpected),
-                        "Rule Array was not correct (did you switch to LittleEndian?), was: " + Tools.DisplayArray(rulesToTest.RuleArray));
+                        "Rule Array was not correct (did you switch to LittleEndian?), was: " + Tools.ArrayToString(rulesToTest.RuleArray));
         }
 
         [TestMethod]

@@ -1,6 +1,8 @@
 ﻿using CellularAutomata.OneDimensionalCA;
 using System;
 using System.Numerics;
+using AutomataUserInterface;
+using System.Windows.Media;
 
 namespace CellularAutomata
 {
@@ -8,7 +10,15 @@ namespace CellularAutomata
     {
         public static Random Rand = new Random(); //no longer readonly, for testing purposes.
 
-        public static ConsoleColor ErrorColor = ConsoleColor.Red;
+        public static Brush PositiveColor = Brushes.Blue;
+
+        public static Brush NeutralColor = Brushes.Black;
+
+        public static Brush ErrorColor = Brushes.Red;
+
+        public static Brush GreenColor = Brushes.Green;
+
+        public static MainWindow OutputWindow;
 
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
@@ -241,14 +251,14 @@ namespace CellularAutomata
                             big = LargeArbitraryToDecimalSystem(numberCode[0], radix);
                         } catch (IndexOutOfRangeException)
                         {
-                            DisplayMessage("Failed to parse rule number: \"" + s + "\"\n", ErrorColor);
+                            DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", ErrorColor);
                         }
                         break;
                     case 'b':
                         int.TryParse(s.Substring(2), out b);
                         break;
                     default:
-                        DisplayMessage("Failed to parse parameter: \"" + s + "\"\n", ErrorColor);
+                        DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", ErrorColor);
                         break;
                 }
             }
@@ -274,22 +284,34 @@ namespace CellularAutomata
             }
             catch (ArgumentException)
             {
-                DisplayMessage("Error: something went wrong with constructing the new Automata.\n", ErrorColor);
+                DisplayMessageLine("Error: something went wrong with constructing the new Automata.", ErrorColor);
                 theAutomata = null;
             }
 
             return theAutomata;
         }
 
-        public static void DisplayMessage(string theMessage, ConsoleColor theColor)
-        {
-            ConsoleColor oldColor = Console.ForegroundColor;
-            Console.ForegroundColor = theColor;
-            Console.Write(theMessage);
-            Console.ForegroundColor = oldColor;
+        public static void DisplayMessageLine(string theMessage)
+        { 
+            OutputWindow.addSomeColoredText("\n" + theMessage, NeutralColor);
         }
 
-        public static string DisplayArray(int[] theArray)
+        public static void DisplayMessageLine(string theMessage, Brush theColor)
+        {
+            OutputWindow.addSomeColoredText("\n" + theMessage, theColor); 
+        }
+
+        public static void DisplayMessage(string theMessage)
+        {
+            OutputWindow.addSomeColoredText(theMessage, NeutralColor);
+        }
+
+        public static void DisplayMessage(string theMessage, Brush theColor)
+        {
+            OutputWindow.addSomeColoredText(theMessage, theColor);
+        }
+
+        public static string ArrayToString(int[] theArray)
         {
             string result = "{";
             for(int i = 0; i < theArray.Length - 1; i++)
@@ -300,7 +322,7 @@ namespace CellularAutomata
             return result;
         }
 
-        public static string DisplayArrayWithSpaces(int[] theArray)
+        public static string ArrayToStringWithSpaces(int[] theArray)
         {
             string result = "{ ";
             for (int i = 0; i < theArray.Length - 1; i++)

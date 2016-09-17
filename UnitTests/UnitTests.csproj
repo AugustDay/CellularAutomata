@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CellularAutomata\CellularAutomata.csproj">
-      <Project>{a8227a57-dbc0-446c-bd15-c6c356a87b6c}</Project>
-      <Name>CellularAutomata</Name>
+    <ProjectReference Include="..\AutomataUserInterface\CellularAutomataSimulator.csproj">
+      <Project>{9BF96091-9A64-4802-8137-58FCA32884AD}</Project>
+      <Name>CellularAutomataSimulator</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace CellularAutomata
 {
-    public class ConsoleInterface
+    public class InterfaceBackend
     {
         private const string COMMAND_NOT_RECOGNIZED =
             "Command not recognized. Type 'help' for list of commands.";
@@ -15,7 +15,7 @@ namespace CellularAutomata
         private const string USER_INPUT_SYMBOL = "> ";
 
         private const string WELCOME_PROMPT = "Welcome to the Cellular Automata (CA) simulator!\n" +
-            "By: Austin Ingraham\n\nPress 'help' or simply 'h' for commands.\n"; //TODO name here!
+            "By: Austin Ingraham\n\nPress 'help' or simply 'h' for commands."; //TODO name here!
 
         private const string HELP_MESSAGE =
             "h|help: lists all commands.\n" +
@@ -40,7 +40,7 @@ namespace CellularAutomata
 
             "m|many {###}: inits CA origin w/ both random and single-cell origins, runs Go.\n" +
             "o|output: saves CA as a BMP image and text file with info on its structure.\n" +
-            "q|quit: ends the program.";
+            "q|quit: ends the program.\n";
 
         private Dictionary<string, int> Commands = new Dictionary<string, int>()
         {
@@ -74,69 +74,62 @@ namespace CellularAutomata
 
         private Simulator1D CurrentAutomata;
 
-        public ConsoleInterface()
+        private Stopwatch Watch;
+
+        public InterfaceBackend()
         {
             CurrentAutomata = new Simulator1D();
             History.AddLast(CurrentAutomata);
+            Watch = new Stopwatch();
+            Tools.DisplayMessage(WELCOME_PROMPT);
         }
 
-        public void Run()
+        public void Run(string theInput)
         {
-            bool keepGoing = true;
-            PrintWelcomeCA();
-            string prompt = WELCOME_PROMPT + USER_INPUT_SYMBOL;
-            string input = "";
             string[] arguments;
-            Stopwatch sw = new Stopwatch();
-            while (keepGoing)
+            if (theInput.Length > 0) //checks if the user just hit enter or input something.
             {
-                Console.Write(prompt);
-                prompt = USER_INPUT_SYMBOL;
-                input = Console.ReadLine();
-                if (input.Length > 0) //checks if the user just hit enter or input something.
+                Watch.Restart();
+                arguments = ParseInput(theInput).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+                if (arguments.Length > 0 && Commands.ContainsKey(arguments[0])) //input has valid argument.
                 {
-                    sw.Restart();
-                    arguments = ParseInput(input).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-                    if (Commands.ContainsKey(arguments[0])) //input has valid argument.
+                    switch (Commands[arguments[0]])
                     {
-                        switch (Commands[arguments[0]])
-                        {
-                            case 0: //help
-                                Console.WriteLine(HELP_MESSAGE);
-                                break;
-                            case 1: //about
-                                Console.WriteLine("'About' command not yet implemented.");
-                                break;
-                            case 2: //quit
-                                keepGoing = false;
-                                break;
-                            case 3: //new
-                                NewCommand(arguments);
-                                break;
-                            case 5: //status
-                                StatusCommand();
-                                break;
-                            case 6:
-                                GoCommand(arguments);
-                                break;
-                            case 7:
-                                ContinueCommand(arguments);
-                                break;
-                            case 8:
-                                CurrentAutomata.OutputAutomata();
-                                break;
-                            case 9:
-                                ManyCommand(arguments);
-                                break;
-                        }
-                        sw.Stop();
-                        Console.WriteLine($"Command took: {sw.ElapsedMilliseconds} ms.");
+                        case 0: //help
+                            Tools.DisplayMessageLine(HELP_MESSAGE);
+                            break;
+                        case 1: //about
+                            Tools.DisplayMessageLine("'About' command not yet implemented.");
+                            break;
+                        //case 2: //quit 
+                        //    keepGoing = false; TODO Should close the window!
+                        //    break;
+                        case 3: //new
+                            NewCommand(arguments);
+                            break;
+                        case 5: //status
+                            StatusCommand();
+                            break;
+                        case 6:
+                            GoCommand(arguments);
+                            break;
+                        case 7:
+                            ContinueCommand(arguments);
+                            break;
+                        case 8:
+                            CurrentAutomata.OutputAutomata();
+                            break;
+                        case 9:
+                            ManyCommand(arguments);
+                            break;
                     }
-                    else
-                    {
-                        Console.WriteLine(COMMAND_NOT_RECOGNIZED);
-                    }
+                    Watch.Stop();
+                    Tools.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
                 }
+                else
+                {
+                    Tools.DisplayMessageLine(COMMAND_NOT_RECOGNIZED);
+                }                
             }
         }
 
@@ -188,10 +181,10 @@ namespace CellularAutomata
             string status = "========================\nDimension: 1, Type: Elementary\n" +
                 $"States: {CurrentAutomata.Rules.PossibleStates}, " +
                 $"Neighborhood size: {CurrentAutomata.Rules.NeighborhoodSize}\n" +
-                $"Neighborhood coordinates: {Tools.DisplayArray(CurrentAutomata.Rules.NeighborhoodCoordinates)}\n" +
+                $"Neighborhood coordinates: {Tools.ArrayToString(CurrentAutomata.Rules.NeighborhoodCoordinates)}\n" +
                 $"Rule Number: {CurrentAutomata.Rules.RuleNumber}_{CurrentAutomata.Rules.RuleBase}\n" +
                 $"Current Generation: {CurrentAutomata.StepNumber}\n========================";
-            Console.WriteLine(status);
+            Tools.DisplayMessageLine(status);
         }
 
         public void NewCommand(string[] theArguments)
@@ -215,11 +208,11 @@ namespace CellularAutomata
             if (CurrentAutomata != null)
             {
                 AddToHistory();
-                Console.WriteLine("Found automata #" + CurrentAutomata.Rules.RuleNumber);
+                Tools.DisplayMessageLine("Found automata #" + CurrentAutomata.Rules.RuleNumber);
             }
             else
             {
-                Tools.DisplayMessage("Error: failed to parse parameters.\n", Tools.ErrorColor);
+                Tools.DisplayMessageLine("Error: failed to parse parameters.", Tools.ErrorColor);
                 CurrentAutomata = History.Last();
             }
         }
@@ -233,7 +226,7 @@ namespace CellularAutomata
             }
             else if (!int.TryParse(theArguments[1], out numberOfSteps))
             {
-                Console.WriteLine("Failed to read the given number of steps. Using default instead.");
+                Tools.DisplayMessageLine("Failed to read the given number of steps. Using default instead.");
                 numberOfSteps = CurrentAutomata.DEFAULT_NUMBER_OF_STEPS;
             }
 
@@ -292,7 +285,6 @@ namespace CellularAutomata
                             Console.BackgroundColor = ConsoleColor.Green;
                             break;
                     }
-                    Console.Write("  ");
                 }
                 Console.WriteLine();
             }

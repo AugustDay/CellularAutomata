@@ -1,0 +1,39 @@
+﻿<Window x:Class="AutomataUserInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutomataUserInterface"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="700">
+    <DockPanel Margin="0">
+        <TextBox x:Name="UserInput"
+		 DockPanel.Dock="Bottom"
+		 MinLines="2"
+		 TextWrapping="Wrap"
+		 KeyUp="UserInput_KeyUp"
+		 Background="White"
+		 Foreground="Black"
+         FontFamily="Consolas">
+            <TextBox.ToolTip>
+                <TextBlock>
+			<Italic Foreground="Red">Instructions: </Italic> Type here to change the preview text.
+                </TextBlock>
+            </TextBox.ToolTip>
+            The quick brown fox jumps over the lazy dog.
+        </TextBox>
+        <FlowDocumentScrollViewer Margin="-8, 0, 0, 0" x:Name="Document">
+            <FlowDocument Background="White" Foreground="Black">
+                <Paragraph x:Name="TextHistory" 
+			   FontSize="16" 
+               FontFamily="Consolas"/>
+            </FlowDocument>
+            <!--<FlowDocumentScrollViewer.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="Background" Value="Blue"/>
+                </Style>
+            </FlowDocumentScrollViewer.Resources>-->
+        </FlowDocumentScrollViewer>
+    </DockPanel>
+
+</Window>
