@@ -27,6 +27,7 @@ namespace AutomataUserInterface
 
         public MainWindow()
         {
+            //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
             InitializeComponent();
             Title = "Cellular Automata Simulator  v" + typeof(MainWindow).Assembly.GetName().Version.ToString();
             Tools.OutputWindow = this;

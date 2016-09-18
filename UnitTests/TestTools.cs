@@ -87,7 +87,7 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected, Simulator1D.EdgeSettings.HardEdges);
 
             Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
@@ -105,7 +105,7 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected, Simulator1D.EdgeSettings.HardEdges);
 
             Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
@@ -123,7 +123,7 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected, Simulator1D.EdgeSettings.HardEdges);
 
             Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");
@@ -141,7 +141,7 @@ namespace UnitTests
 
             Rules1D rulesExpected = new Rules1D(numberExpected, coordinatesExpected, statesExpected);
             Imager1D imagerExpected = new Imager1D(rulesExpected);
-            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected);
+            Simulator1D resultExpected = new Simulator1D(rulesExpected, imagerExpected, sizeExpected, Simulator1D.EdgeSettings.HardEdges);
 
             Simulator1D resultActual = Tools.MakeAutomataFromCode(testInput);
             Assert.AreEqual(resultExpected, resultActual, "The Automata generated were not equal.");

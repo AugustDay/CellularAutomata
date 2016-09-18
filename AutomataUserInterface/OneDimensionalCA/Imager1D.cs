@@ -7,7 +7,7 @@ namespace CellularAutomata.OneDimensionalCA
     public class Imager1D
     {
 
-        public enum ImagerGridSettings1D
+        public enum GridSettings1D
         {
             NoGrid,
             Grid,
@@ -33,7 +33,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// Determines how to draw the grid on bitmaps. 
         /// Set using ImagerGridSettings1D enum list.
         /// </summary>
-        public ImagerGridSettings1D GridType { get; set; }
+        public GridSettings1D GridType { get; set; }
 
         private int NumberFilesSaved = 0;
 
@@ -48,7 +48,7 @@ namespace CellularAutomata.OneDimensionalCA
             Rule = theRules;
             LinePen = new Pen(Color.Black);
             CellSize = SIZE_DEFAULT;
-            GridType = ImagerGridSettings1D.GridOnLive;
+            GridType = GridSettings1D.GridOnLive;
             InitializeBrushes();
         }
 
@@ -97,7 +97,7 @@ namespace CellularAutomata.OneDimensionalCA
                         point.X = c * CellSize.Width; //this is where leftEdge comes in
                         point.Y = generation * CellSize.Height;
                         g.FillRectangle(Brushes[theCA[generation][c]], point.X, point.Y, CellSize.Width, CellSize.Height);
-                        if(GridType == ImagerGridSettings1D.GridOnLive)
+                        if(GridType == GridSettings1D.GridOnLive)
                         {
                             g.DrawRectangle(LinePen, new Rectangle(point, CellSize));
                         }
@@ -106,7 +106,7 @@ namespace CellularAutomata.OneDimensionalCA
             }
 
             //Draws a grid.
-            if (GridType == ImagerGridSettings1D.Grid)
+            if (GridType == GridSettings1D.Grid)
             {
                 DrawGrid(g, output.Size);
             }

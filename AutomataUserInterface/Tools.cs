@@ -223,6 +223,7 @@ namespace CellularAutomata
             int k = Rules1D.DEFAULT_POSSIBLE_STATES;
             int b = Simulator1D.DEFAULT_SIZE_OF_BOARD;
             int[] ruleArray = Rules1D.DEFAULT_RULE_ARRAY;
+            Simulator1D.EdgeSettings edgeSetting = Simulator1D.DEFAULT_EDGE_SETTING;
             BigInteger big = new BigInteger(-1);
             int[] neighborhoodCoordinates = Rules1D.DEFAULT_NEIGHBORHOOD_ORIENTATION;
 
@@ -230,10 +231,10 @@ namespace CellularAutomata
             {
                 switch(s[0]) //k, n, r, b, etc...
                 {
-                    case 'k':
+                    case 'k': //states
                         int.TryParse(s.Substring(2), out k);
                         break;
-                    case 'n':
+                    case 'n': //neighborhood coordinates
                         string[] sub = s.Substring(2).Split(new char[] { '{', ',', '}' }, StringSplitOptions.RemoveEmptyEntries);
                         neighborhoodCoordinates = new int[sub.Length];
                         for(int i = 0; i < neighborhoodCoordinates.Length; i++)
@@ -242,7 +243,7 @@ namespace CellularAutomata
                         }
                         Array.Sort(neighborhoodCoordinates);
                         break;
-                    case 'r':
+                    case 'r': //rule number
                         try
                         {
                             string[] numberCode = s.Substring(2).Split('_'); //[0] is array, [1] is base
@@ -254,8 +255,11 @@ namespace CellularAutomata
                             DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", ErrorColor);
                         }
                         break;
-                    case 'b':
+                    case 'b': //board size
                         int.TryParse(s.Substring(2), out b);
+                        break;
+                    case 'h': //"hard" edges
+                        edgeSetting = Simulator1D.EdgeSettings.HardEdges;
                         break;
                     default:
                         DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", ErrorColor);
@@ -280,7 +284,7 @@ namespace CellularAutomata
                     daRules = new Rules1D(big, neighborhoodCoordinates, k);
                 }
                 Imager1D daImager = new Imager1D(daRules);
-                theAutomata = new Simulator1D(daRules, daImager, b);
+                theAutomata = new Simulator1D(daRules, daImager, b, edgeSetting);
             }
             catch (ArgumentException)
             {

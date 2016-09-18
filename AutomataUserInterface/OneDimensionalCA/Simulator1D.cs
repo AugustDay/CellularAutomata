@@ -6,7 +6,15 @@ namespace CellularAutomata.OneDimensionalCA
 {
     public class Simulator1D
     {
-        public static readonly int DEFAULT_SIZE_OF_BOARD = 400;
+        public enum EdgeSettings
+        {
+            HardEdges,
+            WraparoundEdges,
+        }
+
+        public static EdgeSettings DEFAULT_EDGE_SETTING = EdgeSettings.WraparoundEdges;
+
+        public static int DEFAULT_SIZE_OF_BOARD = 400;
 
         public int DEFAULT_NUMBER_OF_STEPS = 200;
 
@@ -16,20 +24,26 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>The state of the cells around a given cell.</summary>
         private int[] LocalSituation;
 
+        private Dictionary<int, int> WraparoundIndexes;
+
         ///<summary>Each generation of this Automata, [0] being origin.</summary>
-        public List<int[]> Generations { get; }
+        public List<int[]> Generations { get; private set; }
 
         ///<summary>The imager object that the Automata can use to output results.</summary>
-        public Imager1D Imager { get; }
+        public Imager1D Imager { get; private set; }
 
         ///<summary>Rules for the Automata.</summary>
-        public Rules1D Rules { get; }
+        public Rules1D Rules { get; private set; }
 
         ///<summary>The number of cells on a row.</summary>
-        public int SizeOfBoard { get; set; }
+        public int SizeOfBoard { get; private set; }
 
         ///<summary>Total number of generations that the Automata has been simulated.</summary>
-        public int StepNumber { get { return Generations.Count; } }
+        public int StepNumber { get { return Generations.Count; } private set { } }
+
+        public EdgeSettings CurrentEdgeSetting { get; private set; }
+
+        
 
         ///<summary>No-argument constructor makes an Simulator with default parameters.</summary>
         public Simulator1D() 
@@ -37,32 +51,62 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
             Generations = new List<int[]>();
-            ConstructorHelper(DEFAULT_SIZE_OF_BOARD);
+            ConstructorHelper(DEFAULT_SIZE_OF_BOARD, EdgeSettings.HardEdges);
         }
 
         ///<summary>Constructs a simulator with the given objects.</summary>
-        public Simulator1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard)
+        public Simulator1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard, EdgeSettings theSetting)
         {
             if(theRules == null || 
-               theImager == null ||
-               theSizeOfBoard < 1)
+               theImager == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException("The Rule or Imager param was null");
             }
             Rules = theRules;
             Imager = theImager;
             Generations = new List<int[]>();
-            ConstructorHelper(theSizeOfBoard);
+            ConstructorHelper(theSizeOfBoard, theSetting);
         }
 
         ///<summary>Initializes the components of the simulator.</summary>
-        private void ConstructorHelper(int theSizeOfBoard)
+        private void ConstructorHelper(int theSizeOfBoard, EdgeSettings theSetting)
         {            
+            if(theSizeOfBoard < 1)
+            {
+                throw new ArgumentException("Board cannot be of size less than 1!");
+            }
             LocalSituation = new int[Rules.NeighborhoodSize];
             SizeOfBoard = theSizeOfBoard;
             Origin = new int[SizeOfBoard];
+            CurrentEdgeSetting = theSetting;
+            if(CurrentEdgeSetting == EdgeSettings.WraparoundEdges)
+            {
+                CalculateWraparoundIndex();
+            }
             setOriginSingleCell(); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
             Initialize();
+        }
+
+        private void CalculateWraparoundIndex()
+        {
+            WraparoundIndexes = new Dictionary<int, int>();
+            foreach(int coord in Rules.NeighborhoodCoordinates)
+            {
+                if(Math.Abs(coord) > SizeOfBoard)
+                {
+                    throw new ArgumentException("All neighborhood coordinates must be within the size of the board.");
+                    //otherwise, cells would be counted multiple times in such a neighborhood (and require an extra loop to calculate).
+                    //TODO wraparound with large neighborhoods might be interesting, perhaps add such functionality later? 
+                }
+                if (coord < 0)
+                {
+                    WraparoundIndexes.Add(coord, SizeOfBoard + coord);
+                }
+                else if (coord > 0)
+                {
+                    WraparoundIndexes.Add(coord + SizeOfBoard - 1, -1 + coord);
+                }
+            }
         }
 
         ///<summary>Sets Origin with a cell in the middle with state=1.</summary>
@@ -161,12 +205,20 @@ namespace CellularAutomata.OneDimensionalCA
             for (int n = 0; n < Rules.NeighborhoodSize; n++) 
             {
                 int location = Rules.NeighborhoodCoordinates[n] + theIndex;
-                if(location > 0 && location < theGen.Length) //is not out of bounds
-                {
+                if(location >= 0 && location < SizeOfBoard) //is not out of bounds
+                { 
                     LocalSituation[n] = theGen[location];
                 } else
                 {
-                    LocalSituation[n] = 0; //dead out of bounds
+                    switch(CurrentEdgeSetting)
+                    {
+                        case EdgeSettings.HardEdges:
+                            LocalSituation[n] = 0; //dead out of bounds
+                            break;
+                        case EdgeSettings.WraparoundEdges:
+                            LocalSituation[n] = theGen[WraparoundIndexes[location]];
+                            break;
+                    }                    
                 }
             }
         }
