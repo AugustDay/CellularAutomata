@@ -21,6 +21,8 @@ namespace AutomataUserInterface
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static string WatermarkText = "Type here to enter commands.";
+
         public InterfaceBackend CommandParser;
 
         ScrollViewer Scroller;
@@ -28,7 +30,7 @@ namespace AutomataUserInterface
         public MainWindow()
         {
             //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
-            InitializeComponent();
+            InitializeComponent();            
             Title = "Cellular Automata Simulator  v" + typeof(MainWindow).Assembly.GetName().Version.ToString();
             Tools.OutputWindow = this;
             Scroller = GetDescendantByType(Document, typeof(ScrollViewer)) as ScrollViewer;
@@ -71,6 +73,24 @@ namespace AutomataUserInterface
                 if (foundElement != null) break;
             }
             return foundElement;
+        }
+
+        private void UserInput_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (UserInput.Text == WatermarkText)
+            {
+                UserInput.Text = string.Empty;
+                UserInput.Foreground = Brushes.Black;
+            }
+        }
+
+        private void UserInput_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (UserInput.Text == string.Empty)
+            {
+                UserInput.Text = WatermarkText;
+                UserInput.Foreground = Brushes.Gray;
+            }
         }
     }
 }
