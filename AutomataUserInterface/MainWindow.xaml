@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomataUserInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="700">
-    <DockPanel Margin="0">
-        <TextBox x:Name="UserInput"		 
+        Title="MainWindow" Height="600" Width="880"
+        MinHeight="300" MinWidth="500">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" MinWidth="200"/>
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0" >
+            <TextBox x:Name="UserInput"		 
 		         DockPanel.Dock="Bottom"
                  MinLines="2"
 		         TextWrapping="Wrap"
@@ -17,9 +23,9 @@
 		         Background="White"
 		         Foreground="Gray"
                  FontFamily="Consolas">
-            Type here to enter commands.
-            <TextBox.ToolTip>
-                <TextBlock FontFamily="Consolas">
+                Type here to enter commands.
+                <TextBox.ToolTip>
+                    <TextBlock FontFamily="Consolas">
 			        <Italic Foreground="Red">Valid commands: </Italic> 
                     <!--h|help, a|about, n|new, s|status, g|go, c|continue,  m|many, o|output-->
                     type 'help' or 'h' for a full description of commands.
@@ -31,21 +37,25 @@
                     <LineBreak/>c|continue
                     <LineBreak/>m|many
                     <LineBreak/>o|output
-                </TextBlock>
-            </TextBox.ToolTip>            
-        </TextBox>
-        <FlowDocumentScrollViewer Margin="-8, 0, 0, 0" x:Name="Document">
-            <FlowDocument Background="White" Foreground="Black">
-                <Paragraph x:Name="TextHistory" 
+                    </TextBlock>
+                </TextBox.ToolTip>
+            </TextBox>
+            <FlowDocumentScrollViewer Margin="-8, 0, 0, 0" x:Name="Document">
+                <FlowDocument Background="White" Foreground="Black">
+                    <Paragraph x:Name="TextHistory" 
 			   FontSize="16" 
                FontFamily="Consolas"/>
-            </FlowDocument>
-            <!--<FlowDocumentScrollViewer.Resources>
+                </FlowDocument>
+                <!--<FlowDocumentScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="Background" Value="Blue"/>
                 </Style>
             </FlowDocumentScrollViewer.Resources>-->
-        </FlowDocumentScrollViewer>
-    </DockPanel>
-
+            </FlowDocumentScrollViewer>
+        </DockPanel>
+        <Image  x:Name="ImageField"
+                Grid.Column="1"
+                MouseUp="ImageField_MouseUp"
+                Stretch="None"/>
+    </Grid>
 </Window>

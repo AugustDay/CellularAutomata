@@ -35,6 +35,7 @@ namespace AutomataUserInterface
             Tools.OutputWindow = this;
             Scroller = GetDescendantByType(Document, typeof(ScrollViewer)) as ScrollViewer;
             CommandParser = new InterfaceBackend(); //Init this last!
+            ImageField.Source = ConverterTool.MakeBitmapImageFromDrawing();
         }
 
         public void addSomeColoredText(string theText, Brush theColor)
@@ -91,6 +92,11 @@ namespace AutomataUserInterface
                 UserInput.Text = WatermarkText;
                 UserInput.Foreground = Brushes.Gray;
             }
+        }
+
+        private void ImageField_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ImageField.Source = ConverterTool.MakeBitmapImageFromDrawing();
         }
     }
 }

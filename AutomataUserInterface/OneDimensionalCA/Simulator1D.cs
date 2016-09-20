@@ -85,6 +85,7 @@ namespace CellularAutomata.OneDimensionalCA
             }
             setOriginSingleCell(); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
             Initialize();
+            Imager.GenerateImage(Generations);
         }
 
         private void CalculateWraparoundIndex()
@@ -184,6 +185,7 @@ namespace CellularAutomata.OneDimensionalCA
                 next = NewGeneration(next);
                 Generations.Add(next);
             }
+            Imager.GenerateImage(Generations);
         }
 
         ///<summary>Produces and returns a new generation based on the state of the given generation.</summary>
@@ -226,7 +228,7 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Saves the current state of the Automata.</summary>
         public void OutputAutomata()
         {
-            Imager.SaveImage(Generations);
+            Imager.SaveToFile();
         }
 
         public override bool Equals(Object theOther)
