@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace CellularAutomata.OneDimensionalCA
 {
-    public class Imager1D
+    public class Imager1D 
     {
         public enum GridSettings1D
         {
