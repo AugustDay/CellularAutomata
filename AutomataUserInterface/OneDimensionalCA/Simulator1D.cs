@@ -43,7 +43,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public EdgeSettings CurrentEdgeSetting { get; private set; }
 
-        
+        public bool AutomaticSaving = false;        
 
         ///<summary>No-argument constructor makes an Simulator with default parameters.</summary>
         public Simulator1D() 
@@ -186,6 +186,10 @@ namespace CellularAutomata.OneDimensionalCA
                 Generations.Add(next);
             }
             Imager.GenerateImage(Generations);
+            if (AutomaticSaving)
+            {
+                OutputAutomata();
+            }
         }
 
         ///<summary>Produces and returns a new generation based on the state of the given generation.</summary>

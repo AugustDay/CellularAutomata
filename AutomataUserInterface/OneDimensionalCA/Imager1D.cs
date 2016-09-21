@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutomataUserInterface;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -77,7 +78,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             //find dimensions
             int maxDistance = theCA[0].Length;
-            NumberFilesSaved++;
+            
 
             //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
             //{ 
@@ -115,6 +116,7 @@ namespace CellularAutomata.OneDimensionalCA
                 {
                     DrawGrid(g, ImageOutput.Size);
                 }
+                ImageChangedListener.ImageChanged(ImageOutput);
             }
         }
 
@@ -141,6 +143,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 throw new Exception("Program attempted to save an automata image before it was generated.\n");
             }
+            NumberFilesSaved++;
             TimeSpan t = DateTime.UtcNow - EpochStart;
             SaveImage(t); //TODO remove parameters from save / saveInfo, use object variable instead? 
             if (PrintInfoText)
