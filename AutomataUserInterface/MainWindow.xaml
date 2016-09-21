@@ -9,7 +9,7 @@
         MinHeight="300" MinWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" MinWidth="200"/>
+            <ColumnDefinition Width="2*" MinWidth="200" MaxWidth="400"/>
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0" >
@@ -53,10 +53,9 @@
             </FlowDocumentScrollViewer.Resources>-->
             </FlowDocumentScrollViewer>
         </DockPanel>
-        <Image  x:Name="ImageField"
-                Grid.Column="1"
-                MouseUp="ImageField_MouseUp"
-                MouseRightButtonUp="ImageField_MouseRightButtonUp"
-                Stretch="None"/>
+        <local:ZoomBorder x:Name="border" Grid.Column="1" ClipToBounds="True" Background="LightBlue">
+            <Image  x:Name="ImageField"                
+                MouseRightButtonUp="ImageField_MouseRightButtonUp"/> <!--Stretch="None"-->
+        </local:ZoomBorder>
     </Grid>
 </Window>

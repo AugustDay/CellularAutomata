@@ -98,11 +98,6 @@ namespace AutomataUserInterface
             }
         }
 
-        private void ImageField_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            //nothing
-        }
-
         private void ImageField_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             Tools.DisplayMessageLine("Saving current Automata image... ");
