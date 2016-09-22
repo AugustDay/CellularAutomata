@@ -14,7 +14,7 @@ namespace CellularAutomata.OneDimensionalCA
 
         public static EdgeSettings DEFAULT_EDGE_SETTING = EdgeSettings.WraparoundEdges;
 
-        public static int DEFAULT_SIZE_OF_BOARD = 400;
+        public static int DEFAULT_SIZE_OF_BOARD = 200;
 
         public int DEFAULT_NUMBER_OF_STEPS = 200;
 

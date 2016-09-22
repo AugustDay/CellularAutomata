@@ -17,6 +17,8 @@ namespace AutomataUserInterface
         private Point origin;
         private Point start;
 
+        private int TestScrollCounter = 0;
+
         private TranslateTransform GetTranslateTransform(UIElement element)
         {
             return (TranslateTransform)((TransformGroup)element.RenderTransform)
@@ -83,10 +85,13 @@ namespace AutomataUserInterface
         {
             if (child != null)
             {
+                //CellularAutomata.Tools.DisplayMessageLine($"Scroll value: {TestScrollCounter} ms.");
+                TestScrollCounter++;
+
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
 
-                double zoom = e.Delta > 0 ? .2 : -.2;
+                double zoom = e.Delta > 0 ? 1 : -1;
                 if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
                     return;
 

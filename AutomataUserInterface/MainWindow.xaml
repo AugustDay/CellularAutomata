@@ -55,7 +55,10 @@
         </DockPanel>
         <local:ZoomBorder x:Name="border" Grid.Column="1" ClipToBounds="True" Background="LightBlue">
             <Image  x:Name="ImageField"                
-                MouseRightButtonUp="ImageField_MouseRightButtonUp"/> <!--Stretch="None"-->
+                MouseRightButtonUp="ImageField_MouseRightButtonUp"
+                RenderOptions.BitmapScalingMode="NearestNeighbor" 
+                RenderOptions.EdgeMode="Aliased"/>
+            <!--Stretch="None"  -->
         </local:ZoomBorder>
     </Grid>
 </Window>
