@@ -203,7 +203,7 @@ namespace CellularAutomata
             }
             else //no args, make default
             {
-                CurrentAutomata = Tools.MakeAutomataFromCode("");
+                CurrentAutomata = Tools.MakeAutomataFromCode("", CurrentAutomata);
             }
 
             if (CurrentAutomata != null)

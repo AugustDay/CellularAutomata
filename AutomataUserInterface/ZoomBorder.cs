@@ -91,7 +91,7 @@ namespace AutomataUserInterface
                 var st = GetScaleTransform(child);
                 var tt = GetTranslateTransform(child);
 
-                double zoom = e.Delta > 0 ? 1 : -1;
+                double zoom = e.Delta > 0 ? 0.2 : -0.2;
                 if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
                     return;
 

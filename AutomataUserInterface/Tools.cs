@@ -230,50 +230,51 @@ namespace CellularAutomata
                     int theK, int theB, int[] theRuleArray, int[] theNeighborhoodCoordinates)
         {
             //string sampleSpec = "k=3 n={-1,0,1} r=1234567_10 b=400";
-            if(theSpecification == null || theSpecification.Length == 0)
-            {
-                return new Simulator1D();
-            }
-            string[] testString = theSpecification.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             BigInteger bigNumber = new BigInteger(-1);
 
-            foreach (string s in testString)
-            {
-                switch(s[0]) //k, n, r, b, etc...
+            if (theSpecification != null && theSpecification.Length > 0)
+            {                
+                string[] testString = theSpecification.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string s in testString)
                 {
-                    case 'k': //states
-                        int.TryParse(s.Substring(2), out theK);
-                        break;
-                    case 'n': //neighborhood coordinates
-                        string[] sub = s.Substring(2).Split(new char[] { '{', ',', '}' }, StringSplitOptions.RemoveEmptyEntries);
-                        theNeighborhoodCoordinates = new int[sub.Length];
-                        for(int i = 0; i < theNeighborhoodCoordinates.Length; i++)
-                        {
-                            int.TryParse(sub[i], out theNeighborhoodCoordinates[i]);
-                        }
-                        Array.Sort(theNeighborhoodCoordinates);
-                        break;
-                    case 'r': //rule number
-                        try
-                        {
-                            string[] numberCode = s.Substring(2).Split('_'); //[0] is array, [1] is base
-                            int radix;
-                            int.TryParse(numberCode[1], out radix);
-                            bigNumber = LargeArbitraryToDecimalSystem(numberCode[0], radix);
-                        } catch (IndexOutOfRangeException)
-                        {
-                            DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", ErrorColor);
-                        }
-                        break;
-                    case 'b': //board size
-                        int.TryParse(s.Substring(2), out theB);
-                        break;
-                    case 'h': //"hard" edges
-                        theEdgeSetting = Simulator1D.EdgeSettings.HardEdges;
-                        break;
-                    default:
-                        DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", ErrorColor);
-                        break;
+                    switch (s[0]) //k, n, r, b, etc...
+                    {
+                        case 'k': //states
+                            int.TryParse(s.Substring(2), out theK);
+                            break;
+                        case 'n': //neighborhood coordinates
+                            string[] sub = s.Substring(2).Split(new char[] { '{', ',', '}' }, StringSplitOptions.RemoveEmptyEntries);
+                            theNeighborhoodCoordinates = new int[sub.Length];
+                            for (int i = 0; i < theNeighborhoodCoordinates.Length; i++)
+                            {
+                                int.TryParse(sub[i], out theNeighborhoodCoordinates[i]);
+                            }
+                            Array.Sort(theNeighborhoodCoordinates);
+                            break;
+                        case 'r': //rule number
+                            try
+                            {
+                                string[] numberCode = s.Substring(2).Split('_'); //[0] is array, [1] is base
+                                int radix;
+                                int.TryParse(numberCode[1], out radix);
+                                bigNumber = LargeArbitraryToDecimalSystem(numberCode[0], radix);
+                            }
+                            catch (IndexOutOfRangeException)
+                            {
+                                DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", ErrorColor);
+                            }
+                            break;
+                        case 'b': //board size
+                            int.TryParse(s.Substring(2), out theB);
+                            break;
+                        case 'h': //"hard" edges
+                            theEdgeSetting = Simulator1D.EdgeSettings.HardEdges;
+                            break;
+                        default:
+                            DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", ErrorColor);
+                            break;
+                    }
                 }
             }
             //just pass in rule number in base 10 form, no conversion in here
