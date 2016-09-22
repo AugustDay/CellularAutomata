@@ -193,7 +193,8 @@ namespace CellularAutomata
             {
                 if (theArguments[1].Length > 2) //quotation marks
                 {
-                    CurrentAutomata = Tools.MakeAutomataFromCode(theArguments[1].Substring(1, theArguments[1].Length - 2));
+                    CurrentAutomata = Tools.MakeAutomataFromCode(
+                        theArguments[1].Substring(1, theArguments[1].Length - 2), CurrentAutomata);
                 }
                 else
                 {

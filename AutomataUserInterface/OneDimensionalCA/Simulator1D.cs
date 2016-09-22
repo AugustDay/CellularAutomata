@@ -51,7 +51,7 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
             Generations = new List<int[]>();
-            ConstructorHelper(DEFAULT_SIZE_OF_BOARD, EdgeSettings.HardEdges);
+            ConstructorHelper(DEFAULT_SIZE_OF_BOARD, EdgeSettings.WraparoundEdges);
         }
 
         ///<summary>Constructs a simulator with the given objects.</summary>
