@@ -1,19 +1,11 @@
 ﻿using CellularAutomata;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AutomataUserInterface
 {
@@ -37,7 +29,7 @@ namespace AutomataUserInterface
             Title = "Cellular Automata Simulator  v" + typeof(MainWindow).Assembly.GetName().Version.ToString();
             Tools.OutputWindow = this;
             Scroller = GetDescendantByType(Document, typeof(ScrollViewer)) as ScrollViewer;
-            ImageChangedListener.ImageField = ImageField;
+            ImageTools.ImageField = ImageField;
 
             CommandParser = new InterfaceBackend(); //Init this last!
         }
