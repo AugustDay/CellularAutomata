@@ -1,6 +1,7 @@
 ﻿using CellularAutomata;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace AutomataUserInterface
 
         ScrollViewer Scroller;
 
+        private Stopwatch Watch = new Stopwatch();
+
         public MainWindow()
         {
             //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
@@ -34,6 +37,8 @@ namespace AutomataUserInterface
             Title = "Cellular Automata Simulator  v" + typeof(MainWindow).Assembly.GetName().Version.ToString();
             Tools.OutputWindow = this;
             Scroller = GetDescendantByType(Document, typeof(ScrollViewer)) as ScrollViewer;
+            ImageChangedListener.ImageField = ImageField;
+
             CommandParser = new InterfaceBackend(); //Init this last!
         }
 
@@ -91,6 +96,16 @@ namespace AutomataUserInterface
                 UserInput.Text = WatermarkText;
                 UserInput.Foreground = Brushes.Gray;
             }
+        }
+
+        private void ImageField_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Tools.DisplayMessageLine("Saving current Automata image... ");
+            Watch.Restart();
+            CommandParser.CurrentAutomata.OutputAutomata();
+            Watch.Stop();
+            Tools.DisplayMessage("Done.");
+            Tools.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
         }
     }
 }

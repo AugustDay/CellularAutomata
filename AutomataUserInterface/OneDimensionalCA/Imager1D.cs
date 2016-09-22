@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AutomataUserInterface;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
 namespace CellularAutomata.OneDimensionalCA
 {
-    public class Imager1D
+    public class Imager1D 
     {
-
         public enum GridSettings1D
         {
             NoGrid,
@@ -16,8 +16,10 @@ namespace CellularAutomata.OneDimensionalCA
 
         private static readonly Size SIZE_DEFAULT = new Size(10, 10);
 
-        private static readonly Color[] COLORS_DEFAULT = { Color.LightGray, Color.Blue, Color.Green,
+        private static readonly Color[] COLORS_DEFAULT = { Color.Transparent, Color.Blue, Color.Green,
                                    Color.Red, Color.Yellow, Color.Purple, Color.Aqua}; //TODO add more!
+
+        private static DateTime EpochStart = new DateTime(1970, 1, 1);
 
         private Rules1D Rule;
 
@@ -39,6 +41,8 @@ namespace CellularAutomata.OneDimensionalCA
 
         public bool PrintInfoText = true;
 
+        public Bitmap ImageOutput;
+
         /// <summary>
         /// Constructs an instance of the Imager1D, with the given Rule object. 
         /// </summary>
@@ -58,7 +62,7 @@ namespace CellularAutomata.OneDimensionalCA
         private void InitializeBrushes()
         {
             Brushes = new SolidBrush[Rule.PossibleStates];
-            for(int i = 0; i < Brushes.Length; i++)
+            for (int i = 0; i < Brushes.Length; i++)
             {
                 Brushes[i] = new SolidBrush(COLORS_DEFAULT[i]);
             }
@@ -70,52 +74,49 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         /// <param name="theCA"></param>
         /// <param name="theLeftEdge"></param>
-        public void SaveImage(List<int[]> theCA)
+        public void GenerateImage(List<int[]> theCA)
         {
             //find dimensions
             int maxDistance = theCA[0].Length;
-            NumberFilesSaved++;
+            
 
             //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
-            //{
+            //{ 
             //    maxDistance = Math.Max(maxDistance, gen.Cells.Count);
             //}
 
             //create image
-            Bitmap output = new Bitmap(maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);
-            Graphics g = Graphics.FromImage(output);
-            g.FillRectangle(new SolidBrush(Brushes[0].Color), new Rectangle(new Point(0, 0), output.Size));
-            //image1.SetPixel(x, y, Color.Transparent);
-            Point point = new Point();
-
-            for (int generation = 0; generation < theCA.Count; generation++)
+            ImageOutput = new Bitmap(1 + maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);
+            using (Graphics g = Graphics.FromImage(ImageOutput))
             {
-                for (int c = 0; c < theCA[generation].Length; c++)
+                g.FillRectangle(new SolidBrush(Brushes[0].Color), new Rectangle(new Point(0, 0), ImageOutput.Size));
+                //image1.SetPixel(x, y, Color.Transparent);
+                Point point = new Point();
+
+                for (int generation = 0; generation < theCA.Count; generation++)
                 {
-                    if (theCA[generation][c] > 0) //TODO have array of brushes, a color for each state
+                    for (int c = 0; c < theCA[generation].Length; c++)
                     {
-                        point.X = c * CellSize.Width; //this is where leftEdge comes in
-                        point.Y = generation * CellSize.Height;
-                        g.FillRectangle(Brushes[theCA[generation][c]], point.X, point.Y, CellSize.Width, CellSize.Height);
-                        if(GridType == GridSettings1D.GridOnLive)
+                        if (theCA[generation][c] > 0) //TODO have array of brushes, a color for each state
                         {
-                            g.DrawRectangle(LinePen, new Rectangle(point, CellSize));
+                            point.X = c * CellSize.Width; //this is where leftEdge comes in
+                            point.Y = generation * CellSize.Height;
+                            g.FillRectangle(Brushes[theCA[generation][c]], point.X, point.Y, CellSize.Width, CellSize.Height);
+                            //TODO would having a single rectangle representing every cell, and changing its x and y values be faster? 
+                            if (GridType == GridSettings1D.GridOnLive)
+                            {
+                                g.DrawRectangle(LinePen, new Rectangle(point, CellSize));
+                            }
                         }
                     }
                 }
-            }
 
-            //Draws a grid.
-            if (GridType == GridSettings1D.Grid)
-            {
-                DrawGrid(g, output.Size);
-            }
-
-            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1); //TODO use hex base for time?
-            Save(output, t);
-            if (PrintInfoText)
-            {
-                SaveInfo(t);
+                //Draws a grid.
+                if (GridType == GridSettings1D.Grid)
+                {
+                    DrawGrid(g, ImageOutput.Size);
+                }
+                ImageChangedListener.ImageChanged(ImageOutput);
             }
         }
 
@@ -126,7 +127,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// <param name="theSize"></param>
         private void DrawGrid(Graphics theG, Size theSize)
         {
-            for(int x = 0; x < theSize.Width; x += CellSize.Width)
+            for (int x = 0; x < theSize.Width; x += CellSize.Width)
             {
                 theG.DrawLine(LinePen, x, 0, x, theSize.Height);
             }
@@ -136,21 +137,35 @@ namespace CellularAutomata.OneDimensionalCA
             }
         }
 
+        public void SaveToFile()
+        {
+            if(ImageOutput == null)
+            {
+                throw new Exception("Program attempted to save an automata image before it was generated.\n");
+            }
+            NumberFilesSaved++;
+            TimeSpan t = DateTime.UtcNow - EpochStart;
+            SaveImage(t); //TODO remove parameters from save / saveInfo, use object variable instead? 
+            if (PrintInfoText)
+            {
+                SaveInfo(t);
+            }
+        }
+
         /// <summary>
         /// Writes image to a file in the local directory.
         /// </summary>
-        /// <param name="theOutput"></param>
-        private void Save(Bitmap theOutput, TimeSpan theT) //TODO sometimes still overwrites existing file if generating them fast enough!
-        {
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theT.TotalSeconds + "_" + NumberFilesSaved + ".bmp";
-            theOutput.Save(@location);
+        private void SaveImage(TimeSpan theTime) //TODO sometimes still overwrites existing file if generating them fast enough!
+        {            
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theTime.TotalSeconds + "_" + NumberFilesSaved + ".bmp";
+            ImageOutput.Save(@location);
             //output.Save(@location, ImageFormat.Png); //TODO any way to do compression? Bitmaps are large!
             //TODO create "debug" function to write rule specifics to text file
         }
 
-        private void SaveInfo(TimeSpan theT)
-        {
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theT.TotalSeconds + " -- Info.txt";
+        private void SaveInfo(TimeSpan theTime)
+        { //TODO rule.tostring concise and verbose (one has full rule array, other just has number)
+            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theTime.TotalSeconds + " -- Info.txt";
             List<string> lines = new List<string>();
             lines.Add(Rule.GetInfo());
             System.IO.File.WriteAllLines(@location, lines);
@@ -160,9 +175,9 @@ namespace CellularAutomata.OneDimensionalCA
         {
             List<string> lines = new List<string>();
             string s = "";
-            foreach(int[] g in theList)
+            foreach (int[] g in theList)
             {
-                foreach(int c in g)
+                foreach (int c in g)
                 {
                     s += c;
                 }
@@ -215,8 +230,8 @@ namespace CellularAutomata.OneDimensionalCA
             }
 
             return Rule.Equals(otherImager.Rule) && CellSize.Equals(otherImager.CellSize) &&
-                LinePen.Width == otherImager.LinePen.Width && LinePen.Color == otherImager.LinePen.Color && 
-                GridType == otherImager.GridType && NumberFilesSaved == otherImager.NumberFilesSaved && 
+                LinePen.Width == otherImager.LinePen.Width && LinePen.Color == otherImager.LinePen.Color &&
+                GridType == otherImager.GridType && NumberFilesSaved == otherImager.NumberFilesSaved &&
                 PrintInfoText == otherImager.PrintInfoText;
         }
     }
