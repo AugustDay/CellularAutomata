@@ -72,7 +72,7 @@ namespace CellularAutomata
 
         private LinkedList<Simulator1D> History = new LinkedList<Simulator1D>();
 
-        private Simulator1D CurrentAutomata;
+        public Simulator1D CurrentAutomata;
 
         private Stopwatch Watch;
 
@@ -135,18 +135,20 @@ namespace CellularAutomata
 
         public void ManyCommand(string[] theArguments)
         {
+            bool autoSaving = CurrentAutomata.AutomaticSaving;
+            CurrentAutomata.AutomaticSaving = true;
             int numberOfSteps = GetNumberOfSteps(theArguments);
             for(int i = 1; i < CurrentAutomata.Rules.PossibleStates; i++)
             {
                 CurrentAutomata.setOriginSingleCell(i);
                 CurrentAutomata.Proceed(numberOfSteps);
                 CurrentAutomata.Imager.PrintInfoText = false;
-                CurrentAutomata.OutputAutomata();
             }
             CurrentAutomata.setOriginRandomCells();
             CurrentAutomata.Proceed(numberOfSteps);
             CurrentAutomata.Imager.PrintInfoText = true;
-            CurrentAutomata.OutputAutomata();
+
+            CurrentAutomata.AutomaticSaving = autoSaving;
         }
 
         public void ContinueCommand(string[] theArguments)
@@ -159,7 +161,6 @@ namespace CellularAutomata
             {
                 CurrentAutomata.Proceed();
             }
-            CurrentAutomata.OutputAutomata();
         }
 
         public void GoCommand(string[] theArguments)
@@ -172,7 +173,6 @@ namespace CellularAutomata
             {
                 CurrentAutomata.Go();
             }
-            CurrentAutomata.OutputAutomata();
         }
 
         public void StatusCommand()
