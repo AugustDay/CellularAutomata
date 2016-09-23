@@ -116,7 +116,7 @@ namespace CellularAutomata.OneDimensionalCA
                 {
                     DrawGrid(g, ImageOutput.Size);
                 }
-                ImageTools.ImageChanged(ImageOutput);
+                ImageTools.ChangeDisplayedImage(ImageOutput);
             }
         }
 

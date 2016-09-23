@@ -1,4 +1,5 @@
-﻿using CellularAutomata.OneDimensionalCA;
+﻿using AutomataUserInterface.Tools;
+using CellularAutomata.OneDimensionalCA;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -81,7 +82,7 @@ namespace CellularAutomata
             CurrentAutomata = new Simulator1D();
             History.AddLast(CurrentAutomata);
             Watch = new Stopwatch();
-            Tools.DisplayMessage(WELCOME_PROMPT);
+            Printer.DisplayMessage(WELCOME_PROMPT);
         }
 
         public void Run(string theInput)
@@ -96,10 +97,10 @@ namespace CellularAutomata
                     switch (Commands[arguments[0]])
                     {
                         case 0: //help
-                            Tools.DisplayMessageLine(HELP_MESSAGE);
+                            Printer.DisplayMessageLine(HELP_MESSAGE);
                             break;
                         case 1: //about
-                            Tools.DisplayMessageLine("'About' command not yet implemented.");
+                            Printer.DisplayMessageLine("'About' command not yet implemented.");
                             break;
                         //case 2: //quit 
                         //    keepGoing = false; TODO Should close the window!
@@ -124,11 +125,11 @@ namespace CellularAutomata
                             break;
                     }
                     Watch.Stop();
-                    Tools.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
+                    Printer.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
                 }
                 else
                 {
-                    Tools.DisplayMessageLine(COMMAND_NOT_RECOGNIZED);
+                    Printer.DisplayMessageLine(COMMAND_NOT_RECOGNIZED);
                 }                
             }
         }
@@ -184,7 +185,7 @@ namespace CellularAutomata
                 $"Neighborhood coordinates: {Tools.ArrayToString(CurrentAutomata.Rules.NeighborhoodCoordinates)}\n" +
                 $"Rule Number: {CurrentAutomata.Rules.RuleNumber}_{CurrentAutomata.Rules.RuleBase}\n" +
                 $"Current Generation: {CurrentAutomata.StepNumber}\n========================";
-            Tools.DisplayMessageLine(status);
+            Printer.DisplayMessageLine(status);
         }
 
         public void NewCommand(string[] theArguments)
@@ -209,11 +210,11 @@ namespace CellularAutomata
             if (CurrentAutomata != null)
             {
                 AddToHistory();
-                Tools.DisplayMessageLine("Found automata #" + CurrentAutomata.Rules.RuleNumber);
+                Printer.DisplayMessageLine("Found automata #" + CurrentAutomata.Rules.RuleNumber);
             }
             else
             {
-                Tools.DisplayMessageLine("Error: failed to parse parameters.", Tools.ErrorColor);
+                Printer.DisplayMessageLine("Error: failed to parse parameters.", Printer.ErrorColor);
                 CurrentAutomata = History.Last();
             }
         }
@@ -227,7 +228,7 @@ namespace CellularAutomata
             }
             else if (!int.TryParse(theArguments[1], out numberOfSteps))
             {
-                Tools.DisplayMessageLine("Failed to read the given number of steps. Using default instead.");
+                Printer.DisplayMessageLine("Failed to read the given number of steps. Using default instead.");
                 numberOfSteps = CurrentAutomata.DEFAULT_NUMBER_OF_STEPS;
             }
 

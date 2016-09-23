@@ -1,4 +1,5 @@
-﻿using CellularAutomata;
+﻿using AutomataUserInterface.Tools;
+using CellularAutomata;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -27,7 +28,7 @@ namespace AutomataUserInterface
             //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
             InitializeComponent();            
             Title = "Cellular Automata Simulator  v" + typeof(MainWindow).Assembly.GetName().Version.ToString();
-            Tools.OutputWindow = this;
+            Printer.OutputWindow = this;
             Scroller = GetDescendantByType(Document, typeof(ScrollViewer)) as ScrollViewer;
             ImageTools.ImageField = ImageField;
 
@@ -44,7 +45,7 @@ namespace AutomataUserInterface
         {
             if (e.Key == Key.Enter)
             {
-                addSomeColoredText("\n> " + UserInput.Text, Tools.PositiveColor);
+                addSomeColoredText("\n> " + UserInput.Text, Printer.PositiveColor);
                 CommandParser.Run(UserInput.Text);
                 UserInput.Text = "";
                 e.Handled = true;
@@ -92,12 +93,12 @@ namespace AutomataUserInterface
 
         private void ImageField_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Tools.DisplayMessageLine("Saving current Automata image... ");
+            Printer.DisplayMessageLine("Saving current Automata image... ");
             Watch.Restart();
             CommandParser.CurrentAutomata.OutputAutomata();
             Watch.Stop();
-            Tools.DisplayMessage("Done.");
-            Tools.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
+            Printer.DisplayMessage("Done.");
+            Printer.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
         }
     }
 }

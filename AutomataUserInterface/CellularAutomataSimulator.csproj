@@ -63,8 +63,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Tools\ImageTools.cs" />
-    <Compile Include="Tools\Tools.cs" />
+    <Compile Include="Utilities\ImageConverter.cs" />
+    <Compile Include="Utilities\Printer.cs" />
+    <Compile Include="Utilities\Tools.cs" />
     <Compile Include="View\ZoomBorder.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

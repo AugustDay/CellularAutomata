@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -11,7 +8,7 @@ namespace AutomataUserInterface
     {
         public static System.Windows.Controls.Image ImageField;
 
-        public static void ImageChanged(Bitmap theImage)
+        public static void ChangeDisplayedImage(Bitmap theImage)
         {
             if (ImageField != null)
             {

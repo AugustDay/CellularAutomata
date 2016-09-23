@@ -3,22 +3,13 @@ using System;
 using System.Numerics;
 using AutomataUserInterface;
 using System.Windows.Media;
+using AutomataUserInterface.Tools;
 
 namespace CellularAutomata
 {
     public static class Tools
     {
         public static Random Rand = new Random(); //no longer readonly, for testing purposes.
-
-        public static Brush PositiveColor = Brushes.Blue;
-
-        public static Brush NeutralColor = Brushes.Black;
-
-        public static Brush ErrorColor = Brushes.Red;
-
-        public static Brush GreenColor = Brushes.Green;
-
-        public static MainWindow OutputWindow;
 
         /// <summary>
         /// Converts the given decimal number to the numeral system with the
@@ -262,7 +253,7 @@ namespace CellularAutomata
                             }
                             catch (IndexOutOfRangeException)
                             {
-                                DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", ErrorColor);
+                                Printer.DisplayMessageLine("Failed to parse rule number: \"" + s + "\"", Printer.ErrorColor);
                             }
                             break;
                         case 'b': //board size
@@ -272,7 +263,7 @@ namespace CellularAutomata
                             theEdgeSetting = Simulator1D.EdgeSettings.HardEdges;
                             break;
                         default:
-                            DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", ErrorColor);
+                            Printer.DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", Printer.ErrorColor);
                             break;
                     }
                 }
@@ -299,33 +290,13 @@ namespace CellularAutomata
             }
             catch (ArgumentException)
             {
-                DisplayMessageLine("Error: something went wrong with constructing the new Automata.", ErrorColor);
+                Printer.DisplayMessageLine("Error: something went wrong with constructing the new Automata.", Printer.ErrorColor);
                 theAutomata = null;
             }
 
             return theAutomata;
-        }
-
-        public static void DisplayMessageLine(string theMessage)
-        { 
-            OutputWindow.addSomeColoredText("\n" + theMessage, NeutralColor);
-        }
-
-        public static void DisplayMessageLine(string theMessage, Brush theColor)
-        {
-            OutputWindow.addSomeColoredText("\n" + theMessage, theColor); 
-        }
-
-        public static void DisplayMessage(string theMessage)
-        {
-            OutputWindow.addSomeColoredText(theMessage, NeutralColor);
-        }
-
-        public static void DisplayMessage(string theMessage, Brush theColor)
-        {
-            OutputWindow.addSomeColoredText(theMessage, theColor);
-        }
-
+        }   
+                
         public static string ArrayToString(int[] theArray)
         {
             string result = "{";
