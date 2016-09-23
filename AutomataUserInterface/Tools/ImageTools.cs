@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace AutomataUserInterface
@@ -13,55 +15,33 @@ namespace AutomataUserInterface
         {
             if (ImageField != null)
             {
-                ImageField.Source = BasicConvertBitmapToBitmapSource(theImage);
+                BitmapSource bSource = Convert(theImage);
+
+                bSource.Freeze();
+
+                ImageField.Source = bSource;
             }
         }
 
-        public static BitmapSource MakeBitmapImageFromDrawing()
+        /// <summary>
+        /// Converts a System.Drawing.Bitmap to a BitmapSource, usable in a WPF image panel.
+        /// </summary>
+        /// <param name="theBitmap"></param>
+        /// <returns></returns>
+        /// <author>Clemens</author>
+        /// http://stackoverflow.com/a/30729291
+        public static BitmapSource Convert(Bitmap theBitmap)
         {
-            Bitmap pic = new Bitmap(500, 600);
-            Graphics g = Graphics.FromImage(pic);
-            g.FillRectangle(new SolidBrush(Color.Transparent), new Rectangle(new Point(0, 0), pic.Size));
-            g.FillRectangle(new SolidBrush(Color.Blue), new Rectangle(0, 0, 60, 80));
-            g.FillRectangle(new SolidBrush(Color.Green), new Rectangle(440, 520, 60, 80));
+            var bitmapData = theBitmap.LockBits(
+                new Rectangle(0, 0, theBitmap.Width, theBitmap.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadOnly, theBitmap.PixelFormat);
 
-            //blah blah get a bitmap
-            return CreateBitmapSourceFromBitmap(pic);
-        }
+            var bitmapSource = BitmapSource.Create(
+                bitmapData.Width, bitmapData.Height, 96, 96, PixelFormats.Bgra32, null,
+                bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
 
-        [DllImport("gdi32.dll")]
-        private static extern bool DeleteObject(IntPtr hObject);
-
-        public static BitmapSource CreateBitmapSourceFromBitmap(Bitmap bitmap)
-        {
-            if (bitmap == null)
-                throw new ArgumentNullException("bitmap");
-
-            IntPtr hBitmap = bitmap.GetHbitmap();
-
-            try
-            {
-                return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    hBitmap,
-                    IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally
-            {
-                DeleteObject(hBitmap);
-            }
-        }
-
-        //works, but causes a memory leak each time a new image is loaded.
-        //not severe enough to be a problem for now, but need to find a better solution soon
-        public static BitmapSource BasicConvertBitmapToBitmapSource(Bitmap src)
-        {
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                                              src.GetHbitmap(), //leaks!
-                                              IntPtr.Zero,
-                                              System.Windows.Int32Rect.Empty,
-                                              BitmapSizeOptions.FromEmptyOptions());
+            theBitmap.UnlockBits(bitmapData);
+            return bitmapSource;
         }
     }
-}
+} 

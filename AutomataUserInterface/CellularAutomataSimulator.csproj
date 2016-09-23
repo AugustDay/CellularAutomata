@@ -38,7 +38,7 @@
     <StartupObject>AutomataUserInterface.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Interface\Default XAML Icon.ico</ApplicationIcon>
+    <ApplicationIcon>View\Default XAML Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -59,23 +59,23 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="Interface\App.xaml">
+    <ApplicationDefinition Include="View\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Tools\ImageTools.cs" />
     <Compile Include="Tools\Tools.cs" />
-    <Compile Include="Interface\ZoomBorder.cs" />
-    <Page Include="Interface\MainWindow.xaml">
+    <Compile Include="View\ZoomBorder.cs" />
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Interface\App.xaml.cs">
+    <Compile Include="View\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Interface\InterfaceBackend.cs" />
-    <Compile Include="Interface\MainWindow.xaml.cs">
+    <Compile Include="View\InterfaceBackend.cs" />
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -111,7 +111,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Interface\Default XAML Icon.ico" />
+    <Resource Include="View\Default XAML Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
