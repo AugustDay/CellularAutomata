@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutomataUserInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="880"
+        Title="MainWindow" Height="700" Width="1000"
         MinHeight="300" MinWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -55,10 +55,30 @@
         </DockPanel>
         <local:ZoomBorder x:Name="border" Grid.Column="1" ClipToBounds="True" Background="LightBlue">
             <Image  x:Name="ImageField"                
-                MouseRightButtonUp="ImageField_MouseRightButtonUp"
                 RenderOptions.BitmapScalingMode="NearestNeighbor" 
                 RenderOptions.EdgeMode="Aliased"/>
             <!--Stretch="None"  -->
+            <local:ZoomBorder.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="MenuSimulateMore" Header="Step _Forward" Click="MenuSimulateMore_Click" InputGestureText="Ctrl+F"/>
+                    <MenuItem x:Name="MenuStartingCondition" Header="Starting _Condition" InputGestureText="Ctrl+C"/>
+                    <MenuItem x:Name="MenuCenterImage" Header="_Center Image" Click="MenuCenterImage_Click"/>
+                    <MenuItem x:Name="MenuSave" Header="_Save" Click="MenuSave_Click" InputGestureText="Ctrl+S"/>
+                    <!--<MenuItem.Icon>
+                            <Image Source="Images/cut.png" />
+                        </MenuItem.Icon>-->
+                    <Separator/>                    
+                    <!--<MenuItem.Icon>
+                            <Image Source="Images/copy.png" />
+                        </MenuItem.Icon>-->
+                    <MenuItem x:Name="MenuNewRandomRule" Header="_New Rule" Click="MenuNewRandomRule_Click" InputGestureText="Ctrl+N"/>
+                    <MenuItem x:Name="MenuNewSpecificRule" Header="C_hoose Rule" />
+                    <Separator/>
+                    <MenuItem x:Name="MenuLastRule" Header="_Last Rule" />
+                    <MenuItem x:Name="MenuNextRule" Header="_Next Rule" />
+                    <MenuItem x:Name="MenuViewHistory" Header="_View History" />
+                </ContextMenu>
+            </local:ZoomBorder.ContextMenu>
         </local:ZoomBorder>
     </Grid>
 </Window>

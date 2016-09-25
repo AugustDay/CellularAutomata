@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace UnitTests
 {
     [TestClass]
-    public class TestSimulation1D
+    public class TestSimulator1D
     {
         [TestMethod]
         public void Simulation1D_SimulationIsAccurateForRule30_WraparoundEdges()
@@ -24,6 +24,8 @@ namespace UnitTests
 
             string testInput = "k=2 n={-1,0,1} r=30_10 b=7";
             Simulator1D cellularAutomata30 = Tools.MakeAutomataFromCode(testInput);
+            cellularAutomata30.GenerateImageAfterSimulating = false;
+
             cellularAutomata30.Go(8);
 
             int counter = 0;
@@ -66,6 +68,8 @@ namespace UnitTests
 
             string testInput = "k=2 n={-1,0,1} r=30_10 b=30 h";
             Simulator1D cellularAutomata30 = Tools.MakeAutomataFromCode(testInput);
+            cellularAutomata30.GenerateImageAfterSimulating = false;
+
             cellularAutomata30.Go(15);
 
             int counter = 0;
@@ -98,6 +102,8 @@ namespace UnitTests
             correctSimulationList.Add(new int[] { 2, 1, 0, 2, 2, 1, 1, 2, 1, 1, 2, 1, 0, 2, 1, 2, 2, 2, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 2, 2, });
             string testInput = "k=3 n={-1,0,1} r=1537550572281_10 b=30 h";
             Simulator1D cellularAutomata30 = Tools.MakeAutomataFromCode(testInput);
+            cellularAutomata30.GenerateImageAfterSimulating = false;
+
             cellularAutomata30.Go(15);
 
             int counter = 0;

@@ -51,7 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TestAutomata1D.cs" />
+    <Compile Include="TestSimulator1D.cs" />
     <Compile Include="TestRules1D.cs" />
     <Compile Include="TestTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
