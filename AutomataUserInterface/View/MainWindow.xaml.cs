@@ -93,16 +93,10 @@ namespace AutomataUserInterface
 
         #region Context Menu
 
-        private void MenuSave_Click(object sender, RoutedEventArgs e)
+        private void MenuDownload_Click(object sender, RoutedEventArgs e)
         {
-            Printer.DisplayMessageLine("Save option clicked.", Printer.GreenColor);
-            CommandParser.Run("o");
-            //Printer.DisplayMessageLine("Saving current Automata image... ");
-            //Watch.Restart();
-            //CommandParser.CurrentAutomata.OutputAutomata();
-            //Watch.Stop();
-            //Printer.DisplayMessage("Done.");
-            //Printer.DisplayMessageLine($"Command took: {Watch.ElapsedMilliseconds} ms.");
+            Printer.DisplayMessageLine("Download option clicked.", Printer.GreenColor);
+            CommandParser.Run("o"); //TODO rename to d|download
         }
 
         private void MenuCenterImage_Click(object sender, RoutedEventArgs e)
@@ -114,16 +108,26 @@ namespace AutomataUserInterface
         {
             Printer.DisplayMessageLine("Simulate option clicked.", Printer.GreenColor);
             CommandParser.Run("c");
-            //CommandParser.CurrentAutomata.Proceed();
         }
 
         private void MenuNewRandomRule_Click(object sender, RoutedEventArgs e)
         {
             Printer.DisplayMessageLine("New Automata option clicked.", Printer.GreenColor);
             CommandParser.Run("n");
-            //these should send string input to commandParser, for consistent behavior. 
+        }
+
+        private void MenuStartingCondition_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuNewSpecificRule_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         #endregion
+
+
     }
 }

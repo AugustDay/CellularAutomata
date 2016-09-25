@@ -60,23 +60,60 @@
             <!--Stretch="None"  -->
             <local:ZoomBorder.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="MenuSimulateMore" Header="Step _Forward" Click="MenuSimulateMore_Click" InputGestureText="Ctrl+F"/>
-                    <MenuItem x:Name="MenuStartingCondition" Header="Starting _Condition" InputGestureText="Ctrl+C"/>
-                    <MenuItem x:Name="MenuCenterImage" Header="_Center Image" Click="MenuCenterImage_Click"/>
-                    <MenuItem x:Name="MenuSave" Header="_Save" Click="MenuSave_Click" InputGestureText="Ctrl+S"/>
-                    <!--<MenuItem.Icon>
-                            <Image Source="Images/cut.png" />
-                        </MenuItem.Icon>-->
-                    <Separator/>                    
-                    <!--<MenuItem.Icon>
-                            <Image Source="Images/copy.png" />
-                        </MenuItem.Icon>-->
-                    <MenuItem x:Name="MenuNewRandomRule" Header="_New Rule" Click="MenuNewRandomRule_Click" InputGestureText="Ctrl+N"/>
-                    <MenuItem x:Name="MenuNewSpecificRule" Header="C_hoose Rule" />
+                    <MenuItem x:Name="MenuSimulateMore" 
+                              Header="Step _Forward" InputGestureText="Ctrl+F"
+                              Click="MenuSimulateMore_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/RightArrowGreen_pixelbox.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MenuStartingCondition" 
+                              Header="Starting _Condition" InputGestureText="Ctrl+C"
+                              Click="MenuStartingCondition_Click"/>
+                    <MenuItem x:Name="MenuCenterImage" 
+                              Header="Center _Image" InputGestureText="Ctrl+I"
+                              Click="MenuCenterImage_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/ImageResizeActual_fugue.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MenuDownload" Header="_Download" InputGestureText="Ctrl+D"
+                              Click="MenuDownload_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/Floppy_pixelbox.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                        <Separator/>                    
+                    <MenuItem x:Name="MenuNewRandomRule" 
+                              Header="_New Rule" InputGestureText="Ctrl+N" 
+                              Click="MenuNewRandomRule_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/RefreshColor_pixelbox.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="MenuNewSpecificRule" 
+                              Header="Choose _Rule" InputGestureText="Ctrl+R"
+                              Click="MenuNewSpecificRule_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/RefreshGold_pixelbox.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
-                    <MenuItem x:Name="MenuLastRule" Header="_Last Rule" />
-                    <MenuItem x:Name="MenuNextRule" Header="_Next Rule" />
-                    <MenuItem x:Name="MenuViewHistory" Header="_View History" />
+                    <MenuItem x:Name="MenuLastRule" Header="Last Rule" InputGestureText="Ctrl+Z">
+                        <!--<MenuItem.Icon>
+                            <Image Source="/Images/ArrowUndo_famsilk.png" />
+                        </MenuItem.Icon>-->
+                    </MenuItem>
+                    <MenuItem x:Name="MenuNextRule" Header="Next Rule" InputGestureText="Ctrl+Y">
+                        <!--<MenuItem.Icon>
+                            <Image Source="/Images/ArrowRedo_famsilk.png" />
+                        </MenuItem.Icon>-->
+                    </MenuItem>
+                    <MenuItem x:Name="MenuViewHistory" Header="View _History" InputGestureText="Ctrl+H">
+                        <MenuItem.Icon>
+                            <Image Source="/Images/ClockHistoryFrame_fugue.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </local:ZoomBorder.ContextMenu>
         </local:ZoomBorder>

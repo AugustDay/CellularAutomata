@@ -114,6 +114,33 @@
   <ItemGroup>
     <Resource Include="Images\Default XAML Icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Floppy_pixelbox.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\RefreshGold_pixelbox.ico" />
+    <Resource Include="Images\RefreshColor_pixelbox.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\RightArrowGreen_pixelbox.ico" />
+    <Resource Include="Images\RightArrowBlue_pixelbox.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ArrowRedo_famsilk.png" />
+    <Resource Include="Images\ArrowUndo_famsilk.png" />
+    <Resource Include="Images\image_famsilk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ApplicationResizeActual_fugue.png" />
+    <Resource Include="Images\ArrowOut_fugue.png" />
+    <Resource Include="Images\ImageResizeActual_fugue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BlueDocumentClock_fugue.png" />
+    <Resource Include="Images\ClockHistoryFrame_fugue.png" />
+    <Resource Include="Images\ClockHistory_fugue.png" />
+    <Resource Include="Images\DocumentClock_fugue.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
