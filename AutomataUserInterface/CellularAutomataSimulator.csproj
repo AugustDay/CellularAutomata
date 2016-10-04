@@ -38,7 +38,7 @@
     <StartupObject>AutomataUserInterface.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\Default XAML Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\Default XAML Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -112,34 +112,34 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Default XAML Icon.ico" />
+    <Resource Include="Icons\Default XAML Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Floppy_pixelbox.ico" />
+    <Resource Include="Icons\Floppy_pixelbox.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\RefreshGold_pixelbox.ico" />
-    <Resource Include="Images\RefreshColor_pixelbox.ico" />
+    <Resource Include="Icons\RefreshGold_pixelbox.ico" />
+    <Resource Include="Icons\RefreshColor_pixelbox.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\RightArrowGreen_pixelbox.ico" />
-    <Resource Include="Images\RightArrowBlue_pixelbox.ico" />
+    <Resource Include="Icons\RightArrowGreen_pixelbox.ico" />
+    <Resource Include="Icons\RightArrowBlue_pixelbox.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ArrowRedo_famsilk.png" />
-    <Resource Include="Images\ArrowUndo_famsilk.png" />
-    <Resource Include="Images\image_famsilk.png" />
+    <Resource Include="Icons\ArrowRedo_famsilk.png" />
+    <Resource Include="Icons\ArrowUndo_famsilk.png" />
+    <Resource Include="Icons\image_famsilk.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ApplicationResizeActual_fugue.png" />
-    <Resource Include="Images\ArrowOut_fugue.png" />
-    <Resource Include="Images\ImageResizeActual_fugue.png" />
+    <Resource Include="Icons\ApplicationResizeActual_fugue.png" />
+    <Resource Include="Icons\ArrowOut_fugue.png" />
+    <Resource Include="Icons\ImageResizeActual_fugue.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\BlueDocumentClock_fugue.png" />
-    <Resource Include="Images\ClockHistoryFrame_fugue.png" />
-    <Resource Include="Images\ClockHistory_fugue.png" />
-    <Resource Include="Images\DocumentClock_fugue.png" />
+    <Resource Include="Icons\BlueDocumentClock_fugue.png" />
+    <Resource Include="Icons\ClockHistoryFrame_fugue.png" />
+    <Resource Include="Icons\ClockHistory_fugue.png" />
+    <Resource Include="Icons\DocumentClock_fugue.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

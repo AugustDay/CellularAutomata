@@ -205,19 +205,19 @@ namespace CellularAutomata
 
         public static Simulator1D MakeAutomataFromCode(string theSpecification, Simulator1D theCA)
         {
-            return MakeAutomataFromCode(theSpecification, theCA.CurrentEdgeSetting, theCA.Rules.PossibleStates, 
+            return MakeAutomataFromCode(theSpecification, theCA.StartingCells, theCA.CurrentEdgeSetting, theCA.Rules.PossibleStates, 
                                         theCA.SizeOfBoard, theCA.Rules.RuleArray, theCA.Rules.NeighborhoodCoordinates);
         }
 
         public static Simulator1D MakeAutomataFromCode(string theSpecification)
         {
-            return MakeAutomataFromCode(theSpecification, Simulator1D.DEFAULT_EDGE_SETTING,
+            return MakeAutomataFromCode(theSpecification, Simulator1D.DEFAULT_STARTING_CELLS, Simulator1D.DEFAULT_EDGE_SETTING,
                                         Rules1D.DEFAULT_POSSIBLE_STATES, Simulator1D.DEFAULT_SIZE_OF_BOARD,
                                         Rules1D.DEFAULT_RULE_ARRAY, Rules1D.DEFAULT_NEIGHBORHOOD_ORIENTATION);
         }
 
         public static Simulator1D MakeAutomataFromCode(
-                    string theSpecification, Simulator1D.EdgeSettings theEdgeSetting,
+                    string theSpecification, int[] theStartingCells, Simulator1D.EdgeSettings theEdgeSetting,
                     int theK, int theB, int[] theRuleArray, int[] theNeighborhoodCoordinates)
         {
             //string sampleSpec = "k=3 n={-1,0,1} r=1234567_10 b=400";
@@ -262,6 +262,10 @@ namespace CellularAutomata
                         case 'h': //"hard" edges
                             theEdgeSetting = Simulator1D.EdgeSettings.HardEdges;
                             break;
+                        //case 'c':
+                        //    //TODO be able to specify starting cells from here
+                              //Difficulty: need starting cells in int[] form in constructor, must change or add static class to handle.
+                        //    break;
                         default:
                             Printer.DisplayMessageLine("Failed to parse parameter: \"" + s + "\"", Printer.ErrorColor);
                             break;
@@ -286,7 +290,7 @@ namespace CellularAutomata
                     daRules = new Rules1D(bigNumber, theNeighborhoodCoordinates, theK);
                 }
                 Imager1D daImager = new Imager1D(daRules);
-                theAutomata = new Simulator1D(daRules, daImager, theB, theEdgeSetting);
+                theAutomata = new Simulator1D(daRules, daImager, theB, theStartingCells, theEdgeSetting);
             }
             catch (ArgumentException)
             {

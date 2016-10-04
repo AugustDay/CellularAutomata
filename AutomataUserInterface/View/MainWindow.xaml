@@ -7,13 +7,19 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000"
         MinHeight="300" MinWidth="500">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" MinWidth="200" MaxWidth="400"/>
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
-        <DockPanel Grid.Column="0" >
-            <TextBox x:Name="UserInput"		 
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Click="MenuItemAbout_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="200" MaxWidth="400"/>
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="0" >
+                <TextBox x:Name="UserInput"		 
 		         DockPanel.Dock="Bottom"
                  MinLines="2"
 		         TextWrapping="Wrap"
@@ -23,9 +29,9 @@
 		         Background="White"
 		         Foreground="Gray"
                  FontFamily="Consolas">
-                Type here to enter commands.
-                <TextBox.ToolTip>
-                    <TextBlock FontFamily="Consolas">
+                    Type here to enter commands.
+                    <TextBox.ToolTip>
+                        <TextBlock FontFamily="Consolas">
 			        <Italic Foreground="Red">Valid commands: </Italic> 
                     <!--h|help, a|about, n|new, s|status, g|go, c|continue,  m|many, o|output-->
                     type 'help' or 'h' for a full description of commands.
@@ -37,85 +43,86 @@
                     <LineBreak/>c|continue
                     <LineBreak/>m|many
                     <LineBreak/>o|output
-                    </TextBlock>
-                </TextBox.ToolTip>
-            </TextBox>
-            <FlowDocumentScrollViewer Margin="-8, 0, 0, 0" x:Name="Document">
-                <FlowDocument Background="White" Foreground="Black">
-                    <Paragraph x:Name="TextHistory" 
+                        </TextBlock>
+                    </TextBox.ToolTip>
+                </TextBox>
+                <FlowDocumentScrollViewer Margin="-8, 0, 0, 0" x:Name="Document">
+                    <FlowDocument Background="White" Foreground="Black">
+                        <Paragraph x:Name="TextHistory" 
 			   FontSize="16" 
                FontFamily="Consolas"/>
-                </FlowDocument>
-                <!--<FlowDocumentScrollViewer.Resources>
+                    </FlowDocument>
+                    <!--<FlowDocumentScrollViewer.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="Background" Value="Blue"/>
                 </Style>
             </FlowDocumentScrollViewer.Resources>-->
-            </FlowDocumentScrollViewer>
-        </DockPanel>
-        <local:ZoomBorder x:Name="border" Grid.Column="1" ClipToBounds="True" Background="LightBlue">
-            <Image  x:Name="ImageField"                
+                </FlowDocumentScrollViewer>
+            </DockPanel>
+            <local:ZoomBorder x:Name="border" Grid.Column="1" ClipToBounds="True" Background="LightBlue">
+                <Image  x:Name="ImageField"                
                 RenderOptions.BitmapScalingMode="NearestNeighbor" 
                 RenderOptions.EdgeMode="Aliased"/>
-            <!--Stretch="None"  -->
-            <local:ZoomBorder.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="MenuSimulateMore" 
+                <!--Stretch="None"  -->
+                <local:ZoomBorder.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="MenuSimulateMore" 
                               Header="Step _Forward" InputGestureText="Ctrl+F"
                               Click="MenuSimulateMore_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/RightArrowGreen_pixelbox.ico" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="MenuStartingCondition" 
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/RightArrowGreen_pixelbox.ico" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="MenuStartingCondition" 
                               Header="Starting _Condition" InputGestureText="Ctrl+C"
                               Click="MenuStartingCondition_Click"/>
-                    <MenuItem x:Name="MenuCenterImage" 
+                        <MenuItem x:Name="MenuCenterImage" 
                               Header="Center _Image" InputGestureText="Ctrl+I"
                               Click="MenuCenterImage_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/ImageResizeActual_fugue.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="MenuDownload" Header="_Download" InputGestureText="Ctrl+D"
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/ImageResizeActual_fugue.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="MenuDownload" Header="_Download" InputGestureText="Ctrl+D"
                               Click="MenuDownload_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/Floppy_pixelbox.ico" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                        <Separator/>                    
-                    <MenuItem x:Name="MenuNewRandomRule" 
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/Floppy_pixelbox.ico" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem x:Name="MenuNewRandomRule" 
                               Header="_New Rule" InputGestureText="Ctrl+N" 
                               Click="MenuNewRandomRule_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/RefreshColor_pixelbox.ico" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="MenuNewSpecificRule" 
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/RefreshColor_pixelbox.ico" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="MenuNewSpecificRule" 
                               Header="Choose _Rule" InputGestureText="Ctrl+R"
                               Click="MenuNewSpecificRule_Click">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/RefreshGold_pixelbox.ico" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem x:Name="MenuLastRule" Header="Last Rule" InputGestureText="Ctrl+Z">
-                        <!--<MenuItem.Icon>
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/RefreshGold_pixelbox.ico" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem x:Name="MenuLastRule" Header="Last Rule" InputGestureText="Ctrl+Z">
+                            <!--<MenuItem.Icon>
                             <Image Source="/Images/ArrowUndo_famsilk.png" />
                         </MenuItem.Icon>-->
-                    </MenuItem>
-                    <MenuItem x:Name="MenuNextRule" Header="Next Rule" InputGestureText="Ctrl+Y">
-                        <!--<MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="MenuNextRule" Header="Next Rule" InputGestureText="Ctrl+Y">
+                            <!--<MenuItem.Icon>
                             <Image Source="/Images/ArrowRedo_famsilk.png" />
                         </MenuItem.Icon>-->
-                    </MenuItem>
-                    <MenuItem x:Name="MenuViewHistory" Header="View _History" InputGestureText="Ctrl+H">
-                        <MenuItem.Icon>
-                            <Image Source="/Images/ClockHistoryFrame_fugue.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </local:ZoomBorder.ContextMenu>
-        </local:ZoomBorder>
-    </Grid>
+                        </MenuItem>
+                        <MenuItem x:Name="MenuViewHistory" Header="View _History" InputGestureText="Ctrl+H">
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/ClockHistoryFrame_fugue.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </local:ZoomBorder.ContextMenu>
+            </local:ZoomBorder>
+        </Grid>
+    </DockPanel>
 </Window>

@@ -16,7 +16,11 @@ namespace CellularAutomata.OneDimensionalCA
 
         public static int DEFAULT_SIZE_OF_BOARD = 200;
 
+        public static int[] DEFAULT_STARTING_CELLS = new int[] { 1 };
+
         public int DEFAULT_NUMBER_OF_STEPS = 200;
+
+        public int[] StartingCells { get; private set; }
 
         ///<summary>The starting orientation of cells in a new simulation.</summary>
         private int[] Origin;
@@ -45,21 +49,21 @@ namespace CellularAutomata.OneDimensionalCA
 
         public bool GenerateImageAfterSimulating = true;
 
-        public bool AutomaticSaving = false;        
+        public bool AutomaticSaving = false;
 
         ///<summary>No-argument constructor makes an Simulator with default parameters.</summary>
-        public Simulator1D() 
+        public Simulator1D()
         {
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
             Generations = new List<int[]>();
-            ConstructorHelper(DEFAULT_SIZE_OF_BOARD, EdgeSettings.WraparoundEdges);
+            ConstructorHelper(DEFAULT_SIZE_OF_BOARD, DEFAULT_STARTING_CELLS, EdgeSettings.WraparoundEdges);
         }
 
         ///<summary>Constructs a simulator with the given objects.</summary>
-        public Simulator1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard, EdgeSettings theSetting)
+        public Simulator1D(Rules1D theRules, Imager1D theImager, int theSizeOfBoard, int[] theStartingCells, EdgeSettings theSetting)
         {
-            if(theRules == null || 
+            if (theRules == null ||
                theImager == null)
             {
                 throw new ArgumentNullException("The Rule or Imager param was null");
@@ -67,35 +71,35 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = theRules;
             Imager = theImager;
             Generations = new List<int[]>();
-            ConstructorHelper(theSizeOfBoard, theSetting);
+            ConstructorHelper(theSizeOfBoard, theStartingCells, theSetting);
         }
 
         ///<summary>Initializes the components of the simulator.</summary>
-        private void ConstructorHelper(int theSizeOfBoard, EdgeSettings theSetting)
-        {            
-            if(theSizeOfBoard < 1)
+        private void ConstructorHelper(int theSizeOfBoard, int[] theStartingCells, EdgeSettings theSetting)
+        {
+            if (theSizeOfBoard < 1)
             {
                 throw new ArgumentException("Board cannot be of size less than 1!");
             }
             LocalSituation = new int[Rules.NeighborhoodSize];
             SizeOfBoard = theSizeOfBoard;
             Origin = new int[SizeOfBoard];
+            SetOriginStartingCells(theStartingCells); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
+
             CurrentEdgeSetting = theSetting;
-            if(CurrentEdgeSetting == EdgeSettings.WraparoundEdges)
+            if (CurrentEdgeSetting == EdgeSettings.WraparoundEdges)
             {
                 CalculateWraparoundIndex();
             }
-            setOriginSingleCell(); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
             Initialize();
-            Imager.GenerateImage(Generations);
         }
 
         private void CalculateWraparoundIndex()
         {
             WraparoundIndexes = new Dictionary<int, int>();
-            foreach(int coord in Rules.NeighborhoodCoordinates)
+            foreach (int coord in Rules.NeighborhoodCoordinates)
             {
-                if(Math.Abs(coord) > SizeOfBoard)
+                if (Math.Abs(coord) > SizeOfBoard)
                 {
                     throw new ArgumentException("All neighborhood coordinates must be within the size of the board.");
                     //otherwise, cells would be counted multiple times in such a neighborhood (and require an extra loop to calculate).
@@ -115,36 +119,99 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Sets Origin with a cell in the middle with state=1.</summary>
         public void setOriginSingleCell()
         {
-            setOriginSingleCell(1);
+            SetOriginStartingCells(new int[] { 1 });
         }
 
         ///<summary>Sets Origin with a single live cell in the middle with the given state.</summary>
         public void setOriginSingleCell(int theState) //with 75 dead cells on either side
         {
-            if(theState >= Rules.PossibleStates || theState < 0)
-            {
-                throw new ArgumentOutOfRangeException("theState", theState, "Need a given state that exists in this rule.");
-            }
+            SetOriginStartingCells(new int[] { theState });
+        }
+
+        ///<summary>Sets Origin with a single live cell in the middle with the given state.</summary>
+        public void SetOriginStartingCells(int[] theCells) //with 75 dead cells on either side
+        {
+            StartingCells = theCells;
             Origin = new int[SizeOfBoard];
             int i;
-            for(i = 0; i < SizeOfBoard / 2; i++ )
+            for (i = 0; i < (SizeOfBoard / 2) - (theCells.Length / 2); i++)
             {
                 Origin[i] = 0;
             }
-            Origin[i] = theState;
-            i++;
-            for(; i < SizeOfBoard; i++)
+            foreach (int c in theCells)
+            {
+                if (c >= Rules.PossibleStates)
+                { //TODO this validation is happening twice in the case of String input. Make private inner function?
+                    //Right now Starting Cells might not necessarily equal what the origin really is (set before validation).
+                    Origin[i] = Rules.PossibleStates - 1;
+                }
+                else if (c < 0)
+                {
+                    Origin[i] = 0;
+                }
+                else
+                {
+                    Origin[i] = c;
+                }
+                i++;
+            }
+            for (; i < SizeOfBoard; i++)
             {
                 Origin[i] = 0;
             }
-            Initialize(); //TODO should these setOrigin functions re-initialize?
+            Initialize();
         }
+
+        ///<summary>Sets Origin with a single live cell in the middle with the given state.</summary>
+        public void SetOriginStringInput(string theInput) //with 75 dead cells on either side
+        {
+            //have a static string be the default, which persists when making a new automata.
+            //convert to an int[] array, parse the string into this array only the first time. 
+            int[] specificOrigin = ParseOriginInput(theInput);
+            if (specificOrigin.Length > SizeOfBoard)
+            { //if user gives an origin that's larger than the current size, just increase the dimensions to match. 
+                SizeOfBoard = specificOrigin.Length;
+            }
+            SetOriginStartingCells(specificOrigin);
+        }
+
+        private int[] ParseOriginInput(string theInput)
+        {
+            int[] specificOrigin = new int[theInput.Length];
+            int cell;
+            bool succeed;
+            int counter = 0;
+            foreach (char c in theInput)
+            {
+                succeed = Int32.TryParse("" + c /* TODO is there a faster way to do that? */, out cell);
+                if (succeed)
+                {
+                    if (cell >= Rules.PossibleStates)
+                    {
+                        cell = Rules.PossibleStates - 1;
+                    }
+                }
+                else
+                {
+                    cell = 0;
+                } //TODO need an event system for logging incorrect input without the need for printing from backend. 
+
+                specificOrigin[counter] = cell;
+                counter++;
+            }
+
+            return specificOrigin;
+        }
+
+
+
+
 
         ///<summary>Sets the Origin with cells of random states.</summary>
         public void setOriginRandomCells()
         {
             Origin = new int[SizeOfBoard];
-            for(int i = 0; i < SizeOfBoard; i++)
+            for (int i = 0; i < SizeOfBoard; i++)
             {
                 Origin[i] = Tools.Rand.Next(Rules.PossibleStates);
             }
@@ -154,7 +221,7 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Initializes the Automata, then simulates for the default number of steps.</summary>
         public void Go()
         {
-            Go(DEFAULT_NUMBER_OF_STEPS);            
+            Go(DEFAULT_NUMBER_OF_STEPS);
         }
 
         ///<summary>Initializes the Automata, then simulates for a given number of steps.</summary>
@@ -169,6 +236,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Generations.Clear();
             Generations.Add(Origin);
+            Imager.GenerateImage(Generations);
         }
 
         ///<summary>Iterate forward the default number of steps.</summary>
@@ -187,7 +255,7 @@ namespace CellularAutomata.OneDimensionalCA
                 next = NewGeneration(next);
                 Generations.Add(next);
             }
-            if(GenerateImageAfterSimulating)
+            if (GenerateImageAfterSimulating)
             {
                 Imager.GenerateImage(Generations);
             }
@@ -213,15 +281,16 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Finds the cells which occupy the given cell's neighborhood.</summary>
         public void getNeighboorhood(int theIndex, int[] theGen)
         {
-            for (int n = 0; n < Rules.NeighborhoodSize; n++) 
+            for (int n = 0; n < Rules.NeighborhoodSize; n++)
             {
                 int location = Rules.NeighborhoodCoordinates[n] + theIndex;
-                if(location >= 0 && location < SizeOfBoard) //is not out of bounds
-                { 
-                    LocalSituation[n] = theGen[location];
-                } else
+                if (location >= 0 && location < SizeOfBoard) //is not out of bounds
                 {
-                    switch(CurrentEdgeSetting)
+                    LocalSituation[n] = theGen[location];
+                }
+                else
+                {
+                    switch (CurrentEdgeSetting)
                     {
                         case EdgeSettings.HardEdges:
                             LocalSituation[n] = 0; //dead out of bounds
@@ -229,7 +298,7 @@ namespace CellularAutomata.OneDimensionalCA
                         case EdgeSettings.WraparoundEdges:
                             LocalSituation[n] = theGen[WraparoundIndexes[location]];
                             break;
-                    }                    
+                    }
                 }
             }
         }
@@ -248,9 +317,9 @@ namespace CellularAutomata.OneDimensionalCA
 
             Simulator1D otherAutomata = (Simulator1D)theOther;
             bool gensAreEqual = true;
-            for(int i = 0; i < Generations.Count; i++)
+            for (int i = 0; i < Generations.Count; i++)
             {
-                if(!Generations[i].SequenceEqual(otherAutomata.Generations[i]))
+                if (!Generations[i].SequenceEqual(otherAutomata.Generations[i]))
                 {
                     gensAreEqual = false;
                     break;

@@ -96,7 +96,7 @@ namespace AutomataUserInterface
         private void MenuDownload_Click(object sender, RoutedEventArgs e)
         {
             Printer.DisplayMessageLine("Download option clicked.", Printer.GreenColor);
-            CommandParser.Run("o"); //TODO rename to d|download
+            CommandParser.Run("d"); //TODO rename to d|download
         }
 
         private void MenuCenterImage_Click(object sender, RoutedEventArgs e)
@@ -107,7 +107,7 @@ namespace AutomataUserInterface
         private void MenuSimulateMore_Click(object sender, RoutedEventArgs e)
         {
             Printer.DisplayMessageLine("Simulate option clicked.", Printer.GreenColor);
-            CommandParser.Run("c");
+            CommandParser.Run("f");
         }
 
         private void MenuNewRandomRule_Click(object sender, RoutedEventArgs e)
@@ -126,8 +126,20 @@ namespace AutomataUserInterface
 
         }
 
+
         #endregion
 
+        #region Menu Bar
 
+        private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
+        {
+            string version = typeof(MainWindow).Assembly.GetName().Version.ToString();
+            Printer.DisplayMessageLine("Application by: Austin Ingraham");
+            Printer.DisplayMessageLine("Version " + version);
+            Printer.DisplayMessageLine("Some icons by Yusuke Kamiyamane, from http://p.yusukekamiyamane.com/");
+            //TODO full popup about screen, with complete attribution.
+        }
+
+        #endregion
     }
 }

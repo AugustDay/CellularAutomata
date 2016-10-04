@@ -36,11 +36,11 @@ namespace CellularAutomata
 
             "s|status: prints the status of the current automata.\n" +
             "g|go {###}: initializes, runs ### generations of the CA, and saves result.\n" +
-            "c|continue {###}: runs another ### generations of the CA, saving result.\n\t" +
+            "f|forward {###}: runs another ### generations of the CA, saving result.\n\t" +
             "For Go and Continue, program will output result if autosaving is ON.\n\n" + //TODO implement autosave setting.
 
             "m|many {###}: inits CA origin w/ both random and single-cell origins, runs Go.\n" +
-            "o|output: saves CA as a BMP image and text file with info on its structure.\n" +
+            "d|download: downloads CA as a BMP image and text file with info on its structure.\n" +
             "q|quit: ends the program.\n";
 
         private Dictionary<string, int> Commands = new Dictionary<string, int>()
@@ -52,9 +52,10 @@ namespace CellularAutomata
             {"undo", 4 }, //TODO implement this and add to Help text.
             {"status", 5 },
             {"go", 6 },
-            {"continue", 7 },
-            {"output", 8 },
+            {"forward", 7 },
+            {"download", 8 },
             {"many", 9 },
+            {"cells", 10 },
 
             //short versions:
             {"h", 0 },
@@ -64,9 +65,10 @@ namespace CellularAutomata
             {"u", 4 },
             {"s", 5 },
             {"g", 6 },
-            {"c", 7 },
-            {"o", 8 },
-            {"m", 9 }
+            {"f", 7 },
+            {"d", 8 },
+            {"m", 9 },
+            {"c", 10 }
         };
 
         private const int MAXIMUM_HISTORY_SIZE = 5;
@@ -122,6 +124,9 @@ namespace CellularAutomata
                             break;
                         case 9:
                             ManyCommand(arguments);
+                            break;
+                        case 10: //starting cells
+                            CellsCommand(arguments);
                             break;
                     }
                     Watch.Stop();
@@ -216,6 +221,25 @@ namespace CellularAutomata
             {
                 Printer.DisplayMessageLine("Error: failed to parse parameters.", Printer.ErrorColor);
                 CurrentAutomata = History.Last();
+            }
+        }
+
+        public void CellsCommand(string[] theArguments)
+        {
+            if (theArguments.Length > 1)
+            {
+                if (theArguments[1].Length > 2) //quotation marks
+                { //TODO If they ommit quotation marks, it's messed up. 
+                    CurrentAutomata.SetOriginStringInput(theArguments[1].Substring(1,theArguments[1].Length - 2));
+                }
+                else
+                {
+                    CurrentAutomata = null;
+                }
+            }
+            else //no args, make default
+            {
+                CurrentAutomata.SetOriginStartingCells(Simulator1D.DEFAULT_STARTING_CELLS);
             }
         }
 
