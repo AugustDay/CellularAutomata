@@ -12,6 +12,11 @@
             <MenuItem Header="Help">
                 <MenuItem Header="About" Click="MenuItemAbout_Click"/>
             </MenuItem>
+            <MenuItem Header="Color Theme">
+                <MenuItem x:Name="MenuItemColor_Default" Header="Default" IsCheckable="True" IsChecked="True" Click="MenuItemColor_Default_Click"/>
+                <MenuItem x:Name="MenuItemColor_Choice2" Header="Choice 2" IsCheckable="True" Click="MenuItemColor_Choice2_Click"/>
+                <MenuItem x:Name="MenuItemColor_Choice3" Header="Choice 3" IsCheckable="True" Click="MenuItemColor_Choice3_Click"/>
+            </MenuItem>
         </Menu>
         <Grid>
             <Grid.ColumnDefinitions>

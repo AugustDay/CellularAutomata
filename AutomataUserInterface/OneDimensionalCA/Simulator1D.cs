@@ -84,7 +84,8 @@ namespace CellularAutomata.OneDimensionalCA
             LocalSituation = new int[Rules.NeighborhoodSize];
             SizeOfBoard = theSizeOfBoard;
             Origin = new int[SizeOfBoard];
-            SetOriginStartingCells(theStartingCells); //TODO should be changeable from code in Tools. random or single should be part of info.txt!
+            SetOriginStartingCells(theStartingCells); /* TODO should be changeable from code in Tools. random or single should be part of info.txt!
+                                                         Could fix by making SetOriginStartingCells return be static in tools and return the array here. */
 
             CurrentEdgeSetting = theSetting;
             if (CurrentEdgeSetting == EdgeSettings.WraparoundEdges)
@@ -301,6 +302,11 @@ namespace CellularAutomata.OneDimensionalCA
                     }
                 }
             }
+        }
+
+        public void RefreshDisplay()
+        {
+            Imager.GenerateImage(Generations);
         }
 
         ///<summary>Saves the current state of the Automata.</summary>

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace AutomataUserInterface
 {
@@ -23,7 +24,7 @@ namespace AutomataUserInterface
 
         private Stopwatch Watch = new Stopwatch();
 
-        public MainWindow()
+        public MainWindow() 
         {
             //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
             InitializeComponent();            
@@ -125,8 +126,7 @@ namespace AutomataUserInterface
         {
 
         }
-
-
+        
         #endregion
 
         #region Menu Bar
@@ -140,6 +140,42 @@ namespace AutomataUserInterface
             //TODO full popup about screen, with complete attribution.
         }
 
+        private void MenuItemColor_Default_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.DisplayMessageLine("Unimplemented, default color theme chosen.");
+            UncheckAllColorMenuItems();
+            MenuItemColor_Default.IsChecked = true;
+            CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default);
+            CommandParser.CurrentAutomata.RefreshDisplay();
+        }
+
+        private void MenuItemColor_Choice2_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.DisplayMessageLine("Unimplemented, color choice 2 chosen.");
+            UncheckAllColorMenuItems();
+            MenuItemColor_Choice2.IsChecked = true;
+            CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2);
+            CommandParser.CurrentAutomata.RefreshDisplay();
+        }
+
+        private void MenuItemColor_Choice3_Click(object sender, RoutedEventArgs e)
+        {
+            Printer.DisplayMessageLine("Unimplemented, color choice 3 chosen.");
+            UncheckAllColorMenuItems();
+            MenuItemColor_Choice3.IsChecked = true;
+            CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3);
+            CommandParser.CurrentAutomata.RefreshDisplay();
+        }
+
+        private void UncheckAllColorMenuItems()
+        {
+            MenuItemColor_Default.IsChecked = false;
+            MenuItemColor_Choice2.IsChecked = false;
+            MenuItemColor_Choice3.IsChecked = false;
+        }
+
         #endregion
+
+
     }
 }

@@ -14,10 +14,21 @@ namespace CellularAutomata.OneDimensionalCA
             GridOnLive,
         }
 
+        public enum ColorThemes
+        {
+            Default,
+            Choice2,
+            Choice3
+        }
+
         private static readonly Size SIZE_DEFAULT = new Size(10, 10);
 
-        private static readonly Color[] COLORS_DEFAULT = { Color.Transparent, Color.Blue, Color.Green,
-                                   Color.Red, Color.Yellow, Color.Purple, Color.Aqua}; //TODO add more!
+        private static readonly Color[][] COLOR_THEMES = {
+            new Color[] { Color.Transparent, Color.Blue, Color.Green, Color.Red, Color.Yellow, Color.Purple, Color.Aqua},
+            new Color[] { Color.Transparent, Color.Blue, Color.Yellow},
+            new Color[] { Color.Transparent, Color.Blue, Color.Red} };
+
+        private static Color[] MyCurrentColorTheme = COLOR_THEMES[0];
 
         private static DateTime EpochStart = new DateTime(1970, 1, 1);
 
@@ -64,7 +75,7 @@ namespace CellularAutomata.OneDimensionalCA
             Brushes = new SolidBrush[Rule.PossibleStates];
             for (int i = 0; i < Brushes.Length; i++)
             {
-                Brushes[i] = new SolidBrush(COLORS_DEFAULT[i]);
+                Brushes[i] = new SolidBrush(MyCurrentColorTheme[i]);
             }
         }
 
@@ -204,6 +215,13 @@ namespace CellularAutomata.OneDimensionalCA
             }
             return lines;
         }
+
+        public void ChooseColorTheme(ColorThemes theTheme)
+        {
+            MyCurrentColorTheme = COLOR_THEMES[(int) theTheme];
+            InitializeBrushes();
+        }
+
 
         public override bool Equals(Object theOther)
         {

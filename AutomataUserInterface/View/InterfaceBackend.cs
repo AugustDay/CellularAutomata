@@ -35,6 +35,7 @@ namespace CellularAutomata
             "Example: > new \"k=3 n={-1,0,1} r=1234567_10 b=400\"\n\t\n" +
 
             "s|status: prints the status of the current automata.\n" +
+            "c|cells \"###\": chooses the cells' states on the first step.\n" +
             "g|go {###}: initializes, runs ### generations of the CA, and saves result.\n" +
             "f|forward {###}: runs another ### generations of the CA, saving result.\n\t" +
             "For Go and Continue, program will output result if autosaving is ON.\n\n" + //TODO implement autosave setting.
