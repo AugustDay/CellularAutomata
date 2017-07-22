@@ -111,14 +111,14 @@
                         </MenuItem>
                         <Separator/>
                         <MenuItem x:Name="MenuLastRule" Header="Last Rule" InputGestureText="Ctrl+Z">
-                            <!--<MenuItem.Icon>
-                            <Image Source="/Images/ArrowUndo_famsilk.png" />
-                        </MenuItem.Icon>-->
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/ArrowUndo_famsilk.png" />
+                            </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuNextRule" Header="Next Rule" InputGestureText="Ctrl+Y">
-                            <!--<MenuItem.Icon>
-                            <Image Source="/Images/ArrowRedo_famsilk.png" />
-                        </MenuItem.Icon>-->
+                            <MenuItem.Icon>
+                                <Image Source="/Icons/ArrowRedo_famsilk.png" />
+                            </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuViewHistory" Header="View _History" InputGestureText="Ctrl+H">
                             <MenuItem.Icon>
