@@ -271,6 +271,7 @@ namespace CellularAutomata
             {
                 History.AddLast(CurrentAutomata);
             }
+            Printer.DisplayMessageLine("History list size: " + History.Count);
         }
 
         public string[] ParseInput(string theInput)
