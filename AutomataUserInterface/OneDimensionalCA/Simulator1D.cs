@@ -51,6 +51,9 @@ namespace CellularAutomata.OneDimensionalCA
 
         public bool AutomaticSaving = false;
 
+        //TODO create function to retrieve current rule name (number string)
+        //TODO create API class above simulator with public methods and private simulator/rules/imager, so that gui can't access them. Use Interface.
+
         ///<summary>No-argument constructor makes an Simulator with default parameters.</summary>
         public Simulator1D()
         {

@@ -221,7 +221,7 @@ namespace CellularAutomata
             else
             {
                 Printer.DisplayMessageLine("Error: failed to parse parameters.", Printer.ErrorColor);
-                CurrentAutomata = History.Last();
+                CurrentAutomata = History.Last(); //TODO make this instead return to the previous CurrentAutomata, which may not be the last in history.
             }
         }
 
@@ -272,6 +272,16 @@ namespace CellularAutomata
                 History.AddLast(CurrentAutomata);
             }
             Printer.DisplayMessageLine("History list size: " + History.Count);
+        }
+
+        public void SetCurrentAutomata(int theIndex)
+        {
+            if(theIndex < 0 || theIndex >= History.Count)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            CurrentAutomata = History.ElementAt(theIndex);
+            CurrentAutomata.RefreshDisplay();
         }
 
         public string[] ParseInput(string theInput)

@@ -34,6 +34,8 @@ namespace AutomataUserInterface
             ImageTools.ImageField = ImageField;
 
             CommandParser = new InterfaceBackend(); //Init this last!
+            AddCurrentAutomataToRecentMenu();
+
         }
 
         public void addSomeColoredText(string theText, Brush theColor)
@@ -115,6 +117,27 @@ namespace AutomataUserInterface
         {
             Printer.DisplayMessageLine("New Automata option clicked.", Printer.GreenColor);
             CommandParser.Run("n");
+
+            //TODO implement eventhandler and remove this!
+            AddCurrentAutomataToRecentMenu();
+        }
+
+        private void AddCurrentAutomataToRecentMenu()
+        {
+            MenuItem newAutomataMenuItem = new MenuItem();
+            newAutomataMenuItem.Header = "Rule #" + CommandParser.CurrentAutomata.Rules.RuleNumber;
+            newAutomataMenuItem.Click += new RoutedEventHandler(RecentAutomataMenuItem_Click);
+            UncheckAllAutomataInRecentMenu();
+            newAutomataMenuItem.IsChecked = true;
+            MenuViewHistory.Items.Add(newAutomataMenuItem);
+        }
+
+        private void UncheckAllAutomataInRecentMenu()
+        {
+            foreach(MenuItem i in MenuViewHistory.Items)
+            {
+                i.IsChecked = false;
+            }
         }
 
         private void MenuStartingCondition_Click(object sender, RoutedEventArgs e)
@@ -125,6 +148,27 @@ namespace AutomataUserInterface
         private void MenuNewSpecificRule_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void RecentAutomataMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem chosenItem = sender as MenuItem;
+            UncheckAllAutomataInRecentMenu();
+            int counter = 0;
+            foreach(MenuItem i in MenuViewHistory.Items)
+            {
+                if(i == chosenItem)
+                {
+                    Printer.DisplayMessageLine("Clicked on: " + i.ToString());
+                    i.IsChecked = true;
+                    break;
+                }
+                counter++;
+            }
+
+            CommandParser.SetCurrentAutomata(counter);
+
+            //MenuViewHistory.Items.RemoveAt(counter);
         }
         
         #endregion
