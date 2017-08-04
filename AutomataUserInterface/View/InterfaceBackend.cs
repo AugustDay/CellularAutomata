@@ -72,13 +72,17 @@ namespace CellularAutomata
             {"c", 10 }
         };
 
-        private const int MAXIMUM_HISTORY_SIZE = 5;
+        public const int MAXIMUM_HISTORY_SIZE = 5;
 
         private LinkedList<Simulator1D> History = new LinkedList<Simulator1D>();
 
         public Simulator1D CurrentAutomata;
 
         private Stopwatch Watch;
+
+        public delegate void AutomataGeneratedEventHandler(object sender, EventArgs args);
+
+        public event AutomataGeneratedEventHandler AutomataGenerated;
 
         public InterfaceBackend()
         {
@@ -271,8 +275,9 @@ namespace CellularAutomata
             {
                 History.AddLast(CurrentAutomata);
             }
-            Printer.DisplayMessageLine("History list size: " + History.Count);
+            OnAutomataGenerated();
         }
+
 
         public void SetCurrentAutomata(int theIndex)
         {
@@ -282,6 +287,15 @@ namespace CellularAutomata
             }
             CurrentAutomata = History.ElementAt(theIndex);
             CurrentAutomata.RefreshDisplay();
+        }
+
+        /// <summary>
+        /// To be called when a new automata is generated successfully (I.E. when the history list has changed).
+        /// TODO change the name to HistoryChanged to be less ambiguous? But perhaps this is useful for other times when the new automata is made.
+        /// </summary>
+        protected virtual void OnAutomataGenerated()
+        {
+            AutomataGenerated?.Invoke(this, EventArgs.Empty);
         }
 
         public string[] ParseInput(string theInput)

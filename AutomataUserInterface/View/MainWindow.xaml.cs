@@ -35,6 +35,7 @@ namespace AutomataUserInterface
 
             CommandParser = new InterfaceBackend(); //Init this last!
             AddCurrentAutomataToRecentMenu();
+            CommandParser.AutomataGenerated += OnAutomataGenerated;
 
         }
 
@@ -117,9 +118,6 @@ namespace AutomataUserInterface
         {
             Printer.DisplayMessageLine("New Automata option clicked.", Printer.GreenColor);
             CommandParser.Run("n");
-
-            //TODO implement eventhandler and remove this!
-            AddCurrentAutomataToRecentMenu();
         }
 
         private void AddCurrentAutomataToRecentMenu()
@@ -137,6 +135,21 @@ namespace AutomataUserInterface
             foreach(MenuItem i in MenuViewHistory.Items)
             {
                 i.IsChecked = false;
+            }
+        }
+
+        public void OnAutomataGenerated(object source, EventArgs e)
+        {
+            Printer.DisplayMessageLine("history list changed.");
+            MenuItem newAutomataMenuItem = new MenuItem();
+            newAutomataMenuItem.Header = "Rule #" + CommandParser.CurrentAutomata.Rules.RuleNumber;
+            newAutomataMenuItem.Click += new RoutedEventHandler(RecentAutomataMenuItem_Click);
+            UncheckAllAutomataInRecentMenu();
+            newAutomataMenuItem.IsChecked = true;
+            MenuViewHistory.Items.Add(newAutomataMenuItem);
+            if (InterfaceBackend.MAXIMUM_HISTORY_SIZE < MenuViewHistory.Items.Count)
+            {
+                MenuViewHistory.Items.RemoveAt(0);
             }
         }
 
