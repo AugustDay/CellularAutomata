@@ -24,10 +24,10 @@ namespace AutomataUserInterface
 
         private Stopwatch Watch = new Stopwatch();
 
-        public MainWindow() 
+        public MainWindow()
         {
             //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
-            InitializeComponent();            
+            InitializeComponent();
             Title = "Cellular Automata Simulator  v" + typeof(MainWindow).Assembly.GetName().Version.ToString();
             Printer.OutputWindow = this;
             Scroller = GetDescendantByType(Document, typeof(ScrollViewer)) as ScrollViewer;
@@ -132,7 +132,7 @@ namespace AutomataUserInterface
 
         private void UncheckAllAutomataInRecentMenu()
         {
-            foreach(MenuItem i in MenuViewHistory.Items)
+            foreach (MenuItem i in MenuViewHistory.Items)
             {
                 i.IsChecked = false;
             }
@@ -168,9 +168,9 @@ namespace AutomataUserInterface
             MenuItem chosenItem = sender as MenuItem;
             UncheckAllAutomataInRecentMenu();
             int counter = 0;
-            foreach(MenuItem i in MenuViewHistory.Items)
+            foreach (MenuItem i in MenuViewHistory.Items)
             {
-                if(i == chosenItem)
+                if (i == chosenItem)
                 {
                     Printer.DisplayMessageLine("Clicked on: " + i.ToString());
                     i.IsChecked = true;
@@ -183,11 +183,16 @@ namespace AutomataUserInterface
 
             //MenuViewHistory.Items.RemoveAt(counter);
         }
-        
+
         #endregion
 
         #region Menu Bar
 
+        /// <summary>
+        /// Displays information about the program, including attributions.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
         {
             string version = typeof(MainWindow).Assembly.GetName().Version.ToString();
@@ -197,30 +202,56 @@ namespace AutomataUserInterface
             //TODO full popup about screen, with complete attribution.
         }
 
-        private void MenuItemColor_Default_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Selects whether to color cells based on their value (state), or by their neighborhood lookup. 
+        /// </summary>
+        private void MenuItemColor_CellValue_Click(object sender, RoutedEventArgs e)
         {
-            Printer.DisplayMessageLine("Unimplemented, default color theme chosen.");
-            UncheckAllColorMenuItems();
-            MenuItemColor_Default.IsChecked = true;
-            CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default);
+            //TODO add mouseover on these options to display a tooltip for informing the user.
+            MenuItemCellColor_Value.IsChecked = false;
+            MenuItemCellColor_NeighborhoodLookup.IsChecked = false;
+            MenuItem colorThemeChoice = sender as MenuItem;
+            if (colorThemeChoice == MenuItemCellColor_Value)
+            {
+                Printer.DisplayMessageLine("Displaying cells by their value.");
+                
+            }
+            else
+            {
+                Printer.DisplayMessageLine("Displaying cells by their neighborhood lookup.");
+                
+            }
+
+            Printer.DisplayMessageLine("Unimplemented.");
             CommandParser.CurrentAutomata.RefreshDisplay();
         }
 
-        private void MenuItemColor_Choice2_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Selects the color theme which the program will use to display cells. 
+        /// </summary>
+        private void MenuItemColorTheme_Click(object sender, RoutedEventArgs e)
         {
-            Printer.DisplayMessageLine("Unimplemented, color choice 2 chosen.");
             UncheckAllColorMenuItems();
-            MenuItemColor_Choice2.IsChecked = true;
-            CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2);
-            CommandParser.CurrentAutomata.RefreshDisplay();
-        }
+            MenuItem colorThemeChoice = sender as MenuItem;
+            if (colorThemeChoice == MenuItemColor_Default)
+            {
+                Printer.DisplayMessageLine("Default color theme chosen.");
+                MenuItemColor_Default.IsChecked = true;
+                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default);
+            }
+            else if (colorThemeChoice == MenuItemColor_Choice2)
+            {
+                Printer.DisplayMessageLine("Unimplemented, color choice 2 chosen.");
+                MenuItemColor_Choice2.IsChecked = true;
+                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2);
+            }
+            else if (colorThemeChoice == MenuItemColor_Choice3)
+            {
+                Printer.DisplayMessageLine("Unimplemented, color choice 3 chosen.");
+                MenuItemColor_Choice3.IsChecked = true;
+                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3);
+            }
 
-        private void MenuItemColor_Choice3_Click(object sender, RoutedEventArgs e)
-        {
-            Printer.DisplayMessageLine("Unimplemented, color choice 3 chosen.");
-            UncheckAllColorMenuItems();
-            MenuItemColor_Choice3.IsChecked = true;
-            CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3);
             CommandParser.CurrentAutomata.RefreshDisplay();
         }
 
@@ -231,8 +262,8 @@ namespace AutomataUserInterface
             MenuItemColor_Choice3.IsChecked = false;
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

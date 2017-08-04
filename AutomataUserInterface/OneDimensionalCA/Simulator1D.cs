@@ -225,7 +225,7 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Initializes the Automata, then simulates for the default number of steps.</summary>
         public void Go()
         {
-            Go(DEFAULT_NUMBER_OF_STEPS);
+            Go(DEFAULT_NUMBER_OF_STEPS); //TODO rename Go to Start to reduce ambiguity.
         }
 
         ///<summary>Initializes the Automata, then simulates for a given number of steps.</summary>
