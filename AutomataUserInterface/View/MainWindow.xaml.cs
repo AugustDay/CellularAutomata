@@ -214,16 +214,22 @@ namespace AutomataUserInterface
             if (colorThemeChoice == MenuItemCellColor_Value)
             {
                 Printer.DisplayMessageLine("Displaying cells by their value.");
-                
+                MenuItemCellColor_Value.IsChecked = true;
+                CommandParser.CurrentAutomata.DisplayNeighborhoodLookup = false;
+                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum);
+                CommandParser.CurrentAutomata.RefreshDisplay();
             }
             else
             {
                 Printer.DisplayMessageLine("Displaying cells by their neighborhood lookup.");
-                
+                MenuItemCellColor_NeighborhoodLookup.IsChecked = true;
+                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.NeighborhoodLookup);
+                CommandParser.CurrentAutomata.DisplayNeighborhoodLookup = true;
+                CommandParser.CurrentAutomata.RefreshDisplay();
             }
 
             Printer.DisplayMessageLine("Unimplemented.");
-            CommandParser.CurrentAutomata.RefreshDisplay();
+            
         }
 
         /// <summary>
@@ -238,21 +244,27 @@ namespace AutomataUserInterface
                 Printer.DisplayMessageLine("Default color theme chosen.");
                 MenuItemColor_Default.IsChecked = true;
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default);
+                CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default;
             }
             else if (colorThemeChoice == MenuItemColor_Choice2)
             {
                 Printer.DisplayMessageLine("Unimplemented, color choice 2 chosen.");
                 MenuItemColor_Choice2.IsChecked = true;
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2);
+                CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2;
             }
             else if (colorThemeChoice == MenuItemColor_Choice3)
             {
                 Printer.DisplayMessageLine("Unimplemented, color choice 3 chosen.");
                 MenuItemColor_Choice3.IsChecked = true;
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3);
+                CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3;
             }
 
-            CommandParser.CurrentAutomata.RefreshDisplay();
+            if (MenuItemCellColor_Value.IsChecked)
+            {
+                CommandParser.CurrentAutomata.RefreshDisplay();
+            }
         }
 
         private void UncheckAllColorMenuItems()

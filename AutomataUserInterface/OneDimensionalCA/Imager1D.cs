@@ -18,7 +18,8 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Default,
             Choice2,
-            Choice3
+            Choice3,
+            NeighborhoodLookup
         }
 
         private static readonly Size SIZE_DEFAULT = new Size(10, 10);
@@ -26,7 +27,12 @@ namespace CellularAutomata.OneDimensionalCA
         private static readonly Color[][] COLOR_THEMES = {
             new Color[] { Color.Transparent, Color.Blue, Color.Green, Color.Red, Color.Yellow, Color.Purple, Color.Aqua},
             new Color[] { Color.Transparent, Color.Blue, Color.Yellow},
-            new Color[] { Color.Transparent, Color.Blue, Color.Red} };
+            new Color[] { Color.Transparent, Color.Blue, Color.Red},
+            new Color[] { Color.Transparent, Color.LightYellow, Color.Yellow, Color.GreenYellow, Color.LightGreen, Color.Green,
+                          Color.DarkGreen, Color.SeaGreen, Color.MediumSeaGreen, Color.DeepSkyBlue, Color.Blue, Color.Navy,
+                          Color.SlateBlue, Color.Purple, Color.MediumOrchid, Color.DarkMagenta, Color.Black, Color.Silver,
+                          Color.SlateGray, Color.LightSteelBlue, Color.Crimson, Color.Firebrick, Color.DarkRed, Color.Brown,
+                          Color.Goldenrod, Color.Gold, Color.Linen } };
 
         private static Color[] MyCurrentColorTheme = COLOR_THEMES[0];
 
@@ -50,6 +56,8 @@ namespace CellularAutomata.OneDimensionalCA
 
         private int NumberFilesSaved = 0;
 
+        public ColorThemes CurrentColorThemeEnum { get; set; }
+
         public bool PrintInfoText = true;
 
         public Bitmap ImageOutput;
@@ -64,6 +72,7 @@ namespace CellularAutomata.OneDimensionalCA
             LinePen = new Pen(Color.Black);
             CellSize = SIZE_DEFAULT;
             GridType = GridSettings1D.GridOnLive;
+            CurrentColorThemeEnum = ColorThemes.Default;
             InitializeBrushes();
         }
 
@@ -72,7 +81,7 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         private void InitializeBrushes()
         {
-            Brushes = new SolidBrush[Rule.PossibleStates];
+            Brushes = new SolidBrush[MyCurrentColorTheme.Length];
             for (int i = 0; i < Brushes.Length; i++)
             {
                 Brushes[i] = new SolidBrush(MyCurrentColorTheme[i]);
@@ -88,13 +97,7 @@ namespace CellularAutomata.OneDimensionalCA
         public void GenerateImage(List<int[]> theCA)
         {
             //find dimensions
-            int maxDistance = theCA[0].Length;
-            
-
-            //foreach (Generation1D gen in theCA) //Don't need this as long as universe size is constant.
-            //{ 
-            //    maxDistance = Math.Max(maxDistance, gen.Cells.Count);
-            //}
+            int maxDistance = theCA[0].Length;            
 
             //create image
             ImageOutput = new Bitmap(1 + maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);

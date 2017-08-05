@@ -110,7 +110,7 @@ namespace CellularAutomata.OneDimensionalCA
         }
 
         ///<summary>From the given neighborhood orientation, return a cell state.</summary>
-        public int rule(int[] theNeighborhood)
+        public int[] rule(int[] theNeighborhood)
         {
             long number = 0;
             long power = 0;
@@ -122,8 +122,8 @@ namespace CellularAutomata.OneDimensionalCA
                 }
                 power++;
             }
-            
-            return RuleArray[number]; //TODO this is a problem with the .Reverse() stuff
+            //TODO explain the new cell lookup return value format.
+            return new int[] { RuleArray[number], (int) number }; //TODO this is a problem with the .Reverse() stuff
         }
 
         ///<summary>Returns a string representing all of the information about this Rule.</summary>

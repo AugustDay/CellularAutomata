@@ -33,6 +33,8 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Each generation of this Automata, [0] being origin.</summary>
         public List<int[]> Generations { get; private set; }
 
+        public List<int[]> NeighborhoodLookupGenerations { get; private set; }
+
         ///<summary>The imager object that the Automata can use to output results.</summary>
         public Imager1D Imager { get; private set; }
 
@@ -51,6 +53,8 @@ namespace CellularAutomata.OneDimensionalCA
 
         public bool AutomaticSaving = false;
 
+        public bool DisplayNeighborhoodLookup { get; set; }
+
         //TODO create function to retrieve current rule name (number string)
         //TODO create API class above simulator with public methods and private simulator/rules/imager, so that gui can't access them. Use Interface.
 
@@ -60,6 +64,7 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = new Rules1D();
             Imager = new Imager1D(Rules);
             Generations = new List<int[]>();
+            NeighborhoodLookupGenerations = new List<int[]>();
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD, DEFAULT_STARTING_CELLS, EdgeSettings.WraparoundEdges);
         }
 
@@ -74,6 +79,7 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = theRules;
             Imager = theImager;
             Generations = new List<int[]>();
+            NeighborhoodLookupGenerations = new List<int[]>();
             ConstructorHelper(theSizeOfBoard, theStartingCells, theSetting);
         }
 
@@ -240,6 +246,8 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Generations.Clear();
             Generations.Add(Origin);
+            NeighborhoodLookupGenerations.Clear();
+            NeighborhoodLookupGenerations.Add(new int[SizeOfBoard]);
             Imager.GenerateImage(Generations);
         }
 
@@ -261,7 +269,7 @@ namespace CellularAutomata.OneDimensionalCA
             }
             if (GenerateImageAfterSimulating)
             {
-                Imager.GenerateImage(Generations);
+                RefreshDisplay();
             }
             if (AutomaticSaving)
             {
@@ -273,12 +281,16 @@ namespace CellularAutomata.OneDimensionalCA
         public int[] NewGeneration(int[] theGen)
         {
             int[] newCells = new int[SizeOfBoard];
+            int[] cellLookup = new int[SizeOfBoard];
             for (int i = 0; i < theGen.Length; i++)
             {
+                //TODO alternate way that may be more efficient: neighborhood lookup is a public value in Rule that is written every time the rule() function is called.
                 getNeighboorhood(i, theGen);
-                newCells[i] = Rules.rule(LocalSituation);
+                int[] cellsAndLookup = Rules.rule(LocalSituation);
+                newCells[i] = cellsAndLookup[0];
+                cellLookup[i] = cellsAndLookup[1];
             }
-
+            NeighborhoodLookupGenerations.Add(cellLookup);
             return newCells;
         }
 
@@ -307,9 +319,16 @@ namespace CellularAutomata.OneDimensionalCA
             }
         }
 
+
         public void RefreshDisplay()
         {
-            Imager.GenerateImage(Generations);
+            if(DisplayNeighborhoodLookup)
+            {
+                Imager.GenerateImage(NeighborhoodLookupGenerations);
+            } else
+            {
+                Imager.GenerateImage(Generations);
+            }            
         }
 
         ///<summary>Saves the current state of the Automata.</summary>
