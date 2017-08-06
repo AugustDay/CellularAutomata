@@ -289,7 +289,7 @@ namespace CellularAutomata
                 {
                     daRules = new Rules1D(bigNumber, theNeighborhoodCoordinates, theK);
                 }
-                Imager1D daImager = new Imager1D(daRules);
+                Imager1D daImager = new Imager1D();
                 theAutomata = new Simulator1D(daRules, daImager, theB, theStartingCells, theEdgeSetting);
             }
             catch (ArgumentException)

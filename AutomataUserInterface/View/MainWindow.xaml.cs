@@ -24,6 +24,8 @@ namespace AutomataUserInterface
 
         private Stopwatch Watch = new Stopwatch();
 
+        private System.Drawing.Bitmap CurrentImage;
+
         public MainWindow()
         {
             //TODO surround everything in a Try/Catch to easily save a stacktrace to file in case of crash
@@ -36,7 +38,32 @@ namespace AutomataUserInterface
             CommandParser = new InterfaceBackend(); //Init this last!
             AddCurrentAutomataToRecentMenu();
             CommandParser.AutomataGenerated += OnAutomataGenerated;
+            CommandParser.CurrentAutomata.Imager.ImageGenerated += OnImageGenerated;
+            CommandParser.CurrentAutomata.RefreshDisplay();
 
+        }
+
+        private void OnImageGenerated(object sender, CellularAutomata.OneDimensionalCA.Imager1D.ImageEventArgs args)
+        {
+            CurrentImage = args.ImageOutput;
+            ImageTools.ChangeDisplayedImage(CurrentImage);
+            //give reference to currentImage to CommandParser (so it can do the download thing)
+        }
+
+        public void OnAutomataGenerated(object source, EventArgs e)
+        {
+            MenuItem newAutomataMenuItem = new MenuItem();
+            newAutomataMenuItem.Header = "Rule #" + CommandParser.CurrentAutomata.Rules.RuleNumber;
+            newAutomataMenuItem.Click += new RoutedEventHandler(RecentAutomataMenuItem_Click);
+            UncheckAllAutomataInRecentMenu();
+            newAutomataMenuItem.IsChecked = true;
+            MenuViewHistory.Items.Add(newAutomataMenuItem);
+            if (InterfaceBackend.MAXIMUM_HISTORY_SIZE < MenuViewHistory.Items.Count)
+            {
+                MenuViewHistory.Items.RemoveAt(0);
+            }
+            CommandParser.CurrentAutomata.Imager.ImageGenerated += OnImageGenerated;
+            CommandParser.CurrentAutomata.RefreshDisplay();
         }
 
         public void addSomeColoredText(string theText, Brush theColor)
@@ -122,6 +149,7 @@ namespace AutomataUserInterface
 
         private void AddCurrentAutomataToRecentMenu()
         {
+            Printer.DisplayMessageLine("Found rule #" + CommandParser.CurrentAutomata.Rules.RuleNumber + ".", Printer.GreenColor);
             MenuItem newAutomataMenuItem = new MenuItem();
             newAutomataMenuItem.Header = "Rule #" + CommandParser.CurrentAutomata.Rules.RuleNumber;
             newAutomataMenuItem.Click += new RoutedEventHandler(RecentAutomataMenuItem_Click);
@@ -138,20 +166,7 @@ namespace AutomataUserInterface
             }
         }
 
-        public void OnAutomataGenerated(object source, EventArgs e)
-        {
-            Printer.DisplayMessageLine("history list changed.");
-            MenuItem newAutomataMenuItem = new MenuItem();
-            newAutomataMenuItem.Header = "Rule #" + CommandParser.CurrentAutomata.Rules.RuleNumber;
-            newAutomataMenuItem.Click += new RoutedEventHandler(RecentAutomataMenuItem_Click);
-            UncheckAllAutomataInRecentMenu();
-            newAutomataMenuItem.IsChecked = true;
-            MenuViewHistory.Items.Add(newAutomataMenuItem);
-            if (InterfaceBackend.MAXIMUM_HISTORY_SIZE < MenuViewHistory.Items.Count)
-            {
-                MenuViewHistory.Items.RemoveAt(0);
-            }
-        }
+        
 
         private void MenuStartingCondition_Click(object sender, RoutedEventArgs e)
         {
@@ -216,7 +231,7 @@ namespace AutomataUserInterface
                 Printer.DisplayMessageLine("Displaying cells by their value.");
                 MenuItemCellColor_Value.IsChecked = true;
                 CommandParser.CurrentAutomata.DisplayNeighborhoodLookup = false;
-                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum);
+                CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.CurrentColorThemeEnum);
                 CommandParser.CurrentAutomata.RefreshDisplay();
             }
             else
@@ -244,21 +259,21 @@ namespace AutomataUserInterface
                 Printer.DisplayMessageLine("Default color theme chosen.");
                 MenuItemColor_Default.IsChecked = true;
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default);
-                CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default;
+                CellularAutomata.OneDimensionalCA.Imager1D.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Default;
             }
             else if (colorThemeChoice == MenuItemColor_Choice2)
             {
                 Printer.DisplayMessageLine("Unimplemented, color choice 2 chosen.");
                 MenuItemColor_Choice2.IsChecked = true;
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2);
-                CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2;
+                CellularAutomata.OneDimensionalCA.Imager1D.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice2;
             }
             else if (colorThemeChoice == MenuItemColor_Choice3)
             {
                 Printer.DisplayMessageLine("Unimplemented, color choice 3 chosen.");
                 MenuItemColor_Choice3.IsChecked = true;
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3);
-                CommandParser.CurrentAutomata.Imager.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3;
+                CellularAutomata.OneDimensionalCA.Imager1D.CurrentColorThemeEnum = CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.Choice3;
             }
 
             if (MenuItemCellColor_Value.IsChecked)

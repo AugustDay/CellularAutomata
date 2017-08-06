@@ -7,6 +7,11 @@ namespace CellularAutomata.OneDimensionalCA
 {
     public class Imager1D 
     {
+        public class ImageEventArgs : EventArgs
+        {
+            public Bitmap ImageOutput { get; set; }
+        }
+
         public enum GridSettings1D
         {
             NoGrid,
@@ -35,11 +40,7 @@ namespace CellularAutomata.OneDimensionalCA
                           Color.Goldenrod, Color.Gold, Color.Linen } };
 
         private static Color[] MyCurrentColorTheme = COLOR_THEMES[0];
-
-        private static DateTime EpochStart = new DateTime(1970, 1, 1);
-
-        private Rules1D Rule;
-
+                
         /// <summary> Colors for each Cell. </summary>
         public SolidBrush[] Brushes { get; set; }
 
@@ -54,21 +55,18 @@ namespace CellularAutomata.OneDimensionalCA
         /// </summary>
         public GridSettings1D GridType { get; set; }
 
-        private int NumberFilesSaved = 0;
+        public static ColorThemes CurrentColorThemeEnum { get; set; }
 
-        public ColorThemes CurrentColorThemeEnum { get; set; }
+        public delegate void ImageGeneratedEventHandler(object sender, ImageEventArgs args);
 
-        public bool PrintInfoText = true;
-
-        public Bitmap ImageOutput;
+        public event ImageGeneratedEventHandler ImageGenerated;
 
         /// <summary>
         /// Constructs an instance of the Imager1D, with the given Rule object. 
         /// </summary>
         /// <param name="theRules"></param>
-        public Imager1D(Rules1D theRules)
+        public Imager1D()
         {
-            Rule = theRules;
             LinePen = new Pen(Color.Black);
             CellSize = SIZE_DEFAULT;
             GridType = GridSettings1D.GridOnLive;
@@ -100,7 +98,7 @@ namespace CellularAutomata.OneDimensionalCA
             int maxDistance = theCA[0].Length;            
 
             //create image
-            ImageOutput = new Bitmap(1 + maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);
+            Bitmap ImageOutput = new Bitmap(1 + maxDistance * CellSize.Width, 1 + theCA.Count * CellSize.Height);
             using (Graphics g = Graphics.FromImage(ImageOutput))
             {
                 g.FillRectangle(new SolidBrush(Brushes[0].Color), new Rectangle(new Point(0, 0), ImageOutput.Size));
@@ -130,7 +128,8 @@ namespace CellularAutomata.OneDimensionalCA
                 {
                     DrawGrid(g, ImageOutput.Size);
                 }
-                ImageTools.ChangeDisplayedImage(ImageOutput);
+                //ImageTools.ChangeDisplayedImage(ImageOutput);
+                OnImageGenerated(ImageOutput);
             }
         }
 
@@ -149,59 +148,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 theG.DrawLine(LinePen, 0, y, theSize.Width, y);
             }
-        }
-
-        public void SaveToFile()
-        {
-            if(ImageOutput == null)
-            {
-                throw new Exception("Program attempted to save an automata image before it was generated.\n");
-            }
-            NumberFilesSaved++;
-            TimeSpan t = DateTime.UtcNow - EpochStart;
-            SaveImage(t); //TODO remove parameters from save / saveInfo, use object variable instead? 
-            if (PrintInfoText)
-            {
-                SaveInfo(t);
-            }
-        }
-
-        /// <summary>
-        /// Writes image to a file in the local directory.
-        /// </summary>
-        private void SaveImage(TimeSpan theTime) //TODO sometimes still overwrites existing file if generating them fast enough!
-        {            
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theTime.TotalSeconds + "_" + NumberFilesSaved + ".bmp";
-            ImageOutput.Save(@location);
-            //output.Save(@location, ImageFormat.Png); //TODO any way to do compression? Bitmaps are large!
-            //TODO create "debug" function to write rule specifics to text file
-        }
-
-        private void SaveInfo(TimeSpan theTime)
-        { //TODO rule.tostring concise and verbose (one has full rule array, other just has number)
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)theTime.TotalSeconds + " -- Info.txt";
-            List<string> lines = new List<string>();
-            lines.Add(Rule.GetInfo());
-            System.IO.File.WriteAllLines(@location, lines);
-        }
-
-        public void printCA(List<int[]> theList)
-        {
-            List<string> lines = new List<string>();
-            string s = "";
-            foreach (int[] g in theList)
-            {
-                foreach (int c in g)
-                {
-                    s += c;
-                }
-                lines.Add(s);
-                s = "";
-            }
-            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-            string location = AppDomain.CurrentDomain.BaseDirectory + Rule.ToString() + " -- " + (int)t.TotalSeconds + ".txt";
-            System.IO.File.WriteAllLines(@location, lines);
-        }
+        }       
 
         public List<string> displayCA(List<int[]> theList)
         {
@@ -225,6 +172,14 @@ namespace CellularAutomata.OneDimensionalCA
             InitializeBrushes();
         }
 
+        /// <summary>
+        /// To be called when a new automata is generated successfully (I.E. when the history list has changed).
+        /// TODO change the name to HistoryChanged to be less ambiguous? But perhaps this is useful for other times when the new automata is made.
+        /// </summary>
+        protected virtual void OnImageGenerated(Bitmap theImage)
+        {           
+            ImageGenerated?.Invoke(this, new ImageEventArgs() { ImageOutput = theImage });
+        }
 
         public override bool Equals(Object theOther)
         {
@@ -250,10 +205,9 @@ namespace CellularAutomata.OneDimensionalCA
                 }
             }
 
-            return Rule.Equals(otherImager.Rule) && CellSize.Equals(otherImager.CellSize) &&
+            return CellSize.Equals(otherImager.CellSize) &&
                 LinePen.Width == otherImager.LinePen.Width && LinePen.Color == otherImager.LinePen.Color &&
-                GridType == otherImager.GridType && NumberFilesSaved == otherImager.NumberFilesSaved &&
-                PrintInfoText == otherImager.PrintInfoText;
+                GridType == otherImager.GridType;
         }
     }
 }

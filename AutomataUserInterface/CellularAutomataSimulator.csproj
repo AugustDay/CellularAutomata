@@ -63,6 +63,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="OneDimensionalCA\Analysis1D.cs" />
+    <Compile Include="Utilities\Downloader.cs" />
     <Compile Include="Utilities\ImageConverter.cs" />
     <Compile Include="Utilities\Printer.cs" />
     <Compile Include="Utilities\Tools.cs" />

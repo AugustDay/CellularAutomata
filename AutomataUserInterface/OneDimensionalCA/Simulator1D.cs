@@ -49,10 +49,6 @@ namespace CellularAutomata.OneDimensionalCA
 
         public EdgeSettings CurrentEdgeSetting { get; private set; }
 
-        public bool GenerateImageAfterSimulating = true;
-
-        public bool AutomaticSaving = false;
-
         public bool DisplayNeighborhoodLookup { get; set; }
 
         //TODO create function to retrieve current rule name (number string)
@@ -62,7 +58,7 @@ namespace CellularAutomata.OneDimensionalCA
         public Simulator1D()
         {
             Rules = new Rules1D();
-            Imager = new Imager1D(Rules);
+            Imager = new Imager1D();
             Generations = new List<int[]>();
             NeighborhoodLookupGenerations = new List<int[]>();
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD, DEFAULT_STARTING_CELLS, EdgeSettings.WraparoundEdges);
@@ -212,10 +208,7 @@ namespace CellularAutomata.OneDimensionalCA
 
             return specificOrigin;
         }
-
-
-
-
+        
 
         ///<summary>Sets the Origin with cells of random states.</summary>
         public void setOriginRandomCells()
@@ -248,7 +241,6 @@ namespace CellularAutomata.OneDimensionalCA
             Generations.Add(Origin);
             NeighborhoodLookupGenerations.Clear();
             NeighborhoodLookupGenerations.Add(new int[SizeOfBoard]);
-            Imager.GenerateImage(Generations);
         }
 
         ///<summary>Iterate forward the default number of steps.</summary>
@@ -266,14 +258,6 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 next = NewGeneration(next);
                 Generations.Add(next);
-            }
-            if (GenerateImageAfterSimulating)
-            {
-                RefreshDisplay();
-            }
-            if (AutomaticSaving)
-            {
-                OutputAutomata();
             }
         }
 
@@ -330,13 +314,7 @@ namespace CellularAutomata.OneDimensionalCA
                 Imager.GenerateImage(Generations);
             }            
         }
-
-        ///<summary>Saves the current state of the Automata.</summary>
-        public void OutputAutomata()
-        {
-            Imager.SaveToFile();
-        }
-
+               
         public override bool Equals(Object theOther)
         {
             // Check for null values and compare run-time types.

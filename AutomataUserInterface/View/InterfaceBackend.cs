@@ -84,6 +84,10 @@ namespace CellularAutomata
 
         public event AutomataGeneratedEventHandler AutomataGenerated;
 
+        public bool GenerateImageAfterSimulating = true;
+
+        public bool AutomaticSaving = false;
+
         public InterfaceBackend()
         {
             CurrentAutomata = new Simulator1D();
@@ -125,7 +129,7 @@ namespace CellularAutomata
                             ContinueCommand(arguments);
                             break;
                         case 8:
-                            CurrentAutomata.OutputAutomata();
+                            DownloadInfoCommand();
                             break;
                         case 9:
                             ManyCommand(arguments);
@@ -144,8 +148,13 @@ namespace CellularAutomata
             }
         }
 
+        /// <summary>
+        /// Generates images of the same automata with different starting orientations (one for each possible state, and random).
+        /// </summary>
+        /// <param name="theArguments"></param>
         public void ManyCommand(string[] theArguments)
         {
+            /*
             bool autoSaving = CurrentAutomata.AutomaticSaving;
             CurrentAutomata.AutomaticSaving = true;
             int numberOfSteps = GetNumberOfSteps(theArguments);
@@ -160,6 +169,8 @@ namespace CellularAutomata
             CurrentAutomata.Imager.PrintInfoText = true;
 
             CurrentAutomata.AutomaticSaving = autoSaving;
+            */
+            Printer.DisplayMessageLine("Function needs to be restored after changes to program architecture.", Printer.ErrorColor);
         }
 
         public void ContinueCommand(string[] theArguments)
@@ -171,6 +182,15 @@ namespace CellularAutomata
             else //default
             {
                 CurrentAutomata.Proceed();
+            }
+            if (GenerateImageAfterSimulating)
+            {
+                CurrentAutomata.RefreshDisplay();
+            }
+            if (AutomaticSaving)
+            {
+                //CurrentAutomata.OutputAutomata();
+                //TODO replace with downloader thing. Interface will need a reference to the bitmap from MainWindow to make it work.
             }
         }
 
@@ -220,7 +240,6 @@ namespace CellularAutomata
             if (CurrentAutomata != null)
             {
                 AddToHistory();
-                Printer.DisplayMessageLine("Found automata #" + CurrentAutomata.Rules.RuleNumber);
             }
             else
             {
@@ -287,6 +306,11 @@ namespace CellularAutomata
             }
             CurrentAutomata = History.ElementAt(theIndex);
             CurrentAutomata.RefreshDisplay();
+        }
+
+        public void DownloadInfoCommand()
+        {
+            Printer.DisplayMessageLine("Download function not implemented", Printer.ErrorColor);
         }
 
         /// <summary>
