@@ -88,6 +88,8 @@ namespace CellularAutomata
 
         public bool AutomaticSaving = false;
 
+        public System.Drawing.Bitmap AutomataImage;
+
         public InterfaceBackend()
         {
             CurrentAutomata = new Simulator1D();
@@ -183,15 +185,7 @@ namespace CellularAutomata
             {
                 CurrentAutomata.Proceed();
             }
-            if (GenerateImageAfterSimulating)
-            {
-                CurrentAutomata.RefreshDisplay();
-            }
-            if (AutomaticSaving)
-            {
-                //CurrentAutomata.OutputAutomata();
-                //TODO replace with downloader thing. Interface will need a reference to the bitmap from MainWindow to make it work.
-            }
+            ShowTheAutomata();
         }
 
         public void GoCommand(string[] theArguments)
@@ -203,6 +197,19 @@ namespace CellularAutomata
             else //default
             {
                 CurrentAutomata.Go();
+            }
+            ShowTheAutomata();
+        }
+
+        private void ShowTheAutomata()
+        {
+            if (GenerateImageAfterSimulating)
+            {
+                CurrentAutomata.RefreshDisplay();
+            }
+            if (AutomaticSaving)
+            {
+                DownloadInfoCommand();
             }
         }
 
@@ -310,7 +317,8 @@ namespace CellularAutomata
 
         public void DownloadInfoCommand()
         {
-            Printer.DisplayMessageLine("Download function not implemented", Printer.ErrorColor);
+            Downloader.SaveToFile(AutomataImage, CurrentAutomata.Rules, true); 
+            //TODO give user the option to not save a text file if they don't want to.
         }
 
         /// <summary>

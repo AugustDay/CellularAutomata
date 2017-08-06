@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using CellularAutomata.OneDimensionalCA;
 
-namespace AutomataUserInterface.Utilities
+namespace AutomataUserInterface.Tools
 {
     class Downloader
     {

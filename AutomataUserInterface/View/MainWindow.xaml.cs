@@ -47,7 +47,7 @@ namespace AutomataUserInterface
         {
             CurrentImage = args.ImageOutput;
             ImageTools.ChangeDisplayedImage(CurrentImage);
-            //give reference to currentImage to CommandParser (so it can do the download thing)
+            CommandParser.AutomataImage = CurrentImage;
         }
 
         public void OnAutomataGenerated(object source, EventArgs e)
@@ -187,7 +187,6 @@ namespace AutomataUserInterface
             {
                 if (i == chosenItem)
                 {
-                    Printer.DisplayMessageLine("Clicked on: " + i.ToString());
                     i.IsChecked = true;
                     break;
                 }
@@ -241,10 +240,7 @@ namespace AutomataUserInterface
                 CommandParser.CurrentAutomata.Imager.ChooseColorTheme(CellularAutomata.OneDimensionalCA.Imager1D.ColorThemes.NeighborhoodLookup);
                 CommandParser.CurrentAutomata.DisplayNeighborhoodLookup = true;
                 CommandParser.CurrentAutomata.RefreshDisplay();
-            }
-
-            Printer.DisplayMessageLine("Unimplemented.");
-            
+            }            
         }
 
         /// <summary>
