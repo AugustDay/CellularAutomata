@@ -41,6 +41,8 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Rules for the Automata.</summary>
         public Rules1D Rules { get; private set; }
 
+        public Analysis1D Analysis { get; private set; }
+
         ///<summary>The number of cells on a row.</summary>
         public int SizeOfBoard { get; private set; }
 
@@ -58,7 +60,7 @@ namespace CellularAutomata.OneDimensionalCA
         public Simulator1D()
         {
             Rules = new Rules1D();
-            Imager = new Imager1D();
+            Imager = new Imager1D();            
             Generations = new List<int[]>();
             NeighborhoodLookupGenerations = new List<int[]>();
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD, DEFAULT_STARTING_CELLS, EdgeSettings.WraparoundEdges);
@@ -82,6 +84,7 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Initializes the components of the simulator.</summary>
         private void ConstructorHelper(int theSizeOfBoard, int[] theStartingCells, EdgeSettings theSetting)
         {
+            Analysis = new Analysis1D();
             if (theSizeOfBoard < 1)
             {
                 throw new ArgumentException("Board cannot be of size less than 1!");

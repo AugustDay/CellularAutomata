@@ -307,7 +307,7 @@ namespace CellularAutomata
 
         public void SetCurrentAutomata(int theIndex)
         {
-            if(theIndex < 0 || theIndex >= History.Count)
+            if(theIndex < 0 || theIndex >= History.Count) 
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -317,9 +317,11 @@ namespace CellularAutomata
 
         public void DownloadInfoCommand()
         {
-            Downloader.SaveToFile(AutomataImage, CurrentAutomata.Rules, true); 
+            Downloader.SaveToFile(AutomataImage, CurrentAutomata.Rules, CurrentAutomata.Analysis, true, true); 
             //TODO give user the option to not save a text file if they don't want to.
         }
+
+        
 
         /// <summary>
         /// To be called when a new automata is generated successfully (I.E. when the history list has changed).

@@ -9,7 +9,7 @@ namespace AutomataUserInterface.Tools
     {
         private static DateTime EpochStart = new DateTime(1970, 1, 1);
 
-        public static void SaveToFile(Bitmap theImageOutput, Rules1D theRule, bool printInfoText)
+        public static void SaveToFile(Bitmap theImageOutput, Rules1D theRule, Analysis1D theAnalysis, bool printSeedText, bool printAnalysisText)
         {
             if (theImageOutput == null)
             {
@@ -17,9 +17,9 @@ namespace AutomataUserInterface.Tools
             }
             TimeSpan t = DateTime.UtcNow - EpochStart;
             SaveImage(t, theImageOutput, theRule); //TODO remove parameters from save / saveInfo, use object variable instead? 
-            if (printInfoText)
+            if (printSeedText)
             {
-                SaveInfo(t, theRule);
+                SaveInfo(t, theRule, theAnalysis, printAnalysisText);
             }
         }
 
@@ -33,11 +33,16 @@ namespace AutomataUserInterface.Tools
             //output.Save(@location, ImageFormat.Png); //TODO any way to do compression? Bitmaps are large!
         }
 
-        private static void SaveInfo(TimeSpan theTime, Rules1D theRule)
+        private static void SaveInfo(TimeSpan theTime, Rules1D theRule, Analysis1D theAnalysis, bool printAnalysisText)
         { //TODO rule.tostring concise and verbose (one has full rule array, other just has number)
             string location = AppDomain.CurrentDomain.BaseDirectory + theRule.ToString() + " -- " + (int)theTime.TotalSeconds + " -- Info.txt";
             List<string> lines = new List<string>();
             lines.Add(theRule.GetInfo());
+            if(printAnalysisText)
+            {
+                lines.Add("================\nAnalysis:");
+                lines.Add(theAnalysis.GetAnalysis());
+            }
             System.IO.File.WriteAllLines(@location, lines);
         }
     }

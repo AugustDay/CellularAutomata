@@ -165,11 +165,11 @@ namespace AutomataUserInterface
                 i.IsChecked = false;
             }
         }
-
         
 
         private void MenuStartingCondition_Click(object sender, RoutedEventArgs e)
         {
+            //open dialogue window: a button for random, or a text entry window for entering a specific origin.
 
         }
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomataUserInterface.OneDimensionalCA
+namespace CellularAutomata.OneDimensionalCA
 {
-    class Analysis1D
+    public class Analysis1D
     {
         public int[] CellValueFrequency;
 
@@ -22,5 +22,10 @@ namespace AutomataUserInterface.OneDimensionalCA
          * 
          * 
          */
+
+        public string GetAnalysis()
+        {
+            return "Analysis not yet implemented!";
+        }
     }
 }
