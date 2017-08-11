@@ -37,6 +37,12 @@ namespace CellularAutomata.OneDimensionalCA
         ///</summary>
         public int PossibleStates;
 
+        /// <summary>
+        /// Total number of different neighborhood orientations (ex. {0, 2, 1} and {1, 2, 2}).
+        /// Calculated by taking the PossibleStates to the power of NeighborhoodSize (for elementary rules).
+        /// </summary>
+        public int PossibleNeighborhoodLookupValues;
+
         ///<summary>String representation of the number describing this Automata's Rule Array.</summary>
         public string RuleNumber { get; private set; }
 
@@ -86,6 +92,7 @@ namespace CellularAutomata.OneDimensionalCA
             NeighborhoodCoordinates = theNeighborhoodCoordinates;
             NeighborhoodSize = NeighborhoodCoordinates.Length;
             PossibleStates = thePossibleStates;
+            PossibleNeighborhoodLookupValues = (int)Math.Pow(PossibleStates, NeighborhoodSize);
         }
 
         ///<summary>Makes a random rule within the space of the given number of possible states.</summary>
@@ -197,7 +204,7 @@ namespace CellularAutomata.OneDimensionalCA
             return "1D-Rule " + RuleNumber;
         }
 
-        public override bool Equals(Object theOther)
+        public override bool Equals(object theOther)
         {
             // Check for null values and compare run-time types.
             if (GetType() != theOther.GetType() || theOther == null)

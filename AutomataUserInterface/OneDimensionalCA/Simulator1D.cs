@@ -33,7 +33,8 @@ namespace CellularAutomata.OneDimensionalCA
         ///<summary>Each generation of this Automata, [0] being origin.</summary>
         public List<int[]> Generations { get; private set; }
 
-        public List<int[]> NeighborhoodLookupGenerations { get; private set; }
+        /// <summary> The numerical values of the neighborhood orientation which produced each cell in Generations. All zero on origin.</summary>
+        public List<int[]> NeighborhoodGenerations { get; private set; }
 
         ///<summary>The imager object that the Automata can use to output results.</summary>
         public Imager1D Imager { get; private set; }
@@ -62,7 +63,7 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = new Rules1D();
             Imager = new Imager1D();            
             Generations = new List<int[]>();
-            NeighborhoodLookupGenerations = new List<int[]>();
+            NeighborhoodGenerations = new List<int[]>();
             ConstructorHelper(DEFAULT_SIZE_OF_BOARD, DEFAULT_STARTING_CELLS, EdgeSettings.WraparoundEdges);
         }
 
@@ -77,14 +78,13 @@ namespace CellularAutomata.OneDimensionalCA
             Rules = theRules;
             Imager = theImager;
             Generations = new List<int[]>();
-            NeighborhoodLookupGenerations = new List<int[]>();
+            NeighborhoodGenerations = new List<int[]>();
             ConstructorHelper(theSizeOfBoard, theStartingCells, theSetting);
         }
 
         ///<summary>Initializes the components of the simulator.</summary>
         private void ConstructorHelper(int theSizeOfBoard, int[] theStartingCells, EdgeSettings theSetting)
-        {
-            Analysis = new Analysis1D();
+        {            
             if (theSizeOfBoard < 1)
             {
                 throw new ArgumentException("Board cannot be of size less than 1!");
@@ -100,7 +100,7 @@ namespace CellularAutomata.OneDimensionalCA
             {
                 CalculateWraparoundIndex();
             }
-            Initialize();
+            Initialize();            
         }
 
         private void CalculateWraparoundIndex()
@@ -242,8 +242,9 @@ namespace CellularAutomata.OneDimensionalCA
         {
             Generations.Clear();
             Generations.Add(Origin);
-            NeighborhoodLookupGenerations.Clear();
-            NeighborhoodLookupGenerations.Add(new int[SizeOfBoard]);
+            NeighborhoodGenerations.Clear();
+            NeighborhoodGenerations.Add(new int[SizeOfBoard]);
+            Analysis = new Analysis1D(Generations, NeighborhoodGenerations, Rules);
         }
 
         ///<summary>Iterate forward the default number of steps.</summary>
@@ -262,6 +263,7 @@ namespace CellularAutomata.OneDimensionalCA
                 next = NewGeneration(next);
                 Generations.Add(next);
             }
+            Analysis = new Analysis1D(Generations, NeighborhoodGenerations, Rules);
         }
 
         ///<summary>Produces and returns a new generation based on the state of the given generation.</summary>
@@ -277,7 +279,7 @@ namespace CellularAutomata.OneDimensionalCA
                 newCells[i] = cellsAndLookup[0];
                 cellLookup[i] = cellsAndLookup[1];
             }
-            NeighborhoodLookupGenerations.Add(cellLookup);
+            NeighborhoodGenerations.Add(cellLookup);
             return newCells;
         }
 
@@ -311,7 +313,7 @@ namespace CellularAutomata.OneDimensionalCA
         {
             if(DisplayNeighborhoodLookup)
             {
-                Imager.GenerateImage(NeighborhoodLookupGenerations);
+                Imager.GenerateImage(NeighborhoodGenerations);
             } else
             {
                 Imager.GenerateImage(Generations);
