@@ -104,7 +104,7 @@ namespace CellularAutomata.OneDimensionalCA
                 sb.Append(i + ": " + NeighborhoodFreqTotal[i] + "\n");
             }
 
-            sb.Append("\Neighborhood Value Frequencies Per Generation:\n");
+            sb.Append("\nNeighborhood Value Frequencies Per Generation:\n");
             for (int c = 0; c < NeighborhoodFreqTotal.Length; c++)
             {
                 sb.Append("Value '" + c + "':\n");
